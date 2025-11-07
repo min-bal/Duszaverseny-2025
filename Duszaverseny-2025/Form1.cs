@@ -11,10 +11,32 @@ using System.IO;
 
 namespace Duszaverseny_2025
 {
+    /*
+     in.txt max. 200 sor
+        formátuma mindig helyes
+    sebzés/életerő: egész, 2-100/1-100
+    vezéreket a sima kártyák után
+    név max. 16 karakter
+    kazamata neve max. 20
+    gyűjteményben egy kártya csak egyszer
+    uj pakli akárhányszor ismétlődhet
+    kazamata elején életerő alaphelyzetbe kerül
+
+     
+     
+     */
+
     public partial class Form1 : Form
     {
-        Dictionary<int, (string, int, int, string)> kartyak = new Dictionary<int, (string, int, int, string)>();
-        Dictionary<int, (string, int, int, string)> vezerkartyak = new Dictionary<int, (string, int, int, string)>();
+        Dictionary<string, string> tipusok = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        {
+            { "tuz", "Tűz" },
+            { "viz", "Víz" },
+            { "fold", "Föld" },
+            { "levego", "Levegő" }
+        };
+        Dictionary<int, (string, int, int, string)> kartyak = new Dictionary<int, (string, int, int, string)>(); //név, sebzés, életerő, típus
+        Dictionary<int, (string, int, int, string)> vezerkartyak = new Dictionary<int, (string, int, int, string)>(); 
         Dictionary<int, (string, int, int, string)> playercards = new Dictionary<int, (string, int, int, string)>(); //properies of the player's cards
         List<string> Pakli = new List<string>();
 
@@ -23,35 +45,41 @@ namespace Duszaverseny_2025
             string[] args = Environment.GetCommandLineArgs();
             StreamReader sr = new StreamReader(args[1]);
             InitializeComponent();
-            beolvasás(sr);
+            VilágBeolvasás(sr);
+            Gyujteménykészítés(sr);
+
+            ReadNextLine(sr);
+
+
+
+            Pakliba("Sadan");
+            Pakliba("Aragorn");
+
 
             foreach (var kartya in kartyak)
             {
                 Console.WriteLine(kartya.Value.Item1);
             }
-            Console.WriteLine();
-            foreach(var vezerkartya in vezerkartyak)
+            foreach (var vezerkartya in vezerkartyak)
             {
                 Console.WriteLine(vezerkartya.Value.Item1);
             }
-            /*
-            PlayerCardsba("ObiWan");
-            PlayerCardsba("Tul'Arak");
-            Pakliba("Tul'Arak");*/
+
         }
 
         //in.txt beolvasás
-        private void beolvasás(StreamReader sr)
+        private void VilágBeolvasás(StreamReader sr)
         {
             int n = 0;
+            bool vanvezer = false;
             while (true)
             {
                 string sor = sr.ReadLine();
                 if (sor == "uj jatekos") break;
-                if (sor != "")
+                if (sor != "" && !vanvezer)
                 {
                     string[] sorreszek = sor.Split(';');
-                    if (sorreszek[0] == "uj kartya") //kartyak dictioanryba helyezese
+                    if (sorreszek[0] == "uj kartya")
                     {
                         kartyak[n] = (sorreszek[1], Convert.ToInt32(sorreszek[2]), Convert.ToInt32(sorreszek[3]), sorreszek[4]);
                         n++;
@@ -59,80 +87,125 @@ namespace Duszaverseny_2025
 
                     else if (sorreszek[0] == "uj vezer") //vezer berakasa kartyak koze dictionarybe
                     {
-                        if (sorreszek[3] == "sebzes")
+                        vanvezer = true;
+
+                        string alapnev = sorreszek[2];
+                        int m = 0;
+                        while (true)
                         {
-                            string vezer = sorreszek[2];
-                            bool megvan = false;
-                            int m = 0;
-                            while (!megvan)
+                            if (kartyak[m].Item1 == alapnev)
                             {
-                                if (kartyak[m].Item1 == vezer)
+                                if (sorreszek[3] == "sebzes")
                                 {
-                                    megvan = true;
                                     vezerkartyak[0] = (sorreszek[1], kartyak[m].Item2 * 2, kartyak[m].Item3, kartyak[m].Item4);
-                                    n++;
                                 }
-                                m++;
-                            }
-                        }
-                        else
-                        {
-                            string vezer = sorreszek[2];
-                            bool megvan = false;
-                            int m = 0;
-                            while (!megvan)
-                            {
-                                if (kartyak[m].Item1 == vezer)
+                                else
                                 {
-                                    megvan = true;
                                     vezerkartyak[0] = (sorreszek[1], kartyak[m].Item2, kartyak[m].Item3 * 2, kartyak[m].Item4);
-                                    n++;
                                 }
-                                m++;
+                                n++;
+                                break;
                             }
+                            m++;
                         }
                     }
                 }
             }
-            sr.Close();
         }
 
-        private void PlayerCardsba(string c)
+        private void Gyujteménykészítés(StreamReader sr)
         {
-            int index = 0;
-            for (int i = 0; i< kartyak.Count; i++)
+            int n = 0;
+            while (true)
             {
-                if (kartyak[i].Item1 == c)
-                {
-                    playercards[index] = kartyak[i];
-                    index++;
+                string sor = sr.ReadLine();
+                if (sor != "") 
+                { 
+                    string[] sorreszek = sor.Split(';');
+                    if (sorreszek[0] != "felvetel gyujtemenybe") break;
+                    else
+                    {
+                        foreach (int i in kartyak.Keys)
+                        {
+                            if (kartyak[i].Item1 == sorreszek[1])
+                            {
+                                playercards[n] = kartyak[i];
+                            }
+                        }
+                        
+                    }
                 }
             }
         }
 
         private void Pakliba(string c)
         {
-            int index = 0;
             for (int i = 0; i < playercards.Count; i++)
             {
                 if (playercards[i].Item1 == c)
                 {
-                    Pakli[index] = kartyak[i].Item1;
-                    index++;
+                    Pakli.Add(playercards[i].Item1);
                 }
             }
         }
 
+        private void ReadNextLine(StreamReader sr)
+        {
+            while (true)
+            {
+                string sor = sr.ReadLine();
+                if (string.IsNullOrEmpty(sor) && sor != "")
+                {
+                    sr.Close();
+                    Console.WriteLine("Vége a bemenetelnek");
+                    Application.Exit();
+                }
+                else if (sor != "")
+                {
+                    string[] sorreszek = sor.Split(';');
+                    if (sorreszek[0] == "uj pakli")
+                    {
+                        Pakliba(sorreszek[1]);
+                    }
+                    else if (sorreszek[0] == "harc")
+                    {
+                        Harc(sorreszek[1], sorreszek[2]);
+                    }
+                    else if (sorreszek[0] == "export vilag") {
+                        ExportState("vilag", sorreszek[1]);
+                    }
+                    else if (sorreszek[0] == "export jatekos")
+                    {
+                        ExportState("jatekos", sorreszek[1]);
+                    }
+                }
+            }
+        }
+
+        private void Harc(string nev, string output)
+        {
+
+        }
+
+        private void ExportState(string típus, string output)
+        {
+
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
-            Console.WriteLine("asd");
+            Control ctrl = new Control();
+            
+            Console.WriteLine(Pakli.Count);
             for (int i = 0; i < Pakli.Count; i++) { 
-                string text = "asd";
-                for (int j = 1; j <= playercards.Count; j++)
+                string text = "";
+                for (int j = 0; j < playercards.Count; j++)
                 {
                     if (playercards[j].Item1 == Pakli[i])
                     {
-                        text = (playercards[j].Item1.ToString() +"\n"+ playercards[j].Item2.ToString() +"/"+ playercards[j].Item3.ToString() + "\n"+ playercards[j].Item4.ToString());
+                        tipusok.TryGetValue(playercards[j].Item4, out string olvashatotipus);
+                        text = (playercards[j].Item1.ToString() +"\n"+ playercards[j].Item2.ToString() +"/"+ playercards[j].Item3.ToString() + "\n"+ olvashatotipus);
+                        
                     }
                 }
                 Console.WriteLine(text);
