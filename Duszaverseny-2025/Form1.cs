@@ -23,58 +23,71 @@ namespace Duszaverseny_2025
             StreamReader sr = new StreamReader(args[1]);
             InitializeComponent();
             beolvasás(sr);
-            
+
+            foreach (var kartya in kartyak)
+            {
+                Console.WriteLine(kartya.Value.Item1.ToString());
+            }
+            /*
             PlayerCardsba("ObiWan");
             PlayerCardsba("Tul'Arak");
-            Pakliba("Tul'Arak");
+            Pakliba("Tul'Arak");*/
         }
 
         //in.txt beolvasás
         private void beolvasás(StreamReader sr)
         {
-            string sor = sr.ReadLine();
-            string[] sorreszek = sor.Split(';');
-            int n = 0;
-            if (sorreszek[0] == "uj kartya") //kartyak dictioanryba helyezese
+            while (true)
             {
-                kartyak[n] = (sorreszek[1], Convert.ToInt32(sorreszek[2]), Convert.ToInt32(sorreszek[3]), sorreszek[4]);
-                n++;
-            }
-            else if (sorreszek[1] == "uj vezer") //vezer berakasa kartyak koze dictionarybe
-            {
-                if (sorreszek[3] == "sebzes")
+                string sor = sr.ReadLine();
+                if (sor == "uj jatekos") break;
+                if (sor != "")
                 {
-                    string vezer = sorreszek[2];
-                    bool megvan = false;
-                    int m = 0;
-                    while (megvan = false)
+                    string[] sorreszek = sor.Split(';');
+                    int n = 0;
+                    if (sorreszek[0] == "uj kartya") //kartyak dictioanryba helyezese
                     {
-                        if (kartyak[m].Item1 == vezer)
-                        {
-                            megvan = true;
-                            kartyak[n] = (sorreszek[1], kartyak[m].Item2 * 2, kartyak[m].Item3, kartyak[m].Item4);
-                            n++;
-                        }
-                        m++;
+                        kartyak[n] = (sorreszek[1], Convert.ToInt32(sorreszek[2]), Convert.ToInt32(sorreszek[3]), sorreszek[4]);
+                        n++;
                     }
-                }
-                else
-                {
-                    string vezer = sorreszek[2];
-                    bool megvan = false;
-                    int m = 0;
-                    while (megvan = false)
+
+                    /*else if (sorreszek[0] == "uj vezer") //vezer berakasa kartyak koze dictionarybe
                     {
-                        if (kartyak[m].Item1 == vezer)
+                        if (sorreszek[3] == "sebzes")
                         {
-                            megvan = true;
-                            kartyak[n] = (sorreszek[1], kartyak[m].Item2, kartyak[m].Item3 * 2, kartyak[m].Item4);
-                            n++;
+                            string vezer = sorreszek[2];
+                            bool megvan = false;
+                            int m = 0;
+                            while (!megvan)
+                            {
+                                if (kartyak[m].Item1 == vezer)
+                                {
+                                    megvan = true;
+                                    kartyak[n] = (sorreszek[1], kartyak[m].Item2 * 2, kartyak[m].Item3, kartyak[m].Item4);
+                                    n++;
+                                }
+                                m++;
+                            }
                         }
-                        m++;
-                    }
+                        else
+                        {
+                            string vezer = sorreszek[2];
+                            bool megvan = false;
+                            int m = 0;
+                            while (!megvan)
+                            {
+                                if (kartyak[m].Item1 == vezer)
+                                {
+                                    megvan = true;
+                                    kartyak[n] = (sorreszek[1], kartyak[m].Item2, kartyak[m].Item3 * 2, kartyak[m].Item4);
+                                    n++;
+                                }
+                                m++;
+                            }
+                    }*/
                 }
             }
+            sr.Close();
         }
 
         private void PlayerCardsba(string c)
