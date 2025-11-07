@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using System.Net.Sockets;
 
 namespace Duszaverseny_2025
 {
@@ -49,8 +50,14 @@ namespace Duszaverseny_2025
         {
             StreamReader sr = new StreamReader(args[1]);
             InitializeComponent();
+            /*
             VilágBeolvasás(sr);
+            Console.WriteLine("Világ kész");
+            Kazamataolvasás(sr);
+            Console.WriteLine("kazaamta kész");
             Gyujteménykészítés(sr);
+            Console.WriteLine("gyüjtemény kész");*/
+            Világsoronként(sr);
 
             ReadNextLine(sr);
 
@@ -65,13 +72,98 @@ namespace Duszaverseny_2025
 
         }
 
+        private void Világsoronként(StreamReader sr)
+        {//kártya, vezér, kazamata, játékos, felvétel, pakli
+            int kartyan = 0;
+            int vezerkartyan = 0;
+            int playercardsn = 0;
+            bool ujjatakos = false;
+            while (true)
+            {
+                string sor = sr.ReadLine();
+                if (sor == null || sor == "")
+                {
+                    continue;
+                }
+                string[] sorreszek = sor.Split(';');
+                if (!ujjatakos)
+                {
+                    if (sorreszek[0] == "uj kartya")
+                    {
+                        kartyak[kartyan] = (sorreszek[1], Convert.ToInt32(sorreszek[2]), Convert.ToInt32(sorreszek[3]), sorreszek[4]);
+                        kartyan++;
+                    }
+                    if (sorreszek[0] == "uj vezer")
+                    {
+                        string alapnev = sorreszek[2];
+                        foreach (int m in kartyak.Keys)
+                        {
+                            if (kartyak[m].Item1 == alapnev)
+                            {
+                                if (sorreszek[3] == "sebzes")
+                                {
+                                    vezerkartyak[vezerkartyan] = (sorreszek[1], kartyak[m].Item2 * 2, kartyak[m].Item3, kartyak[m].Item4);
+                                }
+                                else
+                                {
+                                    vezerkartyak[vezerkartyan] = (sorreszek[1], kartyak[m].Item2, kartyak[m].Item3 * 2, kartyak[m].Item4);
+                                }
+                                vezerkartyan++;
+                            }
+                        }
+                    }
+                    if (sorreszek[0] == "uj kazamata")
+                    {
+                        if (sorreszek[1] == "egyszeru")
+                        {
+                            kazamataegyszeru[sorreszek[2]] = (sorreszek[3], sorreszek[4]);
+                        }
+                        else if (sorreszek[1] == "kis")
+                        {
+                            string[] ellenfelek = sorreszek[3].Split(',');
+                            kazamatakicsi[sorreszek[2]] = (ellenfelek[0], ellenfelek[1], ellenfelek[2], sorreszek[4], sorreszek[5]);
+                        }
+                        else if (sorreszek[1] == "nagy")
+                        {
+                            string[] ellenfelek = sorreszek[3].Split(',');
+                            kazamatanagy[sorreszek[2]] = (ellenfelek[0], ellenfelek[1], ellenfelek[2], ellenfelek[3], ellenfelek[4], sorreszek[4]);
+                        }
+                    }
+                }
+                    if (sorreszek[0] == "uj jatekos")
+                    {
+                        ujjatakos = true;
+                    }
+                    if (sorreszek[0] == "felvetel gyujtemenybe")
+                    {
+                        foreach (int i in kartyak.Keys)
+                        {
+                            if (kartyak[i].Item1 == sorreszek[1])
+                            {
+                                playercards[playercardsn] = (kartyak[i].Item1, kartyak[i].Item2, kartyak[i].Item3, kartyak[i].Item4);
+                                playercardsn++;
+                            }
+                        }
+                    }
+                    if (sorreszek[0] == "uj pakli")
+                    {
+                        Pakliba(sorreszek[1]);
+                        break;
+                    }
+            }
+        }
+
+        /*
         //in.txt beolvasás
         private void VilágBeolvasás(StreamReader sr)
         {
             int n = 0;
+            int vezern = 0;
             bool vanvezer = false;
+            bool exit = false;
             while (true)
             {
+                if (exit) break;
                 string sor = sr.ReadLine();
                 if (sor == "uj kazamata") break;
                 if (sor != "" && !vanvezer)
@@ -86,26 +178,25 @@ namespace Duszaverseny_2025
                     else if (sorreszek[0] == "uj vezer") //vezer berakasa kartyak koze dictionarybe
                     {
                         vanvezer = true;
-
                         string alapnev = sorreszek[2];
-                        int m = 0;
-                        while (true)
-                        {
+                        //int m = 0;
+                        foreach (int m in kartyak.Keys) {
                             if (kartyak[m].Item1 == alapnev)
                             {
                                 if (sorreszek[3] == "sebzes")
                                 {
-                                    vezerkartyak[0] = (sorreszek[1], kartyak[m].Item2 * 2, kartyak[m].Item3, kartyak[m].Item4);
+                                    vezerkartyak[vezern] = (sorreszek[1], kartyak[m].Item2 * 2, kartyak[m].Item3, kartyak[m].Item4);
                                 }
                                 else
                                 {
-                                    vezerkartyak[0] = (sorreszek[1], kartyak[m].Item2, kartyak[m].Item3 * 2, kartyak[m].Item4);
+                                    vezerkartyak[vezern] = (sorreszek[1], kartyak[m].Item2, kartyak[m].Item3 * 2, kartyak[m].Item4);
                                 }
-                                n++;
+                                vezern++;
+                                exit = true;
                                 break;
                             }
-                            m++;
-                        }
+                            //m++;
+                        } 
                     }
                 }
             }
@@ -116,27 +207,30 @@ namespace Duszaverseny_2025
             int n = 0;
             while (true)
             {
-                string sor = sr.ReadLine();
-                if (sor != "") 
-                { 
-                    string[] sorreszek = sor.Split(';');
-                    if (sorreszek[0] != "felvetel gyujtemenybe") break;
-                    else
+                if (sr.Peek() == 'u' || sr.Peek() == 'e')
+                {
+                    break;
+                }
+                else
+                {
+                    string sor = sr.ReadLine();
+                    if (sor != "")
                     {
+                        string[] sorreszek = sor.Split(';');
                         foreach (int i in kartyak.Keys)
                         {
                             if (kartyak[i].Item1 == sorreszek[1])
                             {
-                                playercards[n] = kartyak[i];
+                                playercards[n] = (kartyak[i].Item1, kartyak[i].Item2, kartyak[i].Item3, kartyak[i].Item4);
+                                n++;
                             }
                         }
-                        
                     }
                 }
             }
         }
 
-        private void Kazamatákolvasás(StreamReader sr)
+        private void Kazamataolvasás(StreamReader sr)
         {
             while (true)
             {
@@ -165,7 +259,7 @@ namespace Duszaverseny_2025
                 }
             }
         }
-
+        */
         private void Pakliba(string c)
         {
             Pakli.Clear();
@@ -178,20 +272,10 @@ namespace Duszaverseny_2025
             {
                 max = nevek.Length / 2;
             }
-
+            
             foreach (string j in nevek)
             {
-                for (int i = 0; i < playercards.Count; i++)
-                {
-                    if (playercards[i].Item1 == j)
-                    {
-                        Pakli.Add(playercards[i].Item1);
-                    }
-                }
-                if (Pakli.Count == max)
-                {
-                    break;
-                }
+                Pakli.Add(j);
             }
         }
 
@@ -215,7 +299,7 @@ namespace Duszaverseny_2025
                     }
                     else if (sorreszek[0] == "harc")
                     {
-                        Harc(sorreszek[1], sorreszek[2]);
+                        //Harc(sorreszek[1], sorreszek[2]);
                     }
                     else if (sorreszek[0] == "export vilag") {
                         ExportState("vilag", sorreszek[1]);
@@ -248,19 +332,22 @@ namespace Duszaverseny_2025
                     sw.WriteLine("vezer;" + kartyak[i].Item1 + ";" + kartyak[i].Item2.ToString() + ";" + kartyak[i].Item3.ToString() + ";" + kartyak[i].Item4.ToString());
                 }
                 sw.WriteLine();
-                foreach (int i in kazamataegyszeru.Keys)
+                foreach (string nev in kazamataegyszeru.Keys)
                 {
-                    string w = string.Join(";", kazamataegyszeru[i]);
+                    string w = string.Join(";", kazamataegyszeru[nev]);
+                    w.Insert(0, nev+ ";");
                     sw.WriteLine("kazamata;egyszeru;" + w);
                 }
-                foreach (int i in kazamatakicsi.Keys)
+                foreach (string nev in kazamatakicsi.Keys)
                 {
-                    string w = string.Join(";", kazamatakicsi[i]);
+                    string w = string.Join(";", kazamatakicsi[nev]);
+                    w.Insert(0, nev + ";");
                     sw.WriteLine("kazamata;kis;" + w);
                 }
-                foreach (int i in kazamatanagy.Keys)
+                foreach (string nev in kazamatanagy.Keys)
                 {
-                    string w = string.Join(";", kazamatanagy[i]);
+                    string w = string.Join(";", kazamatanagy[nev]);
+                    w.Insert(0, nev + ";");
                     sw.WriteLine("kazamata;nagy;" + w);
                 }
             }
@@ -268,12 +355,12 @@ namespace Duszaverseny_2025
             {
                 foreach (int i in playercards.Keys)
                 {
-                    sw.WriteLine("gyujtemeny;" + playercards[i].Item1 + ";" + playercards[i].Item2.ToString() + ";" + playercards[i].Item3.ToString() + ";" + playercards[i].Item4.ToString());
+                    sw.WriteLine("gyujtemeny;" + playercards[i].Item1.ToString() + ";" + playercards[i].Item2.ToString() + ";" + playercards[i].Item3.ToString() + ";" + playercards[i].Item4.ToString());
                 }
                 sw.WriteLine();
                 foreach (string i in Pakli)
                 {
-                    sw.Write("pakli;" + i);
+                    sw.WriteLine("pakli;" + i.ToString());
                 }
             }
             sw.Close();
