@@ -14,6 +14,7 @@ namespace Duszaverseny_2025
     public partial class Form1 : Form
     {
         Dictionary<int, (string, int, int, string)> kartyak = new Dictionary<int, (string, int, int, string)>();
+        Dictionary<int, (string, int, int, string)> vezerkartyak = new Dictionary<int, (string, int, int, string)>();
         Dictionary<int, (string, int, int, string)> playercards = new Dictionary<int, (string, int, int, string)>(); //properies of the player's cards
         List<string> Pakli = new List<string>();
 
@@ -26,7 +27,12 @@ namespace Duszaverseny_2025
 
             foreach (var kartya in kartyak)
             {
-                Console.WriteLine(kartya.Value.Item1.ToString());
+                Console.WriteLine(kartya.Value.Item1);
+            }
+            Console.WriteLine();
+            foreach(var vezerkartya in vezerkartyak)
+            {
+                Console.WriteLine(vezerkartya.Value.Item1);
             }
             /*
             PlayerCardsba("ObiWan");
@@ -37,6 +43,7 @@ namespace Duszaverseny_2025
         //in.txt beolvasás
         private void beolvasás(StreamReader sr)
         {
+            int n = 0;
             while (true)
             {
                 string sor = sr.ReadLine();
@@ -44,14 +51,13 @@ namespace Duszaverseny_2025
                 if (sor != "")
                 {
                     string[] sorreszek = sor.Split(';');
-                    int n = 0;
                     if (sorreszek[0] == "uj kartya") //kartyak dictioanryba helyezese
                     {
                         kartyak[n] = (sorreszek[1], Convert.ToInt32(sorreszek[2]), Convert.ToInt32(sorreszek[3]), sorreszek[4]);
                         n++;
                     }
 
-                    /*else if (sorreszek[0] == "uj vezer") //vezer berakasa kartyak koze dictionarybe
+                    else if (sorreszek[0] == "uj vezer") //vezer berakasa kartyak koze dictionarybe
                     {
                         if (sorreszek[3] == "sebzes")
                         {
@@ -63,7 +69,7 @@ namespace Duszaverseny_2025
                                 if (kartyak[m].Item1 == vezer)
                                 {
                                     megvan = true;
-                                    kartyak[n] = (sorreszek[1], kartyak[m].Item2 * 2, kartyak[m].Item3, kartyak[m].Item4);
+                                    vezerkartyak[0] = (sorreszek[1], kartyak[m].Item2 * 2, kartyak[m].Item3, kartyak[m].Item4);
                                     n++;
                                 }
                                 m++;
@@ -79,12 +85,13 @@ namespace Duszaverseny_2025
                                 if (kartyak[m].Item1 == vezer)
                                 {
                                     megvan = true;
-                                    kartyak[n] = (sorreszek[1], kartyak[m].Item2, kartyak[m].Item3 * 2, kartyak[m].Item4);
+                                    vezerkartyak[0] = (sorreszek[1], kartyak[m].Item2, kartyak[m].Item3 * 2, kartyak[m].Item4);
                                     n++;
                                 }
                                 m++;
                             }
-                    }*/
+                        }
+                    }
                 }
             }
             sr.Close();
