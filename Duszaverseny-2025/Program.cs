@@ -42,9 +42,8 @@ namespace Duszaverseny_2025
             {
                 RunAutomatedTest(args[1]);
 
-                Application.EnableVisualStyles();
-                Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new Form1());
+                var runner = new Teszt();
+                runner.Run();
             }
             catch (Exception ex)
             {
