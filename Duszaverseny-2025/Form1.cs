@@ -14,7 +14,6 @@ namespace Duszaverseny_2025
     public partial class Form1 : Form
     {
         Dictionary<int, (string, int, int, string)> kartyak = new Dictionary<int, (string, int, int, string)>();
-        Dictionary<int, (string, int, int, string)> data = new Dictionary<int, (string, int, int, string)>(); //base properties of each normal card
         Dictionary<int, (string, int, int, string)> playercards = new Dictionary<int, (string, int, int, string)>(); //properies of the player's cards
         List<string> Pakli = new List<string>();
 
@@ -23,6 +22,11 @@ namespace Duszaverseny_2025
             string[] args = Environment.GetCommandLineArgs();
             StreamReader sr = new StreamReader(args[1]);
             InitializeComponent();
+            beolvasás(sr);
+            PopulateWorld();
+            PlayerCardsba("ObiWan");
+            PlayerCardsba("Tul'Arak");
+            Pakliba("Tul'Arak");
         }
 
         //in.txt beolvasás
@@ -33,7 +37,7 @@ namespace Duszaverseny_2025
             int n = 0;
             if (sorreszek[0] == "uj kartya") //kartyak dictioanryba helyezese
             {
-                kartyak[n] = (sorreszek[1], Convert.ToInt32(sorreszek[2]),Convert.ToInt32(sorreszek[3]), sorreszek[4]);
+                kartyak[n] = (sorreszek[1], Convert.ToInt32(sorreszek[2]), Convert.ToInt32(sorreszek[3]), sorreszek[4]);
                 n++;
             }
             else if (sorreszek[1] == "uj vezer") //vezer berakasa kartyak koze dictionarybe
@@ -48,8 +52,8 @@ namespace Duszaverseny_2025
                         if (kartyak[m].Item1 == vezer)
                         {
                             megvan = true;
-                            kartyak[n] = (sorreszek[1], kartyak[m].Item2*2, kartyak[m].Item3, kartyak[m].Item4);
-                            n++;                            
+                            kartyak[n] = (sorreszek[1], kartyak[m].Item2 * 2, kartyak[m].Item3, kartyak[m].Item4);
+                            n++;
                         }
                         m++;
                     }
@@ -64,33 +68,29 @@ namespace Duszaverseny_2025
                         if (kartyak[m].Item1 == vezer)
                         {
                             megvan = true;
-                            kartyak[n] = (sorreszek[1], kartyak[m].Item2, kartyak[m].Item3*2, kartyak[m].Item4);
+                            kartyak[n] = (sorreszek[1], kartyak[m].Item2, kartyak[m].Item3 * 2, kartyak[m].Item4);
                             n++;
                         }
                         m++;
                     }
-            label1.Text = "Hello World!";
-            PopulateWorld();
-            PlayerCardsba("ObiWan");
-            PlayerCardsba("Tul'Arak");
-            Pakliba("Tul'Arak");
-            
+                }
+            }
         }
 
         private void PopulateWorld()
         {
-            data[1] = ("ObiWan", 2, 2, "fold");
-            data[2] = ("Tul'Arak", 2,4,"föld");
+            kartyak[1] = ("ObiWan", 2, 2, "fold");
+            kartyak[2] = ("Tul'Arak", 2,4,"föld");
         }
 
         private void PlayerCardsba(string c)
         {
             int cycle = 1;
-            for (int i = 1; i<=data.Count; i++)
+            for (int i = 1; i<=kartyak.Count; i++)
             {
-                if (data[i].Item1 == c)
+                if (kartyak[i].Item1 == c)
                 {
-                    playercards[cycle] = data[i];
+                    playercards[cycle] = kartyak[i];
                     cycle++;
                 }
             }
@@ -103,7 +103,7 @@ namespace Duszaverseny_2025
             {
                 if (playercards[i].Item1 == c)
                 {
-                    Pakli[index] = data[i].Item1;
+                    Pakli[index] = kartyak[i].Item1;
                     index++;
                 }
             }
