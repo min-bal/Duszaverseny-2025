@@ -39,9 +39,9 @@ namespace Duszaverseny_2025
         Dictionary<int, (string, int, int, string)> vezerkartyak = new Dictionary<int, (string, int, int, string)>(); 
         Dictionary<int, (string, int, int, string)> playercards = new Dictionary<int, (string, int, int, string)>(); //properies of the player's cards
 
-        Dictionary<int, (string, string, string)> kazamataegyszeru = new Dictionary<int, (string, string, string)>(); //név, ellenfél, jutalom
-        Dictionary<int, (string, string, string, string, string, string)> kazamatakicsi = new Dictionary<int, (string, string, string, string, string, string)>(); //név, ellenfél*3, vezér, jutalom
-        Dictionary<int, (string, string, string, string, string, string, string)> kazamatanagy = new Dictionary<int, (string, string, string, string, string, string, string)>(); //név, ellenfél*5, vezér
+        Dictionary<string, (string, string)> kazamataegyszeru = new Dictionary<string, (string, string)>(); //név, ellenfél, jutalom
+        Dictionary<string, (string, string, string, string, string)> kazamatakicsi = new Dictionary<string, (string, string, string, string, string)>(); //név, ellenfél*3, vezér, jutalom
+        Dictionary<string, (string, string, string, string, string, string)> kazamatanagy = new Dictionary<string, (string, string, string, string, string, string)>(); //név, ellenfél*5, vezér
         List<string> Pakli = new List<string>();
         string[] args = Environment.GetCommandLineArgs();
 
@@ -73,7 +73,7 @@ namespace Duszaverseny_2025
             while (true)
             {
                 string sor = sr.ReadLine();
-                if (sor == "uj jatekos") break;
+                if (sor == "uj kazamata") break;
                 if (sor != "" && !vanvezer)
                 {
                     string[] sorreszek = sor.Split(';');
@@ -136,13 +136,61 @@ namespace Duszaverseny_2025
             }
         }
 
+        private void Kazamatákolvasás(StreamReader sr)
+        {
+            while (true)
+            {
+                string sor = sr.ReadLine();
+                if (sor != "")
+                {
+                    string[] sorreszek = sor.Split(';');
+                    if (sorreszek[0] != "uj jatekos") break;
+                    else
+                    {
+                        if (sorreszek[1] == "egyszeru")
+                        {
+                            kazamataegyszeru[sorreszek[2]] = (sorreszek[3], sorreszek[4]);
+                        }
+                        else if (sorreszek[1] == "kis")
+                        {
+                            string[] ellenfelek = sorreszek[3].Split(',');
+                            kazamatakicsi[sorreszek[2]] = (ellenfelek[0], ellenfelek[1], ellenfelek[2], sorreszek[4], sorreszek[5]);
+                        }
+                        else if (sorreszek[1] == "nagy")
+                        {
+                            string[] ellenfelek = sorreszek[3].Split(',');
+                            kazamatanagy[sorreszek[2]] = (ellenfelek[0], ellenfelek[1], ellenfelek[2], ellenfelek[3], ellenfelek[4], sorreszek[4]);
+                        }
+                    }
+                }
+            }
+        }
+
         private void Pakliba(string c)
         {
-            for (int i = 0; i < playercards.Count; i++)
+            Pakli.Clear();
+            string[] nevek = c.Split(',');
+            int max;
+            if (nevek.Length % 2 == 1) {
+                max = (nevek.Length+1) / 2;
+            }
+            else
             {
-                if (playercards[i].Item1 == c)
+                max = nevek.Length / 2;
+            }
+
+            foreach (string j in nevek)
+            {
+                for (int i = 0; i < playercards.Count; i++)
                 {
-                    Pakli.Add(playercards[i].Item1);
+                    if (playercards[i].Item1 == j)
+                    {
+                        Pakli.Add(playercards[i].Item1);
+                    }
+                }
+                if (Pakli.Count == max)
+                {
+                    break;
                 }
             }
         }
