@@ -38,23 +38,21 @@ namespace Duszaverseny_2025
         Dictionary<int, (string, int, int, string)> kartyak = new Dictionary<int, (string, int, int, string)>(); //név, sebzés, életerő, típus
         Dictionary<int, (string, int, int, string)> vezerkartyak = new Dictionary<int, (string, int, int, string)>(); 
         Dictionary<int, (string, int, int, string)> playercards = new Dictionary<int, (string, int, int, string)>(); //properies of the player's cards
+
+        Dictionary<int, (string, string, string)> kazamataegyszeru = new Dictionary<int, (string, string, string)>(); //név, ellenfél, jutalom
+        Dictionary<int, (string, string, string, string, string, string)> kazamatakicsi = new Dictionary<int, (string, string, string, string, string, string)>(); //név, ellenfél*3, vezér, jutalom
+        Dictionary<int, (string, string, string, string, string, string, string)> kazamatanagy = new Dictionary<int, (string, string, string, string, string, string, string)>(); //név, ellenfél*5, vezér
         List<string> Pakli = new List<string>();
+        string[] args = Environment.GetCommandLineArgs();
 
         public Form1()
         {
-            string[] args = Environment.GetCommandLineArgs();
             StreamReader sr = new StreamReader(args[1]);
             InitializeComponent();
             VilágBeolvasás(sr);
             Gyujteménykészítés(sr);
 
             ReadNextLine(sr);
-
-
-
-            Pakliba("Sadan");
-            Pakliba("Aragorn");
-
 
             foreach (var kartya in kartyak)
             {
@@ -189,7 +187,48 @@ namespace Duszaverseny_2025
 
         private void ExportState(string típus, string output)
         {
-
+            StreamWriter sw = new StreamWriter(Path.Combine(Path.GetDirectoryName(args[1]), output));
+            if (típus == "vilag")
+            {
+                foreach (int i in kartyak.Keys)
+                {
+                    sw.WriteLine("kartya;" + kartyak[i].Item1 + ";" + kartyak[i].Item2.ToString() + ";" + kartyak[i].Item3.ToString() + ";" + kartyak[i].Item4.ToString());
+                }
+                sw.WriteLine();
+                foreach (int i in vezerkartyak.Keys)
+                {
+                    sw.WriteLine("vezer;" + kartyak[i].Item1 + ";" + kartyak[i].Item2.ToString() + ";" + kartyak[i].Item3.ToString() + ";" + kartyak[i].Item4.ToString());
+                }
+                sw.WriteLine();
+                foreach (int i in kazamataegyszeru.Keys)
+                {
+                    string w = string.Join(";", kazamataegyszeru[i]);
+                    sw.WriteLine("kazamata;egyszeru;" + w);
+                }
+                foreach (int i in kazamatakicsi.Keys)
+                {
+                    string w = string.Join(";", kazamatakicsi[i]);
+                    sw.WriteLine("kazamata;kis;" + w);
+                }
+                foreach (int i in kazamatanagy.Keys)
+                {
+                    string w = string.Join(";", kazamatanagy[i]);
+                    sw.WriteLine("kazamata;nagy;" + w);
+                }
+            }
+            else if (típus == "jatekos")
+            {
+                foreach (int i in playercards.Keys)
+                {
+                    sw.WriteLine("gyujtemeny;" + playercards[i].Item1 + ";" + playercards[i].Item2.ToString() + ";" + playercards[i].Item3.ToString() + ";" + playercards[i].Item4.ToString());
+                }
+                sw.WriteLine();
+                foreach (string i in Pakli)
+                {
+                    sw.Write("pakli;" + i);
+                }
+            }
+            sw.Close();
         }
 
         private void button1_Click(object sender, EventArgs e)
