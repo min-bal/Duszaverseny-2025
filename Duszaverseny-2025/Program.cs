@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using System.IO;
 
 namespace Duszaverseny_2025
 {
@@ -21,7 +22,7 @@ namespace Duszaverseny_2025
 
             if (args.Length < 2)
             {
-                Console.WriteLine("Használat: WinFormsApp1.exe [--ui | <test_dir_path>]");
+                Console.WriteLine("Használat: Duszaverseny-2025.exe [--ui | <test_dir_path>]");
                 return;
             }
 
@@ -40,6 +41,7 @@ namespace Duszaverseny_2025
             try
             {
                 RunAutomatedTest(args[1]);
+
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new Form1());
@@ -52,7 +54,18 @@ namespace Duszaverseny_2025
 
         private static void RunAutomatedTest(string v)
         {
-            // ...
+            try
+            {
+                if (!File.Exists(v))
+                {
+                    Console.WriteLine("Nem található fájl a megadott elérési úton: " + v);
+                    Application.Exit();
+                }
+            }
+            catch (Exception ex) {
+                Console.WriteLine(ex.Message);
+                Application.Exit();
+            }
         }
 
         [DllImport("Kernel32.dll")]
