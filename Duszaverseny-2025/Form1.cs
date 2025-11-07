@@ -23,7 +23,7 @@ namespace Duszaverseny_2025
             StreamReader sr = new StreamReader(args[1]);
             InitializeComponent();
             beolvasás(sr);
-            PopulateWorld();
+            
             PlayerCardsba("ObiWan");
             PlayerCardsba("Tul'Arak");
             Pakliba("Tul'Arak");
@@ -77,21 +77,15 @@ namespace Duszaverseny_2025
             }
         }
 
-        private void PopulateWorld()
-        {
-            kartyak[1] = ("ObiWan", 2, 2, "fold");
-            kartyak[2] = ("Tul'Arak", 2,4,"föld");
-        }
-
         private void PlayerCardsba(string c)
         {
-            int cycle = 1;
-            for (int i = 1; i<=kartyak.Count; i++)
+            int index = 0;
+            for (int i = 0; i< kartyak.Count; i++)
             {
                 if (kartyak[i].Item1 == c)
                 {
-                    playercards[cycle] = kartyak[i];
-                    cycle++;
+                    playercards[index] = kartyak[i];
+                    index++;
                 }
             }
         }
@@ -99,7 +93,7 @@ namespace Duszaverseny_2025
         private void Pakliba(string c)
         {
             int index = 0;
-            for (int i = 1; i <= playercards.Count; i++)
+            for (int i = 0; i < playercards.Count; i++)
             {
                 if (playercards[i].Item1 == c)
                 {
@@ -111,20 +105,19 @@ namespace Duszaverseny_2025
 
         private void button1_Click(object sender, EventArgs e)
         {
-            
-            foreach(string c in Pakli)
-            {
-                string text = "";
-                for (int i = 1; i <= playercards.Count; i++)
+            Console.WriteLine("asd");
+            for (int i = 0; i < Pakli.Count; i++) { 
+                string text = "asd";
+                for (int j = 1; j <= playercards.Count; j++)
                 {
-                    if (playercards[i].Item1 == c)
+                    if (playercards[j].Item1 == Pakli[i])
                     {
-                        text = (playercards[i].Item1.ToString() +"\n"+ playercards[i].Item2.ToString() +"/"+ playercards[i].Item3.ToString() + "\n"+ playercards[i].Item4.ToString());
+                        text = (playercards[j].Item1.ToString() +"\n"+ playercards[j].Item2.ToString() +"/"+ playercards[j].Item3.ToString() + "\n"+ playercards[j].Item4.ToString());
                     }
                 }
-                
+                Console.WriteLine(text);
             }
-
+            Console.WriteLine("end");
         }
     }
 }
