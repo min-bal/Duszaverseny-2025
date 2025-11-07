@@ -24,6 +24,7 @@ namespace Duszaverseny_2025
             PlayerCardsba("ObiWan");
             PlayerCardsba("Tul'Arak");
             Pakliba("Tul'Arak");
+            
         }
 
         private void PopulateWorld()
@@ -47,13 +48,13 @@ namespace Duszaverseny_2025
 
         private void Pakliba(string c)
         {
-            int cycle = 1;
+            int index = 0;
             for (int i = 1; i <= playercards.Count; i++)
             {
                 if (playercards[i].Item1 == c)
                 {
-                    Pakli[cycle] = data[i].Item1;
-                    cycle++;
+                    Pakli[index] = data[i].Item1;
+                    index++;
                 }
             }
         }
@@ -63,7 +64,15 @@ namespace Duszaverseny_2025
             
             foreach(string c in Pakli)
             {
-
+                string text = "";
+                for (int i = 1; i <= playercards.Count; i++)
+                {
+                    if (playercards[i].Item1 == c)
+                    {
+                        text = (playercards[i].Item1.ToString() +"\n"+ playercards[i].Item2.ToString() +"/"+ playercards[i].Item3.ToString() + "\n"+ playercards[i].Item4.ToString());
+                    }
+                }
+                
             }
 
         }
