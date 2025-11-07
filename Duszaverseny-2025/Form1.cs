@@ -15,6 +15,7 @@ namespace Duszaverseny_2025
         public Form1()
         {
             InitializeComponent();
+            label1.Text = "Hello World!";
         }
     }
 }
