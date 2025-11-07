@@ -20,7 +20,7 @@ namespace Duszaverseny_2025
 
         private void button1_Click(object sender, EventArgs e)
         {
-            label1.Text = "Button1 Clicked!";
+            label1.Text = "Button1 not clicked!";
         }
     }
 }
