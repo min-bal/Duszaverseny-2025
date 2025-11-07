@@ -13,15 +13,7 @@ namespace Duszaverseny_2025
 {
     public partial class Form1 : Form
     {
-        string[] nevek;
-        string[] sebzes;
-        string[] elet;
-        string[] tipus;
-
-        var kartyak = new Dictionary<string, int, int, string>
-        {
-
-        }
+        Dictionary<int, (string, int, int, string)> kartyak = new Dictionary<int, (string, int, int, string)>();
         public Form1()
         {
             string[] args = Environment.GetCommandLineArgs();
@@ -32,20 +24,16 @@ namespace Duszaverseny_2025
         //in.txt beolvasás
         private void beolvasás(StreamReader sr)
         {
-            int n = 0;
             string sor = sr.ReadLine();
             string[] sorreszek = sor.Split(';');
-            if (sorreszek[0] == "uj kartya")
+            int n = 0;
+            if (sorreszek[0] == "uj kartya") //kartyak dictioanryba helyezese
             {
-                nevek[n] = sorreszek[1];
-                sebzes[n] = sorreszek[2];
-                elet[n] = sorreszek[3];
-                tipus[n] = sorreszek[4];
+                kartyak[n] = (sorreszek[1], Convert.ToInt32(sorreszek[2]),Convert.ToInt32(sorreszek[3]), sorreszek[4]);
                 n++;
             }
-            else if (sorreszek[1] == "uj vezer")
+            else if (sorreszek[1] == "uj vezer") //vezer berakasa kartyak koze dictionarybe
             {
-                nevek[n] = sorreszek[1];
                 if (sorreszek[3] == "sebzes")
                 {
                     string vezer = sorreszek[2];
@@ -53,7 +41,29 @@ namespace Duszaverseny_2025
                     int m = 0;
                     while (megvan = false)
                     {
-                        if (nevek[m])
+                        if (kartyak[m].Item1 == vezer)
+                        {
+                            megvan = true;
+                            kartyak[n] = (sorreszek[1], kartyak[m].Item2*2, kartyak[m].Item3, kartyak[m].Item4);
+                            n++;                            
+                        }
+                        m++;
+                    }
+                }
+                else
+                {
+                    string vezer = sorreszek[2];
+                    bool megvan = false;
+                    int m = 0;
+                    while (megvan = false)
+                    {
+                        if (kartyak[m].Item1 == vezer)
+                        {
+                            megvan = true;
+                            kartyak[n] = (sorreszek[1], kartyak[m].Item2, kartyak[m].Item3*2, kartyak[m].Item4);
+                            n++;
+                        }
+                        m++;
                     }
                 }
             }
