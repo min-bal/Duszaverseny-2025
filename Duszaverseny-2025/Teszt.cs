@@ -181,26 +181,25 @@ namespace Duszaverseny_2025
 
         private void Harc(string nev, string output)
         {
-            int type = -1;
+            int type = 0;
             string[] simaellefelek = new string[4];
             string vezer = "";
-            //var actualstatsk = 
             foreach (string tnev in kazamataegyszeru.Keys)
             {
                 if (tnev == nev)
                 {
-                    type = 0;
+                    type = 1;
                     simaellefelek[0] = kazamataegyszeru[tnev].Item1;
                     simaellefelek[1] = kazamataegyszeru[tnev].Item2;
                 }
             }
-            if (type == -1)
+            if (type == 0)
             {
                 foreach (string tnev in kazamatakicsi.Keys)
                 {
                     if (tnev == nev)
                     {
-                        type = 1;
+                        type = 3;
                         simaellefelek[0] = kazamatakicsi[tnev].Item1;
                         simaellefelek[1] = kazamatakicsi[tnev].Item2;
                         simaellefelek[2] = kazamatakicsi[tnev].Item3;
@@ -208,13 +207,13 @@ namespace Duszaverseny_2025
                     }
                 }
             }
-            if (type == -1)
+            if (type == 0)
             {
                 foreach (string tnev in kazamatanagy.Keys)
                 {
                     if (tnev == nev)
                     {
-                        type = 2;
+                        type = 5;
                         simaellefelek[0] = kazamatanagy[tnev].Item1;
                         simaellefelek[1] = kazamatanagy[tnev].Item2;
                         simaellefelek[2] = kazamatanagy[tnev].Item3;
@@ -225,6 +224,10 @@ namespace Duszaverseny_2025
                 }
             }
             string[] harcosok = Pakli.ToArray();
+
+            StreamWriter swharc = new StreamWriter(Path.Combine(Path.GetDirectoryName(args[1]), output));
+            swharc.WriteLine("harc kezdodik;" + nev);
+            swharc.WriteLine();
 
         }
 
