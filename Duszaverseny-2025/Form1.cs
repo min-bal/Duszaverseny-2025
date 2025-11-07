@@ -17,5 +17,10 @@ namespace Duszaverseny_2025
             InitializeComponent();
             label1.Text = "Hello World!";
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            label1.Text = "Button1 Clicked!";
+        }
     }
 }
