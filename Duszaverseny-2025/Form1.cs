@@ -46,7 +46,7 @@ namespace Duszaverseny_2025
         Dictionary<int, (string, int, int, string, string)> vezerkartyak = new Dictionary<int, (string, int, int, string, string)>
         {
             {0, ("Lord Torak", 6, 4, "Föld", "(Vezér)") },
-            {1, ("Priestess Selia", 2, 12, "Föld", "(Vezér)") }
+            {1, ("Priestess Selia", 2, 12, "Víz", "(Vezér)") }
         };
         Dictionary<int, (string, int, int, string)> playercards = new Dictionary<int, (string, int, int, string)> //properies of the player's cards
         {
