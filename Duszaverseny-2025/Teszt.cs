@@ -49,12 +49,12 @@ namespace Duszaverseny_2025
             }
             StreamReader sr = new StreamReader (args[1] + bemenet);
 
-            Világsoronként(sr);
+            Világsoronként(sr, bemenet);
 
             ReadNextLine(sr, bemenet);
         }
 
-        private void Világsoronként(StreamReader sr)
+        private void Világsoronként(StreamReader sr, string bemenet)
         {//kártya, vezér, kazamata, játékos, felvétel, pakli
             int kartyan = 0;
             int vezerkartyan = 0;
@@ -130,6 +130,18 @@ namespace Duszaverseny_2025
                 if (sorreszek[0] == "uj pakli")
                 {
                     Pakliba(sorreszek[1]);
+                    break;
+                }
+                if (sorreszek[0].StartsWith("export"))
+                {
+                    if (sorreszek[0].Contains("jatekos"))
+                    {
+                        ExportState("jatekos", sorreszek[1], bemenet);
+                    }
+                    else
+                    {
+                        ExportState("vilag", sorreszek[1], bemenet);
+                    }
                     break;
                 }
             }
@@ -460,26 +472,20 @@ namespace Duszaverseny_2025
                 sw.WriteLine();
                 foreach (int i in vezerkartyak.Keys)
                 {
-                    sw.WriteLine("vezer;" + kartyak[i].Item1 + ";" + kartyak[i].Item2.ToString() + ";" + kartyak[i].Item3.ToString() + ";" + kartyak[i].Item4.ToString());
+                    sw.WriteLine("vezer;" + vezerkartyak[i].Item1 + ";" + vezerkartyak[i].Item2.ToString() + ";" + vezerkartyak[i].Item3.ToString() + ";" + vezerkartyak[i].Item4.ToString());
                 }
                 sw.WriteLine();
                 foreach (string nev in kazamataegyszeru.Keys)
                 {
-                    string w = string.Join(";", kazamataegyszeru[nev]);
-                    w.Insert(0, nev + ";");
-                    sw.WriteLine("kazamata;egyszeru;" + w);
+                    sw.WriteLine("kazamata;egyszeru;" + nev + ";" + kazamataegyszeru[nev].Item1 + ";" + kazamataegyszeru[nev].Item2);
                 }
                 foreach (string nev in kazamatakicsi.Keys)
                 {
-                    string w = string.Join(";", kazamatakicsi[nev]);
-                    w.Insert(0, nev + ";");
-                    sw.WriteLine("kazamata;kis;" + w);
+                    sw.WriteLine("kazamata;kis;" + nev + ";" + kazamatakicsi[nev].Item1 + "," + kazamatakicsi[nev].Item2 + "," + kazamatakicsi[nev].Item3 + ";" + kazamatakicsi[nev].Item4 + ";" + kazamatakicsi[nev].Item5);
                 }
                 foreach (string nev in kazamatanagy.Keys)
                 {
-                    string w = string.Join(";", kazamatanagy[nev]);
-                    w.Insert(0, nev + ";");
-                    sw.WriteLine("kazamata;nagy;" + w);
+                    sw.WriteLine("kazamata;nagy;" + nev + ";" + kazamatanagy[nev].Item1 + "," + kazamatanagy[nev].Item2 + "," + kazamatanagy[nev].Item3 + "," + kazamatanagy[nev].Item4 + "," + kazamatanagy[nev].Item5 + ";" + kazamatanagy[nev].Item6);
                 }
             }
             else if (típus == "jatekos")

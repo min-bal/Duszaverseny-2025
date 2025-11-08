@@ -1,34 +1,13 @@
-uj kartya;Aragorn;2;5;tuz
-uj kartya;Sadan;2;4;levego
-uj kartya;Corky;2;4;fold
-uj kartya;Kira;2;7;levego
-uj kartya;Eowyn;2;5;viz
-uj kartya;ObiWan;2;2;fold
-uj kartya;Tul'Arak;2;4;fold
-
-uj vezer;Darth ObiWan;ObiWan;sebzes
-
-uj kazamata;egyszeru;Teszt1a Kazamata;Sadan;eletero
-uj kazamata;egyszeru;Teszt1b Kazamata;Aragorn;sebzes
-uj kazamata;kis;Teszt2a Kazamata;Aragorn,Eowyn,ObiWan;Darth ObiWan;eletero
-uj kazamata;kis;Teszt2b Kazamata;Sadan,Eowyn,Kira;Darth ObiWan;sebzes
-uj kazamata;nagy;Teszt3 Kazamata;Aragorn,Eowyn,ObiWan,Kira,Tul'Arak;Darth ObiWan
+uj kartya;Aragorn;5;2;tuz
+uj kartya;Eowyn;5;2;viz
 
 uj jatekos
 
 felvetel gyujtemenybe;Aragorn
-felvetel gyujtemenybe;Sadan
-felvetel gyujtemenybe;Corky
-felvetel gyujtemenybe;Kira
+felvetel gyujtemenybe;Eowyn
 
-uj pakli;Corky,Kira
+export vilag;T_006.out.txt
 
-export vilag;out.vilag01.txt
-export jatekos;out.jatekos01.txt
+export jatekos;T_006_jatekos.out.txt;
 
-harc;Teszt1a Kazamata;out.harc01.txt
 
-export vilag;out.vilag02.txt
-export jatekos;out.jatekos02.txt
-
-harc;Teszt2a Kazamata;out.TESZT.txt
