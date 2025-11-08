@@ -24,9 +24,11 @@ namespace Duszaverseny_2025
     uj pakli akárhányszor ismétlődhet
     kazamata elején életerő alaphelyzetbe
      */
+    
 
     public partial class Form1 : Form
     {
+        int paklix = 5; //pakliba levo kartyak elhelyezesehez kell
         Dictionary<int, (string, int, int, string)> kartyak = new Dictionary<int, (string, int, int, string)> //név, sebzés, életerő, típus
         {
             {0, ("Arin", 2, 5, "Föld") },
@@ -108,10 +110,9 @@ namespace Duszaverseny_2025
             info2lbl.Size = new System.Drawing.Size(150, 30);
             this.Controls.Add(info2lbl);
             foreach (int i in playercards.Keys) { 
-                System.Windows.Forms.Label lbl = new System.Windows.Forms.Label();
-                lbl.Name = "playerkartyalbl" + i.ToString();
+                System.Windows.Forms.Button lbl = new System.Windows.Forms.Button();
+                lbl.Name = i.ToString();
                 lbl.TextAlign = ContentAlignment.MiddleCenter;
-                lbl.BorderStyle = BorderStyle.FixedSingle;
                 lbl.Text = playercards[i].Item1 + Environment.NewLine + playercards[i].Item2 + "/" + playercards[i].Item3 + Environment.NewLine + playercards[i].Item4;
                 lbl.Size = new Size(85, 100);
                 lbl.Location = new Point(x, 180);
@@ -130,7 +131,7 @@ namespace Duszaverseny_2025
             info3lbl.Location = new Point(3, 300);
             info3lbl.Size = new System.Drawing.Size(150, 30);
             this.Controls.Add(info3lbl);
-            foreach (string nev in Pakli) {
+            /*foreach (string nev in Pakli) {
                 foreach (int i in playercards.Keys)
                 {
                     System.Windows.Forms.Label lbl = new System.Windows.Forms.Label();
@@ -143,9 +144,44 @@ namespace Duszaverseny_2025
                     this.Controls.Add(lbl);
                     x = x + 99;
                 }
-            }
+            }*/
         }
 
+        private void Button_Click(object sender, EventArgs e)
+        {
+            Button clicked = sender as Button;
+
+            clicked.Enabled = false;
+
+            int felekerint;
+            if (playercards.Count % 2 == 0)
+            {
+                felekerint = playercards.Count / 2;
+            }
+            else
+            {
+                felekerint = (playercards.Count + 1)/2;
+            }
+
+            if (Pakli.Count < felekerint)
+            {
+                System.Windows.Forms.Label lbl = new System.Windows.Forms.Label();
+                lbl.Name = "paklilbl" + clicked.Name;
+                lbl.TextAlign = ContentAlignment.MiddleCenter;
+                lbl.BorderStyle = BorderStyle.FixedSingle;
+                lbl.Text = playercards[Convert.ToInt32(clicked.Name)].Item1 + Environment.NewLine + playercards[Convert.ToInt32(clicked.Name)].Item2 + "/" + playercards[Convert.ToInt32(clicked.Name)].Item3 + Environment.NewLine + playercards[Convert.ToInt32(clicked.Name)].Item4;
+                lbl.Size = new Size(85, 100);
+                lbl.Location = new Point(paklix, 330);
+                this.Controls.Add(lbl);
+                paklix += 99;
+                Pakli.Add(lbl.Name);
+            }
+            else
+            {
+                //kikapcsolja az osszes tobbi valaszthato kartya buttont
+            }
+            
+        }
 
         public Form1()
         {
@@ -153,11 +189,20 @@ namespace Duszaverseny_2025
             kartyaklbl();
             Playerlabel();
             Paklilabel();
+            foreach (Control ctrl in this.Controls)
+            {
+                if (ctrl is Button btn && btn.Name != "ÚjPakli")
+                {
+                    btn.Click += Button_Click;
+                }
+            }
         }
 
         private void ÚjPakli_Click(object sender, EventArgs e)
         {
-
+            paklix = 5; //ujra az elso helyen lesz a pakli elso kartyaja
+            //kapcsolja be az osszes valaszthato kartya buttont
+            //torolje ki a pakli labeleket
         }
     }
 }
