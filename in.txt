@@ -30,3 +30,5 @@ harc;Teszt1a Kazamata;out.harc01.txt
 
 export vilag;out.vilag02.txt
 export jatekos;out.jatekos02.txt
+
+harc;Teszt2a Kazamata;out.TESZT.txt
