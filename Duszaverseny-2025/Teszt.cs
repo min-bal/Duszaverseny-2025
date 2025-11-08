@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Duszaverseny_2025
 {
@@ -28,10 +29,29 @@ namespace Duszaverseny_2025
 
         public void Run()
         {
-            StreamReader sr = new StreamReader(args[1]);
+            string bemenet = "";
+            if (args[1].EndsWith("/") || args[1].EndsWith("\\"))
+            {
+                bemenet = "in.txt";
+            }
+            else
+            {
+                bemenet = "/in.txt";
+            }
+            try
+            {
+                StreamReader tesztsr = new StreamReader(args[1] + bemenet);
+                tesztsr.Close();
+            }
+            catch (Exception ex) {
+                Console.WriteLine(ex.Message);
+                Environment.Exit(1);
+            }
+            StreamReader sr = new StreamReader (args[1] + bemenet);
+
             Világsoronként(sr);
 
-            ReadNextLine(sr);
+            ReadNextLine(sr, bemenet);
         }
 
         private void Világsoronként(StreamReader sr)
@@ -135,7 +155,7 @@ namespace Duszaverseny_2025
             }
         }
 
-        private void ReadNextLine(StreamReader sr)
+        private void ReadNextLine(StreamReader sr, string bemenet)
         {
             while (true)
             {
@@ -154,21 +174,22 @@ namespace Duszaverseny_2025
                     }
                     else if (sorreszek[0] == "harc")
                     {
-                        Harc(sorreszek[1], sorreszek[2]);
+                        Harc(sorreszek[1], sorreszek[2], bemenet);
                     }
                     else if (sorreszek[0] == "export vilag")
                     {
-                        ExportState("vilag", sorreszek[1]);
+
+                        ExportState("vilag", sorreszek[1], bemenet);
                     }
                     else if (sorreszek[0] == "export jatekos")
                     {
-                        ExportState("jatekos", sorreszek[1]);
+                        ExportState("jatekos", sorreszek[1], bemenet);
                     }
                 }
             }
         }
 
-        private void Harc(string nev, string output)
+        private void Harc(string nev, string output, string bemenet)
         {
             int type = 0;
             Queue<string> simaellenfelek = new Queue<string>();
@@ -234,8 +255,16 @@ namespace Duszaverseny_2025
             {
                 harcosok.Enqueue(k);
             }
-
-            StreamWriter swharc = new StreamWriter(Path.Combine(Path.GetDirectoryName(args[1]), output));
+            string kimenet = "";
+            if (bemenet.StartsWith("/"))
+            {
+                kimenet = "/" + output;
+            }
+            else
+            {
+                kimenet = output;
+            }
+            StreamWriter swharc = new StreamWriter(args[1] + kimenet);
             swharc.WriteLine("harc kezdodik;" + nev);
             swharc.WriteLine();
             kör++;
@@ -410,9 +439,18 @@ namespace Duszaverseny_2025
             }
         }
 
-        private void ExportState(string típus, string output)
+        private void ExportState(string típus, string output, string bemenet)
         {
-            StreamWriter sw = new StreamWriter(Path.Combine(Path.GetDirectoryName(args[1]), output));
+            string kimenet = "";
+            if (bemenet.StartsWith("/"))
+            {
+                kimenet = "/" + output;
+            }
+            else
+            {
+                kimenet = output;
+            }
+            StreamWriter sw = new StreamWriter(args[1] + kimenet);
             if (típus == "vilag")
             {
                 foreach (int i in kartyak.Keys)

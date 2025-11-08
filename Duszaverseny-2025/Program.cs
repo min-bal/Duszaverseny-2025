@@ -55,9 +55,9 @@ namespace Duszaverseny_2025
         {
             try
             {
-                if (!File.Exists(v))
+                if (!Directory.Exists(v))
                 {
-                    Console.WriteLine("Nem található fájl a megadott elérési úton: " + v);
+                    Console.WriteLine("Nem található a megadott elérési út: " + v);
                     Application.Exit();
                 }
             }
