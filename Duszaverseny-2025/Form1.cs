@@ -21,7 +21,7 @@ namespace Duszaverseny_2025
     kazamata neve max. 20
     gyűjteményben egy kártya csak egyszer
     uj pakli akárhányszor ismétlődhet
-    kazamata elején életerő alaphelyzetbe 
+    kazamata elején életerő alaphelyzetbe
      */
 
     public partial class Form1 : Form

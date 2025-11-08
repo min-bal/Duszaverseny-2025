@@ -32,16 +32,6 @@ namespace Duszaverseny_2025
             Világsoronként(sr);
 
             ReadNextLine(sr);
-
-            foreach (var kartya in kartyak)
-            {
-                Console.WriteLine(kartya.Value.Item1);
-            }
-            foreach (var vezerkartya in vezerkartyak)
-            {
-                Console.WriteLine(vezerkartya.Value.Item1);
-            }
-
         }
 
         private void Világsoronként(StreamReader sr)
@@ -153,7 +143,6 @@ namespace Duszaverseny_2025
                 if (string.IsNullOrEmpty(sor) && sor != "")
                 {
                     sr.Close();
-                    Console.WriteLine("Vége a bemenetelnek");
                     Environment.Exit(0);
                 }
                 else if (sor != "")
@@ -254,7 +243,6 @@ namespace Duszaverseny_2025
 
             while (true)
             {
-                Console.WriteLine("kör: "+kör);
                 if (harcosok.Count == 0 && jharcos == "")
                 {
                     swharc.WriteLine("jatekos vesztett");
@@ -370,10 +358,6 @@ namespace Duszaverseny_2025
                 }
                 swharc.WriteLine();
                 kör++;
-                Console.WriteLine("a kör mostmár: " + kör);
-                Console.WriteLine(simaellenfelek.Count);
-                Console.WriteLine(jellenfél);
-                Console.WriteLine(vezer);
             }
             if (!veszitett)
             {
