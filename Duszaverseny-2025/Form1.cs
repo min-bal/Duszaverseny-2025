@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Net.Sockets;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.IO;
-using System.Net.Sockets;
 
 namespace Duszaverseny_2025
 {
@@ -71,21 +72,77 @@ namespace Duszaverseny_2025
         {
             {"A melyseg kiralynoje", ("Liora", "Arin", "Selia", "Nerun", "Torak", "Priestess Selia") }
         };
-
+        List<string> Pakli = new List<string>();
         private void kartyaklbl()
         {
             int x = 5;
+            System.Windows.Forms.Label info1lbl = new System.Windows.Forms.Label();
+            info1lbl.Name = "info1";
+            info1lbl.Text = "Kártyák:";
+            info1lbl.Font = new Font("Microsoft Sans Seriff", 14);
+            info1lbl.Location = new Point(3, 0);
+            info1lbl.Size = new System.Drawing.Size(120, 30);
+            this.Controls.Add(info1lbl);
             for (int i = 0; i < 11; i++)
             {
-                Label lbl = new Label();
+                System.Windows.Forms.Label lbl = new System.Windows.Forms.Label();
                 lbl.Name = "kartyalbl" + i.ToString();
                 lbl.TextAlign = ContentAlignment.MiddleCenter;
                 lbl.BorderStyle = BorderStyle.FixedSingle;
                 lbl.Text = kartyak[i].Item1 + Environment.NewLine + kartyak[i].Item2 + "/" + kartyak[i].Item3 + Environment.NewLine + kartyak[i].Item4;
                 lbl.Size = new Size(85, 100);
-                lbl.Location = new Point(x, 0);
+                lbl.Location = new Point(x, 30);
                 this.Controls.Add(lbl);
                 x = x + 99;
+            }
+        }
+
+        private void Playerlabel()
+        {
+            int x = 5;
+            System.Windows.Forms.Label info2lbl = new System.Windows.Forms.Label();
+            info2lbl.Name = "info2";
+            info2lbl.Text = "Te kártyáid:";
+            info2lbl.Font = new Font("Microsoft Sans Seriff", 14);
+            info2lbl.Location = new Point(2, 150);
+            info2lbl.Size = new System.Drawing.Size(150, 30);
+            this.Controls.Add(info2lbl);
+            foreach (int i in playercards.Keys) { 
+                System.Windows.Forms.Label lbl = new System.Windows.Forms.Label();
+                lbl.Name = "playerkartyalbl" + i.ToString();
+                lbl.TextAlign = ContentAlignment.MiddleCenter;
+                lbl.BorderStyle = BorderStyle.FixedSingle;
+                lbl.Text = playercards[i].Item1 + Environment.NewLine + playercards[i].Item2 + "/" + playercards[i].Item3 + Environment.NewLine + playercards[i].Item4;
+                lbl.Size = new Size(85, 100);
+                lbl.Location = new Point(x, 180);
+                this.Controls.Add(lbl);
+                x = x + 99;
+            }
+        }
+
+        private void Paklilabel()
+        {
+            int x = 5;
+            System.Windows.Forms.Label info3lbl = new System.Windows.Forms.Label();
+            info3lbl.Name = "info3";
+            info3lbl.Text = "Paklid:";
+            info3lbl.Font = new Font("Microsoft Sans Seriff", 14);
+            info3lbl.Location = new Point(3, 300);
+            info3lbl.Size = new System.Drawing.Size(150, 30);
+            this.Controls.Add(info3lbl);
+            foreach (string nev in Pakli) {
+                foreach (int i in playercards.Keys)
+                {
+                    System.Windows.Forms.Label lbl = new System.Windows.Forms.Label();
+                    lbl.Name = "paklilbl" + nev.ToString();
+                    lbl.TextAlign = ContentAlignment.MiddleCenter;
+                    lbl.BorderStyle = BorderStyle.FixedSingle;
+                    lbl.Text = playercards[i].Item1 + Environment.NewLine + playercards[i].Item2 + "/" + playercards[i].Item3 + Environment.NewLine + playercards[i].Item4;
+                    lbl.Size = new Size(85, 100);
+                    lbl.Location = new Point(x, 330);
+                    this.Controls.Add(lbl);
+                    x = x + 99;
+                }
             }
         }
 
@@ -94,12 +151,13 @@ namespace Duszaverseny_2025
         {
             InitializeComponent();
             kartyaklbl();
+            Playerlabel();
+            Paklilabel();
         }
 
-
-        private void button1_Click(object sender, EventArgs e)
+        private void ÚjPakli_Click(object sender, EventArgs e)
         {
-            
+
         }
     }
 }
