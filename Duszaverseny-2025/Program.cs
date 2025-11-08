@@ -47,7 +47,7 @@ namespace Duszaverseny_2025
             }
             catch (Exception ex)
             {
-            Console.WriteLine(ex);
+                Console.WriteLine(ex);
             }
         }
 
