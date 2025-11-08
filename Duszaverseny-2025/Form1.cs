@@ -72,9 +72,28 @@ namespace Duszaverseny_2025
             {"A melyseg kiralynoje", ("Liora", "Arin", "Selia", "Nerun", "Torak", "Priestess Selia") }
         };
 
+        private void kartyaklbl()
+        {
+            int x = 5;
+            for (int i = 0; i < 11; i++)
+            {
+                Label lbl = new Label();
+                lbl.Name = "kartyalbl" + i.ToString();
+                lbl.TextAlign = ContentAlignment.MiddleCenter;
+                lbl.BorderStyle = BorderStyle.FixedSingle;
+                lbl.Text = kartyak[i].Item1 + Environment.NewLine + kartyak[i].Item2 + "/" + kartyak[i].Item3 + Environment.NewLine + kartyak[i].Item4;
+                lbl.Size = new Size(85, 100);
+                lbl.Location = new Point(x, 0);
+                this.Controls.Add(lbl);
+                x = x + 99;
+            }
+        }
+
+
         public Form1()
         {
             InitializeComponent();
+            kartyaklbl();
         }
 
 
