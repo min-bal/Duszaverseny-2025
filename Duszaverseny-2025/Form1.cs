@@ -270,6 +270,11 @@ namespace Duszaverseny_2025
                     btn.Enabled = true;
                 }
             }
+            
+            paklix -= 99;
+            Controls.Remove(button);
+            button.Dispose();
+
             foreach (int i in playercards.Keys)
             {
                 if (paklint.Contains(i))
@@ -286,10 +291,6 @@ namespace Duszaverseny_2025
                     }
                 }
             }
-            paklix -= 99;
-            Controls.Remove(button);
-            button.Dispose();
-            //ha visszaraksz egy gombot oldja fel az osszeset kiveve a lentmaradokat
         }
 
         private void ÚjPakli_Click(object sender, EventArgs e)
@@ -926,19 +927,38 @@ namespace Duszaverseny_2025
                             break;
                         }
                     }
-                    playercards[10] = (kartyak[ujkartya].Item1, kartyak[ujkartya].Item2, kartyak[ujkartya].Item3, kartyak[ujkartya].Item4);
+                    playercards[playercards.Count] = (kartyak[ujkartya].Item1, kartyak[ujkartya].Item2, kartyak[ujkartya].Item3, kartyak[ujkartya].Item4);
                     nyeremeny.Text = "Játékos nyert!\nNyeremény: " + kartyak[ujkartya].Item1;
                     Console.WriteLine(playercards[10].Item1);
-                    
-                    //szar van a levesben
-                    //kapcsolja be az osszes gombot, mivel mar lehet egy hatodikat valasztani
 
-                    foreach (var btn in this.Controls.OfType<Button>().Where(b => b.Name.StartsWith("gyujtemeny")).ToList())
+                    System.Windows.Forms.Button lbl = new System.Windows.Forms.Button();
+                    lbl.Name = "gyujtemeny" + (playercards.Count-1).ToString();
+                    
+                    lbl.TextAlign = ContentAlignment.MiddleCenter;
+                    lbl.Text = playercards[playercards.Count-1].Item1 + Environment.NewLine + playercards[playercards.Count-1].Item2 + "/" + playercards[playercards.Count-1].Item3 + Environment.NewLine + playercards[playercards.Count-1].Item4;
+                    lbl.Size = new Size(85, 100);
+                    lbl.Location = new Point(5+(playercards.Count-1)*99, 340);
+                    lbl.Click += Button_Click;
+                    this.Controls.Add(lbl);
+
+                    foreach (int i in playercards.Keys)
                     {
-                        this.Controls.Remove(btn);
-                        btn.Dispose();
+                        if (paklint.Contains(i))
+                        {
+
+                        }
+                        else
+                        {
+                            string buttonName = "gyujtemeny" + i;
+                            Control[] found = this.Controls.Find(buttonName, true);
+                            if (found.Length > 0 && found[0] is Button btn)
+                            {
+                                btn.Enabled = true;
+                            }
+                        }
                     }
-                    kartyaidbuttons();
+
+                    
                 }
                 else
                 {
