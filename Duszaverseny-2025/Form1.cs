@@ -452,6 +452,7 @@ namespace Duszaverseny_2025
             int Xh = 230;
             int Xe = 300;
             int Y = 50;
+
             if (típus == "egyszeru")
             {
                 simaellenfelek.Enqueue(kazamataegyszeru["Barlangi Portya"].Item1);
@@ -482,14 +483,60 @@ namespace Duszaverseny_2025
                 harcosok.Enqueue(k);
             }
 
+            jellenfél = simaellenfelek.Dequeue();
+            foreach (int i in kartyak.Keys)
+            {
+                if (kartyak[i].Item1 == jellenfél)
+                {
+                    jélete = kartyak[i].Item3;
+                    jsebzése = kartyak[i].Item2;
+                    jtípuse = kartyak[i].Item4;
+                    System.Windows.Forms.Label ell1 = new System.Windows.Forms.Label();
+                    ell1.Name = "jellenfél";
+                    ell1.TextAlign = ContentAlignment.MiddleCenter;
+                    ell1.Text = jellenfél + Environment.NewLine + jsebzése + "/" + jélete + Environment.NewLine + jtípuse;
+                    ell1.BorderStyle = BorderStyle.FixedSingle;
+                    ell1.Size = new System.Drawing.Size(70, 50);
+                    ell1.Location = new Point(Xe, Y);
+                    harctér.Controls.Add(ell1);
+                }
+            }
+
+            jharcos = harcosok.Dequeue();
+            foreach (int i in kartyak.Keys)
+            {
+                if (kartyak[i].Item1 == jharcos)
+                {
+                    jéleth = kartyak[i].Item3;
+                    jsebzésh = kartyak[i].Item2;
+                    jtípush = kartyak[i].Item4;
+                    System.Windows.Forms.Label harcos1 = new System.Windows.Forms.Label();
+                    harcos1.Name = "jharcos";
+                    harcos1.TextAlign = ContentAlignment.MiddleCenter;
+                    harcos1.Text = jharcos + Environment.NewLine + jsebzésh + "/" + jéleth + Environment.NewLine + jtípush;
+                    harcos1.BorderStyle = BorderStyle.FixedSingle;
+                    harcos1.Size = new System.Drawing.Size(70, 50);
+                    harcos1.Location = new Point(Xh, Y);
+                    harctér.Controls.Add(harcos1);
+                }
+            }
+
+            Y += 70;
+
             while (true)
             {
+                if (Y == 890)
+                {
+                    Y = 50;
+                    Xe += 200;
+                    Xh += 200;
+                }
                 if (harcosok.Count == 0 && jharcos == "")
                 {
                     veszitett = true;
                     break;
                 }
-                if (jellenfél == "") //kazamata kezd
+                if (jellenfél == "") //kazamata uj kartyat hoz be?
                 {
                     if (simaellenfelek.Count > 0)
                     {
@@ -504,11 +551,22 @@ namespace Duszaverseny_2025
                                 System.Windows.Forms.Label ell1 = new System.Windows.Forms.Label();
                                 ell1.Name = "jellenfél";
                                 ell1.TextAlign = ContentAlignment.MiddleCenter;
-                                ell1.Text = jellenfél + Environment.NewLine + jélete + "/" + jsebzése + Environment.NewLine + jtípuse;
+                                ell1.Text = jellenfél + Environment.NewLine + jsebzése + "/" + jélete + Environment.NewLine + jtípuse;
                                 ell1.BorderStyle = BorderStyle.FixedSingle;
                                 ell1.Size = new System.Drawing.Size(70, 50);
                                 ell1.Location = new Point(Xe, Y);
                                 harctér.Controls.Add(ell1);
+
+                                System.Windows.Forms.Label harcos1 = new System.Windows.Forms.Label();
+                                harcos1.Name = "jharcos";
+                                harcos1.TextAlign = ContentAlignment.MiddleCenter;
+                                harcos1.Text = jharcos + Environment.NewLine + jsebzésh + "/" + jéleth + Environment.NewLine + jtípush;
+                                harcos1.BorderStyle = BorderStyle.FixedSingle;
+                                harcos1.Size = new System.Drawing.Size(70, 50);
+                                harcos1.Location = new Point(Xh, Y);
+                                harctér.Controls.Add(harcos1);
+
+                                Y += 70;
                             }
                         }
                     }
@@ -527,11 +585,22 @@ namespace Duszaverseny_2025
                                     System.Windows.Forms.Label ell1 = new System.Windows.Forms.Label();
                                     ell1.Name = "jellenfél";
                                     ell1.TextAlign = ContentAlignment.MiddleCenter;
-                                    ell1.Text = jellenfél + Environment.NewLine + jélete + "/" + jsebzése + Environment.NewLine + jtípuse;
+                                    ell1.Text = jellenfél + Environment.NewLine + jsebzése + "/" + jélete + Environment.NewLine + jtípuse;
                                     ell1.BorderStyle = BorderStyle.FixedSingle;
                                     ell1.Size = new System.Drawing.Size(70, 50);
                                     ell1.Location = new Point(Xe, Y);
                                     harctér.Controls.Add(ell1);
+
+                                    System.Windows.Forms.Label harcos1 = new System.Windows.Forms.Label();
+                                    harcos1.Name = "jharcos";
+                                    harcos1.TextAlign = ContentAlignment.MiddleCenter;
+                                    harcos1.Text = jharcos + Environment.NewLine + jsebzésh + "/" + jéleth + Environment.NewLine + jtípush;
+                                    harcos1.BorderStyle = BorderStyle.FixedSingle;
+                                    harcos1.Size = new System.Drawing.Size(70, 50);
+                                    harcos1.Location = new Point(Xh, Y);
+                                    harctér.Controls.Add(harcos1);
+
+                                    Y += 70;
                                 }
                             }
                         }
@@ -542,28 +611,7 @@ namespace Duszaverseny_2025
                 {
                     if (jtípuse == jtípush)
                     {
-                        jéleth -= jsebzése;
-                        if (jéleth < 0)
-                        {
-                            jéleth = 0;
-                        }
-                        System.Windows.Forms.Label ell1 = new System.Windows.Forms.Label();
-                        ell1.Name = "jellenfél";
-                        ell1.TextAlign = ContentAlignment.MiddleCenter;
-                        ell1.Text = jellenfél + Environment.NewLine + jélete + "/" + jsebzése + Environment.NewLine + jtípuse;
-                        ell1.BorderStyle = BorderStyle.FixedSingle;
-                        ell1.Size = new System.Drawing.Size(70, 50);
-                        ell1.Location = new Point(Xe, Y);
-                        harctér.Controls.Add(ell1);
-
-                        System.Windows.Forms.Label harcos1 = new System.Windows.Forms.Label();
-                        harcos1.Name = "jharcos";
-                        harcos1.TextAlign = ContentAlignment.MiddleCenter;
-                        harcos1.Text = jharcos + Environment.NewLine + jéleth + "/" + jsebzésh + Environment.NewLine + jtípush;
-                        harcos1.BorderStyle = BorderStyle.FixedSingle;
-                        harcos1.Size = new System.Drawing.Size(70, 50);
-                        harcos1.Location = new Point(Xh, Y);
-                        harctér.Controls.Add(harcos1);
+                        jéleth -= jsebzése;                                     
                     }
                     else if ((jtípuse == "Tűz" && jtípush == "Levegő") || (jtípuse == "Levegő" && jtípush == "Tűz") || (jtípuse == "Föld" && jtípush == "Víz") || (jtípuse == "Víz" && jtípush == "Föld"))
                     {
@@ -571,63 +619,47 @@ namespace Duszaverseny_2025
                         Console.WriteLine(jsebzése/2);
                         jéleth -= jsebzése / 2;
                         Console.WriteLine(jéleth);
-                        if (jéleth < 0)
-                        {
-                            jéleth = 0;
-                        }
-                        System.Windows.Forms.Label ell1 = new System.Windows.Forms.Label();
-                        ell1.Name = "jellenfél";
-                        ell1.TextAlign = ContentAlignment.MiddleCenter;
-                        ell1.Text = jellenfél + Environment.NewLine + jélete + "/" + jsebzése + Environment.NewLine + jtípuse;
-                        ell1.BorderStyle = BorderStyle.FixedSingle;
-                        ell1.Size = new System.Drawing.Size(70, 50);
-                        ell1.Location = new Point(Xe, Y);
-                        harctér.Controls.Add(ell1);
-
-                        System.Windows.Forms.Label harcos1 = new System.Windows.Forms.Label();
-                        harcos1.Name = "jharcos";
-                        harcos1.TextAlign = ContentAlignment.MiddleCenter;
-                        harcos1.Text = jharcos + Environment.NewLine + jéleth + "/" + jsebzésh + Environment.NewLine + jtípush;
-                        harcos1.BorderStyle = BorderStyle.FixedSingle;
-                        harcos1.Size = new System.Drawing.Size(70, 50);
-                        harcos1.Location = new Point(Xh, Y);
-                        harctér.Controls.Add(harcos1);
                     }
                     else
                     {
                         jéleth -= jsebzése * 2;
-                        if (jéleth < 0)
-                        {
-                            jéleth = 0;
-                        }
-                        System.Windows.Forms.Label ell1 = new System.Windows.Forms.Label();
-                        ell1.Name = "jellenfél";
-                        ell1.TextAlign = ContentAlignment.MiddleCenter;
-                        ell1.Text = jellenfél + Environment.NewLine + jélete + "/" + jsebzése + Environment.NewLine + jtípuse;
-                        ell1.BorderStyle = BorderStyle.FixedSingle;
-                        ell1.Size = new System.Drawing.Size(70, 50);
-                        ell1.Location = new Point(Xe, Y);
-                        harctér.Controls.Add(ell1);
-
-                        System.Windows.Forms.Label harcos1 = new System.Windows.Forms.Label();
-                        harcos1.Name = "jharcos";
-                        harcos1.TextAlign = ContentAlignment.MiddleCenter;
-                        harcos1.Text = jharcos + Environment.NewLine + jéleth + "/" + jsebzésh + Environment.NewLine + jtípush;
-                        harcos1.BorderStyle = BorderStyle.FixedSingle;
-                        harcos1.Size = new System.Drawing.Size(70, 50);
-                        harcos1.Location = new Point(Xh, Y);
-                        harctér.Controls.Add(harcos1);
                     }
-                    if (jéleth <= 0)
+
+                    if (jéleth < 0)
+                    {
+                        jéleth = 0;
+                    }
+
+                    System.Windows.Forms.Label ell1 = new System.Windows.Forms.Label();
+                    ell1.Name = "jellenfél";
+                    ell1.TextAlign = ContentAlignment.MiddleCenter;
+                    ell1.Text = jellenfél + Environment.NewLine + jsebzése + "/" + jélete + Environment.NewLine + jtípuse;
+                    ell1.BorderStyle = BorderStyle.FixedSingle;
+                    ell1.Size = new System.Drawing.Size(70, 50);
+                    ell1.Location = new Point(Xe, Y);
+                    harctér.Controls.Add(ell1);
+
+                    System.Windows.Forms.Label harcos1 = new System.Windows.Forms.Label();
+                    harcos1.Name = "jharcos";
+                    harcos1.TextAlign = ContentAlignment.MiddleCenter;
+                    harcos1.Text = jharcos + Environment.NewLine + jsebzésh + "/" + jéleth + Environment.NewLine + jtípush;
+                    harcos1.BorderStyle = BorderStyle.FixedSingle;
+                    harcos1.Size = new System.Drawing.Size(70, 50);
+                    harcos1.Location = new Point(Xh, Y);
+                    harctér.Controls.Add(harcos1);
+
+                    Y += 70;
+
+                    /*if (jéleth <= 0)
                     {
                         jharcos = "";
                         jéleth = 0;
                         jsebzésh = 0;
                         jtípush = "";
-                    }
+                    }*/
                 }
-
-                if (jharcos == "") //játékos jön
+                
+                if (jharcos == "") //játékos hoz elo kartyat?
                 {
                     if (harcosok.Count != 0)
                     {
@@ -642,11 +674,22 @@ namespace Duszaverseny_2025
                                 System.Windows.Forms.Label harcos1 = new System.Windows.Forms.Label();
                                 harcos1.Name = "jharcos";
                                 harcos1.TextAlign = ContentAlignment.MiddleCenter;
-                                harcos1.Text = jharcos + Environment.NewLine + jéleth + "/" + jsebzésh + Environment.NewLine + jtípush;
+                                harcos1.Text = jharcos + Environment.NewLine + jsebzésh + "/" + jéleth + Environment.NewLine + jtípush;
                                 harcos1.BorderStyle = BorderStyle.FixedSingle;
                                 harcos1.Size = new System.Drawing.Size(70, 50);
                                 harcos1.Location = new Point(Xh, Y);
                                 harctér.Controls.Add(harcos1);
+
+                                System.Windows.Forms.Label ell1 = new System.Windows.Forms.Label();
+                                ell1.Name = "jellenfél";
+                                ell1.TextAlign = ContentAlignment.MiddleCenter;
+                                ell1.Text = jellenfél + Environment.NewLine + jsebzése + "/" + jélete + Environment.NewLine + jtípuse;
+                                ell1.BorderStyle = BorderStyle.FixedSingle;
+                                ell1.Size = new System.Drawing.Size(70, 50);
+                                ell1.Location = new Point(Xe, Y);
+                                harctér.Controls.Add(ell1);
+
+                                Y += 70;
                             }
                         }
                     }
@@ -660,88 +703,49 @@ namespace Duszaverseny_2025
                 {
                     if (jtípuse == jtípush)
                     {
-                        jélete -= jsebzésh;
-                        if (jélete < 0)
-                        {
-                            jélete = 0;
-                        }
-                        System.Windows.Forms.Label ell1 = new System.Windows.Forms.Label();
-                        ell1.Name = "jellenfél";
-                        ell1.TextAlign = ContentAlignment.MiddleCenter;
-                        ell1.Text = jellenfél + Environment.NewLine + jélete + "/" + jsebzése + Environment.NewLine + jtípuse;
-                        ell1.BorderStyle = BorderStyle.FixedSingle;
-                        ell1.Size = new System.Drawing.Size(70, 50);
-                        ell1.Location = new Point(Xe, Y);
-                        harctér.Controls.Add(ell1);
-
-                        System.Windows.Forms.Label harcos1 = new System.Windows.Forms.Label();
-                        harcos1.Name = "jharcos";
-                        harcos1.TextAlign = ContentAlignment.MiddleCenter;
-                        harcos1.Text = jharcos + Environment.NewLine + jéleth + "/" + jsebzésh + Environment.NewLine + jtípush;
-                        harcos1.BorderStyle = BorderStyle.FixedSingle;
-                        harcos1.Size = new System.Drawing.Size(70, 50);
-                        harcos1.Location = new Point(Xh, Y);
-                        harctér.Controls.Add(harcos1);
+                        jélete -= jsebzésh;                     
                     }
                     else if ((jtípuse == "Tűz" && jtípush == "Levegő") || (jtípuse == "Levegő" && jtípush == "Tűz") || (jtípuse == "Föld" && jtípush == "Víz") || (jtípuse == "Víz" && jtípush == "Föld"))
                     {
                         jélete -= jsebzésh / 2;
-                        if (jélete < 0)
-                        {
-                            jélete = 0;
-                        }
-                        System.Windows.Forms.Label ell1 = new System.Windows.Forms.Label();
-                        ell1.Name = "jellenfél";
-                        ell1.TextAlign = ContentAlignment.MiddleCenter;
-                        ell1.Text = jellenfél + Environment.NewLine + jélete + "/" + jsebzése + Environment.NewLine + jtípuse;
-                        ell1.BorderStyle = BorderStyle.FixedSingle;
-                        ell1.Size = new System.Drawing.Size(70, 50);
-                        ell1.Location = new Point(Xe, Y);
-                        harctér.Controls.Add(ell1);
-
-                        System.Windows.Forms.Label harcos1 = new System.Windows.Forms.Label();
-                        harcos1.Name = "jharcos";
-                        harcos1.TextAlign = ContentAlignment.MiddleCenter;
-                        harcos1.Text = jharcos + Environment.NewLine + jéleth + "/" + jsebzésh + Environment.NewLine + jtípush;
-                        harcos1.BorderStyle = BorderStyle.FixedSingle;
-                        harcos1.Size = new System.Drawing.Size(70, 50);
-                        harcos1.Location = new Point(Xh, Y);
-                        harctér.Controls.Add(harcos1);
                     }
                     else
                     {
                         jélete -= jsebzésh * 2;
-                        if (jélete < 0)
-                        {
-                            jélete = 0;
-                        }
-                        System.Windows.Forms.Label ell1 = new System.Windows.Forms.Label();
-                        ell1.Name = "jellenfél";
-                        ell1.TextAlign = ContentAlignment.MiddleCenter;
-                        ell1.Text = jellenfél + Environment.NewLine + jélete + "/" + jsebzése + Environment.NewLine + jtípuse;
-                        ell1.BorderStyle = BorderStyle.FixedSingle;
-                        ell1.Size = new System.Drawing.Size(70, 50);
-                        ell1.Location = new Point(Xe, Y);
-                        harctér.Controls.Add(ell1);
-
-                        System.Windows.Forms.Label harcos1 = new System.Windows.Forms.Label();
-                        harcos1.Name = "jharcos";
-                        harcos1.TextAlign = ContentAlignment.MiddleCenter;
-                        harcos1.Text = jharcos + Environment.NewLine + jéleth + "/" + jsebzésh + Environment.NewLine + jtípush;
-                        harcos1.BorderStyle = BorderStyle.FixedSingle;
-                        harcos1.Size = new System.Drawing.Size(70, 50);
-                        harcos1.Location = new Point(Xh, Y);
-                        harctér.Controls.Add(harcos1);
                     }
-                    if (jélete <= 0)
+
+                    if (jélete < 0)
+                    {
+                        jélete = 0;
+                    }
+
+                    System.Windows.Forms.Label ell1 = new System.Windows.Forms.Label();
+                    ell1.Name = "jellenfél";
+                    ell1.TextAlign = ContentAlignment.MiddleCenter;
+                    ell1.Text = jellenfél + Environment.NewLine + jsebzése + "/" + jélete + Environment.NewLine + jtípuse;
+                    ell1.BorderStyle = BorderStyle.FixedSingle;
+                    ell1.Size = new System.Drawing.Size(70, 50);
+                    ell1.Location = new Point(Xe, Y);
+                    harctér.Controls.Add(ell1);
+
+                    System.Windows.Forms.Label harcos1 = new System.Windows.Forms.Label();
+                    harcos1.Name = "jharcos";
+                    harcos1.TextAlign = ContentAlignment.MiddleCenter;
+                    harcos1.Text = jharcos + Environment.NewLine + jsebzésh + "/" + jéleth + Environment.NewLine + jtípush;
+                    harcos1.BorderStyle = BorderStyle.FixedSingle;
+                    harcos1.Size = new System.Drawing.Size(70, 50);
+                    harcos1.Location = new Point(Xh, Y);
+                    harctér.Controls.Add(harcos1);
+                    Y += 70;
+
+                    /*if (jélete <= 0)
                     {
                         jellenfél = "";
                         jélete = 0;
                         jsebzése = 0;
                         jtípuse = "";
-                    }
+                    }*/
                 }
-                Y += 70;
             }/*
             if (!veszitett)
             {
@@ -884,6 +888,11 @@ namespace Duszaverseny_2025
                     }
                 }
             }
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
