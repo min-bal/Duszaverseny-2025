@@ -129,7 +129,10 @@ namespace Duszaverseny_2025
                 }
                 if (sorreszek[0] == "uj pakli")
                 {
-                    Pakliba(sorreszek[1]);
+                    if (sorreszek.Length > 1)
+                    {
+                        Pakliba(sorreszek[1]);
+                    }
                     break;
                 }
                 if (sorreszek[0].StartsWith("export"))
@@ -195,7 +198,7 @@ namespace Duszaverseny_2025
                     }
                     else if (sorreszek[0] == "export jatekos")
                     {
-                        ExportState("jatekos", sorreszek[1], bemenet);
+                        ExportState("jatekos", sorreszek[1], bemenet); 
                     }
                 }
             }
@@ -263,9 +266,15 @@ namespace Duszaverseny_2025
             }
 
             Queue<string> harcosok = new Queue<string>();
-            foreach (string k in Pakli)
+            try
             {
-                harcosok.Enqueue(k);
+                foreach (string k in Pakli)
+                {
+                    harcosok.Enqueue(k);
+                }
+            }
+            catch (Exception ex) {
+                Console.WriteLine("Üres a pakli!");
             }
             string kimenet = "";
             if (bemenet.StartsWith("/"))
