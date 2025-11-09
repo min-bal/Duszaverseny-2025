@@ -148,10 +148,10 @@ namespace Duszaverseny_2025
 
             System.Windows.Forms.Label info6lbl = new System.Windows.Forms.Label();
             info6lbl.Name = "info6";
-            info6lbl.Text = "Pakli összeállításához nyomd meg az alábbi gombokat."+ Environment.NewLine +"Új paklihoz nyomd meg az \"Új Pakli\" gombot, vagy a pakli egy elemét." + Environment.NewLine + "A pakliban gyűjteményednek legfeljebb fele szerepelhet.";
+            info6lbl.Text = "Pakli módosíttásához nyomd meg az alábbi kártyákat."+ Environment.NewLine +"Pakli kiürétéséhez nyomd meg az új pakli gombot." + Environment.NewLine + "A pakliban gyűjteményednek legfeljebb fele szerepelhet.";
             info6lbl.Font = new Font("Microsoft Sans Seriff", 12);
             info6lbl.Location = new Point(302, 270);
-            info6lbl.Size = new System.Drawing.Size(800, 100);
+            info6lbl.Size = new System.Drawing.Size(800, 70);
             this.Controls.Add(info6lbl);
         }
 
