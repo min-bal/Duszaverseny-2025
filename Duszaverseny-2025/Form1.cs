@@ -10,6 +10,7 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Duszaverseny_2025
 {
@@ -101,7 +102,7 @@ namespace Duszaverseny_2025
 
         private void Playerlabel()
         {
-            int x = 5;
+            
             System.Windows.Forms.Label info2lbl = new System.Windows.Forms.Label();
             info2lbl.Name = "info2";
             info2lbl.Text = "Te kártyáid:";
@@ -109,17 +110,7 @@ namespace Duszaverseny_2025
             info2lbl.Location = new Point(2, 300);
             info2lbl.Size = new System.Drawing.Size(150, 30);
             this.Controls.Add(info2lbl);
-            foreach (int i in playercards.Keys) { 
-                System.Windows.Forms.Button lbl = new System.Windows.Forms.Button();
-                lbl.Name = "gyujtemeny" + i.ToString();
-                lbl.TextAlign = ContentAlignment.MiddleCenter;
-                lbl.Text = playercards[i].Item1 + Environment.NewLine + playercards[i].Item2 + "/" + playercards[i].Item3 + Environment.NewLine + playercards[i].Item4;
-                lbl.Size = new Size(85, 100);
-                lbl.Location = new Point(x, 340);
-                lbl.Click += Button_Click;
-                this.Controls.Add(lbl);
-                x = x + 99;
-            }
+            
         }
 
         private void Paklilabel()
@@ -133,7 +124,7 @@ namespace Duszaverseny_2025
             info3lbl.Size = new System.Drawing.Size(110, 30);
             this.Controls.Add(info3lbl);
 
-            Button KészPakli = new System.Windows.Forms.Button();
+            /*Button KészPakli = new System.Windows.Forms.Button();
             KészPakli.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             KészPakli.Location = new System.Drawing.Point(120, 443);
             KészPakli.Name = "KészPakli";
@@ -142,18 +133,35 @@ namespace Duszaverseny_2025
             KészPakli.Text = "Pakli használata";
             KészPakli.UseVisualStyleBackColor = true;
             KészPakli.Click += new System.EventHandler(KészPakli_Click);
-            this.Controls.Add(KészPakli);
+            this.Controls.Add(KészPakli);*/
             Button ÚjPakli = new System.Windows.Forms.Button();
             ÚjPakli.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            ÚjPakli.Location = new System.Drawing.Point(300, 443);
+            ÚjPakli.Location = new System.Drawing.Point(120, 443);
             ÚjPakli.Name = "ÚjPakli";
             ÚjPakli.Size = new System.Drawing.Size(120, 40);
             ÚjPakli.TabIndex = 0;
             ÚjPakli.Text = "Új pakli";
             ÚjPakli.UseVisualStyleBackColor = true;
-            ÚjPakli.Enabled = false;
+            ÚjPakli.Enabled = true;
             ÚjPakli.Click += new System.EventHandler(ÚjPakli_Click);
             this.Controls.Add(ÚjPakli);
+        }
+
+        private void kartyaidbuttons()
+        {
+            int x = 5;
+            foreach (int i in playercards.Keys)
+            {
+                System.Windows.Forms.Button lbl = new System.Windows.Forms.Button();
+                lbl.Name = "gyujtemeny" + i.ToString();
+                lbl.TextAlign = ContentAlignment.MiddleCenter;
+                lbl.Text = playercards[i].Item1 + Environment.NewLine + playercards[i].Item2 + "/" + playercards[i].Item3 + Environment.NewLine + playercards[i].Item4;
+                lbl.Size = new Size(85, 100);
+                lbl.Location = new Point(x, 340);
+                lbl.Click += Button_Click;
+                this.Controls.Add(lbl);
+                x = x + 99;
+            }
         }
 
         private void vezerek()
@@ -174,12 +182,14 @@ namespace Duszaverseny_2025
                 lbl.Text = vezerkartyak[i].Item1 + Environment.NewLine + vezerkartyak[i].Item2 + "/" + vezerkartyak[i].Item3 + Environment.NewLine + vezerkartyak[i].Item4;
                 lbl.Size = new Size(85, 100);
                 lbl.Location = new Point(x, 180);
+                lbl.BorderStyle = BorderStyle.FixedSingle;
                 lbl.Click += Button_Click;
                 this.Controls.Add(lbl);
                 x = x + 99;
             }
         }
 
+        List<int> paklint = new List<int>();
         private void Button_Click(object sender, EventArgs e)
         {
             Button clicked = sender as Button;
@@ -199,17 +209,28 @@ namespace Duszaverseny_2025
             if (Pakli.Count < felekerint)
             {
                 System.Windows.Forms.Button lbl = new System.Windows.Forms.Button();
-
-                lbl.Name = "paklibtn" + clicked.Name.Last();
+                
                 lbl.TextAlign = ContentAlignment.MiddleCenter;
                 lbl.AutoSize = false;
-                lbl.Text = playercards[Convert.ToInt32(clicked.Name.Last<char>().ToString())].Item1.ToString() + "\r\n" + playercards[Convert.ToInt32(clicked.Name.Last<char>().ToString())].Item2.ToString() + "/" + playercards[Convert.ToInt32(clicked.Name.Last<char>().ToString())].Item3.ToString() + "\r\n" + playercards[Convert.ToInt32(clicked.Name.Last<char>().ToString())].Item4.ToString();
+
+                int nmb;
+                if (clicked.Name.Length == 11)
+                {
+                    nmb = int.Parse(clicked.Name.Last().ToString());
+                }
+                else
+                {
+                    nmb = int.Parse(clicked.Name.Substring(clicked.Name.Length - 2));
+                }
+                paklint.Add(nmb);
+                lbl.Name = "paklibtn" + nmb;
+                lbl.Text = playercards[nmb].Item1.ToString() + "\r\n" + playercards[nmb].Item2.ToString() + "/" + playercards[nmb].Item3.ToString() + "\r\n" + playercards[nmb].Item4.ToString();
                 lbl.Size = new Size(85, 100);
                 lbl.Location = new Point(paklix, 490);
                 lbl.Click += new System.EventHandler(PakliClick);
                 this.Controls.Add(lbl);
                 paklix += 99;
-                Pakli.Add(playercards[Convert.ToInt32(clicked.Name.Last().ToString())].Item1);
+                Pakli.Add(playercards[nmb].Item1);
             }
             if (Pakli.Count == felekerint)
             {
@@ -217,9 +238,85 @@ namespace Duszaverseny_2025
                 {
                     btn.Enabled = false;
                 }
-                KészPakli_Click(this, EventArgs.Empty);
+                //KészPakli_Click(this, EventArgs.Empty);
             }
 
+        }
+
+        private void PakliClick(object sender, EventArgs e)
+        {
+            Button button = sender as Button;
+            int nmb;
+            if (button.Name.Length == 9)
+            {
+                nmb = int.Parse(button.Name.Last().ToString());
+            }
+            else
+            {
+                nmb = int.Parse(button.Name.Substring(button.Name.Length - 2));
+            }
+            string last = nmb.ToString();
+            string asd = playercards[Convert.ToInt32(last)].Item1;
+            Pakli.Remove(asd);
+            paklint.Remove(nmb);
+            foreach (var btn in this.Controls.OfType<Button>())
+            {
+                if (btn.Location.Y == button.Location.Y && btn.Location.X > button.Location.X)
+                {
+                    btn.Location = new Point(btn.Location.X - 99, btn.Location.Y);
+                }
+                else if (btn.Name == "gyujtemeny" + last)
+                {
+                    btn.Enabled = true;
+                }
+            }
+            
+            paklix -= 99;
+            Controls.Remove(button);
+            button.Dispose();
+
+            foreach (int i in playercards.Keys)
+            {
+                if (paklint.Contains(i))
+                {
+
+                }
+                else
+                {
+                    string buttonName = "gyujtemeny" + i;
+                    Control[] found = this.Controls.Find(buttonName, true);
+                    if (found.Length > 0 && found[0] is Button btn)
+                    {
+                        btn.Enabled = true;
+                    }
+                }
+            }
+        }
+
+        private void ÚjPakli_Click(object sender, EventArgs e)
+        {
+            paklix = 0;
+            Pakli.Clear();
+            paklint.Clear();
+            foreach (Control ctrl in Controls)
+            {
+                if (ctrl is Button btn)
+                {
+                    if (btn.Name.StartsWith("gyujtemeny"))
+                    {
+                        btn.Enabled = true;
+                    }
+                    else if (btn.Name == "KészPakli")
+                    {
+                        btn.Enabled = true;
+                    }
+                }
+            }
+            foreach (var btn in this.Controls.OfType<Button>().Where(b => b.Name.StartsWith("paklibtn")).ToList())
+            {
+                this.Controls.Remove(btn);
+                btn.Dispose();
+            }
         }
 
         public Form1()
@@ -227,6 +324,7 @@ namespace Duszaverseny_2025
             InitializeComponent();
             kartyaklbl();
             Playerlabel();
+            kartyaidbuttons();
             Paklilabel();
             vezerek();
             KazmataGombok();
@@ -449,9 +547,10 @@ namespace Duszaverseny_2025
             string jtípuse = "";
             string vezer = "üres";
 
-            int Xh = 230;
-            int Xe = 300;
+            int Xh = 0;
+            int Xe = 70;
             int Y = 50;
+
             if (típus == "egyszeru")
             {
                 simaellenfelek.Enqueue(kazamataegyszeru["Barlangi Portya"].Item1);
@@ -482,14 +581,53 @@ namespace Duszaverseny_2025
                 harcosok.Enqueue(k);
             }
 
-            while (true)
+            jellenfél = simaellenfelek.Dequeue();
+            foreach (int i in kartyak.Keys)
             {
+                if (kartyak[i].Item1 == jellenfél)
+                {
+                    jélete = kartyak[i].Item3;
+                    jsebzése = kartyak[i].Item2;
+                    jtípuse = kartyak[i].Item4;
+                    System.Windows.Forms.Label ell1 = new System.Windows.Forms.Label();
+                    ell1.Name = "jellenfél";
+                    ell1.TextAlign = ContentAlignment.MiddleCenter;
+                    ell1.Text = jellenfél + Environment.NewLine + jsebzése + "/" + jélete + Environment.NewLine + jtípuse;
+                    ell1.BorderStyle = BorderStyle.FixedSingle;
+                    ell1.Size = new System.Drawing.Size(70, 50);
+                    ell1.Location = new Point(Xe, Y);
+                    harctér.Controls.Add(ell1);
+                }
+            }
+
+            jharcos = harcosok.Dequeue();
+            foreach (int i in playercards.Keys)
+            {
+                if (playercards[i].Item1 == jharcos)
+                {
+                    jéleth = playercards[i].Item3;
+                    jsebzésh = playercards[i].Item2;
+                    jtípush = playercards[i].Item4;
+                    System.Windows.Forms.Label harcos1 = new System.Windows.Forms.Label();
+                    harcos1.Name = "jharcos";
+                    harcos1.TextAlign = ContentAlignment.MiddleCenter;
+                    harcos1.Text = jharcos + Environment.NewLine + jsebzésh + "/" + jéleth + Environment.NewLine + jtípush;
+                    harcos1.BorderStyle = BorderStyle.FixedSingle;
+                    harcos1.Size = new System.Drawing.Size(70, 50);
+                    harcos1.Location = new Point(Xh, Y);
+                    harctér.Controls.Add(harcos1);
+                }
+            }
+            Y += 70;
+            
+            while (true)
+            {                                                
                 if (harcosok.Count == 0 && jharcos == "")
                 {
                     veszitett = true;
                     break;
                 }
-                if (jellenfél == "") //kazamata kezd
+                if (jellenfél == "") //kazamata uj kartyat hoz be?
                 {
                     if (simaellenfelek.Count > 0)
                     {
@@ -504,18 +642,38 @@ namespace Duszaverseny_2025
                                 System.Windows.Forms.Label ell1 = new System.Windows.Forms.Label();
                                 ell1.Name = "jellenfél";
                                 ell1.TextAlign = ContentAlignment.MiddleCenter;
-                                ell1.Text = jellenfél + Environment.NewLine + jélete + "/" + jsebzése + Environment.NewLine + jtípuse;
+                                ell1.Text = jellenfél + Environment.NewLine + jsebzése + "/" + jélete + Environment.NewLine + jtípuse;
                                 ell1.BorderStyle = BorderStyle.FixedSingle;
                                 ell1.Size = new System.Drawing.Size(70, 50);
                                 ell1.Location = new Point(Xe, Y);
                                 harctér.Controls.Add(ell1);
+
+                                System.Windows.Forms.Label harcos1 = new System.Windows.Forms.Label();
+                                harcos1.Name = "jharcos";
+                                harcos1.TextAlign = ContentAlignment.MiddleCenter;
+                                harcos1.Text = jharcos + Environment.NewLine + jsebzésh + "/" + jéleth + Environment.NewLine + jtípush;
+                                harcos1.BorderStyle = BorderStyle.FixedSingle;
+                                harcos1.Size = new System.Drawing.Size(70, 50);
+                                harcos1.Location = new Point(Xh, Y);
+                                harctér.Controls.Add(harcos1);
+
+                                if (Y > 680)
+                                {
+                                    Y = 50;
+                                    Xe += 200;
+                                    Xh += 200;
+                                }
+                                else
+                                {
+                                    Y += 70;
+                                }                                    
                             }
                         }
                     }
                     else
                     {
                         if (vezer != "üres")
-                        {
+                        {                            
                             foreach (int i in vezerkartyak.Keys)
                             {
                                 jellenfél = vezer;
@@ -527,97 +685,87 @@ namespace Duszaverseny_2025
                                     System.Windows.Forms.Label ell1 = new System.Windows.Forms.Label();
                                     ell1.Name = "jellenfél";
                                     ell1.TextAlign = ContentAlignment.MiddleCenter;
-                                    ell1.Text = jellenfél + Environment.NewLine + jélete + "/" + jsebzése + Environment.NewLine + jtípuse;
+                                    ell1.Text = jellenfél + Environment.NewLine + jsebzése + "/" + jélete + Environment.NewLine + jtípuse;
                                     ell1.BorderStyle = BorderStyle.FixedSingle;
                                     ell1.Size = new System.Drawing.Size(70, 50);
                                     ell1.Location = new Point(Xe, Y);
                                     harctér.Controls.Add(ell1);
+
+                                    System.Windows.Forms.Label harcos1 = new System.Windows.Forms.Label();
+                                    harcos1.Name = "jharcos";
+                                    harcos1.TextAlign = ContentAlignment.MiddleCenter;
+                                    harcos1.Text = jharcos + Environment.NewLine + jsebzésh + "/" + jéleth + Environment.NewLine + jtípush;
+                                    harcos1.BorderStyle = BorderStyle.FixedSingle;
+                                    harcos1.Size = new System.Drawing.Size(70, 50);
+                                    harcos1.Location = new Point(Xh, Y);
+                                    harctér.Controls.Add(harcos1);
+
+                                    if (Y > 680)
+                                    {
+                                        Y = 50;
+                                        Xe += 200;
+                                        Xh += 200;
+                                    }
+                                    else
+                                    {
+                                        Y += 70;
+                                    }
                                 }
                             }
+                            vezer = "üres";
                         }
                         else break;
                     }
                 }
-                else if (jellenfél != "") //kazamata támad, kivel, mennyi sebzés (típussal), kire, mennyi élet marad
+                else if (jellenfél != "" && jharcos != "") //kazamata támad, kivel, mennyi sebzés (típussal), kire, mennyi élet marad
                 {
                     if (jtípuse == jtípush)
                     {
-                        jéleth -= jsebzése;
-                        if (jéleth < 0)
-                        {
-                            jéleth = 0;
-                        }
-                        System.Windows.Forms.Label ell1 = new System.Windows.Forms.Label();
-                        ell1.Name = "jellenfél";
-                        ell1.TextAlign = ContentAlignment.MiddleCenter;
-                        ell1.Text = jellenfél + Environment.NewLine + jélete + "/" + jsebzése + Environment.NewLine + jtípuse;
-                        ell1.BorderStyle = BorderStyle.FixedSingle;
-                        ell1.Size = new System.Drawing.Size(70, 50);
-                        ell1.Location = new Point(Xe, Y);
-                        harctér.Controls.Add(ell1);
-
-                        System.Windows.Forms.Label harcos1 = new System.Windows.Forms.Label();
-                        harcos1.Name = "jharcos";
-                        harcos1.TextAlign = ContentAlignment.MiddleCenter;
-                        harcos1.Text = jharcos + Environment.NewLine + jéleth + "/" + jsebzésh + Environment.NewLine + jtípush;
-                        harcos1.BorderStyle = BorderStyle.FixedSingle;
-                        harcos1.Size = new System.Drawing.Size(70, 50);
-                        harcos1.Location = new Point(Xh, Y);
-                        harctér.Controls.Add(harcos1);
+                        jéleth -= jsebzése;                                     
                     }
                     else if ((jtípuse == "Tűz" && jtípush == "Levegő") || (jtípuse == "Levegő" && jtípush == "Tűz") || (jtípuse == "Föld" && jtípush == "Víz") || (jtípuse == "Víz" && jtípush == "Föld"))
                     {
-                        Console.WriteLine(jsebzése);
-                        Console.WriteLine(jsebzése/2);
                         jéleth -= jsebzése / 2;
-                        Console.WriteLine(jéleth);
-                        if (jéleth < 0)
-                        {
-                            jéleth = 0;
-                        }
-                        System.Windows.Forms.Label ell1 = new System.Windows.Forms.Label();
-                        ell1.Name = "jellenfél";
-                        ell1.TextAlign = ContentAlignment.MiddleCenter;
-                        ell1.Text = jellenfél + Environment.NewLine + jélete + "/" + jsebzése + Environment.NewLine + jtípuse;
-                        ell1.BorderStyle = BorderStyle.FixedSingle;
-                        ell1.Size = new System.Drawing.Size(70, 50);
-                        ell1.Location = new Point(Xe, Y);
-                        harctér.Controls.Add(ell1);
-
-                        System.Windows.Forms.Label harcos1 = new System.Windows.Forms.Label();
-                        harcos1.Name = "jharcos";
-                        harcos1.TextAlign = ContentAlignment.MiddleCenter;
-                        harcos1.Text = jharcos + Environment.NewLine + jéleth + "/" + jsebzésh + Environment.NewLine + jtípush;
-                        harcos1.BorderStyle = BorderStyle.FixedSingle;
-                        harcos1.Size = new System.Drawing.Size(70, 50);
-                        harcos1.Location = new Point(Xh, Y);
-                        harctér.Controls.Add(harcos1);
                     }
                     else
                     {
                         jéleth -= jsebzése * 2;
-                        if (jéleth < 0)
-                        {
-                            jéleth = 0;
-                        }
-                        System.Windows.Forms.Label ell1 = new System.Windows.Forms.Label();
-                        ell1.Name = "jellenfél";
-                        ell1.TextAlign = ContentAlignment.MiddleCenter;
-                        ell1.Text = jellenfél + Environment.NewLine + jélete + "/" + jsebzése + Environment.NewLine + jtípuse;
-                        ell1.BorderStyle = BorderStyle.FixedSingle;
-                        ell1.Size = new System.Drawing.Size(70, 50);
-                        ell1.Location = new Point(Xe, Y);
-                        harctér.Controls.Add(ell1);
-
-                        System.Windows.Forms.Label harcos1 = new System.Windows.Forms.Label();
-                        harcos1.Name = "jharcos";
-                        harcos1.TextAlign = ContentAlignment.MiddleCenter;
-                        harcos1.Text = jharcos + Environment.NewLine + jéleth + "/" + jsebzésh + Environment.NewLine + jtípush;
-                        harcos1.BorderStyle = BorderStyle.FixedSingle;
-                        harcos1.Size = new System.Drawing.Size(70, 50);
-                        harcos1.Location = new Point(Xh, Y);
-                        harctér.Controls.Add(harcos1);
                     }
+
+                    if (jéleth < 0)
+                    {
+                        jéleth = 0;
+                    }
+
+                    System.Windows.Forms.Label ell1 = new System.Windows.Forms.Label();
+                    ell1.Name = "jellenfél";
+                    ell1.TextAlign = ContentAlignment.MiddleCenter;
+                    ell1.Text = jellenfél + Environment.NewLine + jsebzése + "/" + jélete + Environment.NewLine + jtípuse;
+                    ell1.BorderStyle = BorderStyle.FixedSingle;
+                    ell1.Size = new System.Drawing.Size(70, 50);
+                    ell1.Location = new Point(Xe, Y);
+                    harctér.Controls.Add(ell1);
+
+                    System.Windows.Forms.Label harcos1 = new System.Windows.Forms.Label();
+                    harcos1.Name = "jharcos";
+                    harcos1.TextAlign = ContentAlignment.MiddleCenter;
+                    harcos1.Text = jharcos + Environment.NewLine + jsebzésh + "/" + jéleth + Environment.NewLine + jtípush;
+                    harcos1.BorderStyle = BorderStyle.FixedSingle;
+                    harcos1.Size = new System.Drawing.Size(70, 50);
+                    harcos1.Location = new Point(Xh, Y);
+                    harctér.Controls.Add(harcos1);
+
+                    if (Y > 680)
+                    {
+                        Y = 50;
+                        Xe += 200;
+                        Xh += 200;
+                    }
+                    else
+                    {
+                        Y += 70;
+                    }
+
                     if (jéleth <= 0)
                     {
                         jharcos = "";
@@ -626,27 +774,47 @@ namespace Duszaverseny_2025
                         jtípush = "";
                     }
                 }
-
-                if (jharcos == "") //játékos jön
+                
+                if (jharcos == "") //játékos hoz elo kartyat?
                 {
                     if (harcosok.Count != 0)
                     {
                         jharcos = harcosok.Dequeue();
-                        foreach (int i in kartyak.Keys)
+                        foreach (int i in playercards.Keys)
                         {
-                            if (kartyak[i].Item1 == jharcos)
+                            if (playercards[i].Item1 == jharcos)
                             {
-                                jéleth = kartyak[i].Item3;
-                                jsebzésh = kartyak[i].Item2;
-                                jtípush = kartyak[i].Item4;
+                                jéleth = playercards[i].Item3;
+                                jsebzésh = playercards[i].Item2;
+                                jtípush = playercards[i].Item4;
                                 System.Windows.Forms.Label harcos1 = new System.Windows.Forms.Label();
                                 harcos1.Name = "jharcos";
                                 harcos1.TextAlign = ContentAlignment.MiddleCenter;
-                                harcos1.Text = jharcos + Environment.NewLine + jéleth + "/" + jsebzésh + Environment.NewLine + jtípush;
+                                harcos1.Text = jharcos + Environment.NewLine + jsebzésh + "/" + jéleth + Environment.NewLine + jtípush;
                                 harcos1.BorderStyle = BorderStyle.FixedSingle;
                                 harcos1.Size = new System.Drawing.Size(70, 50);
                                 harcos1.Location = new Point(Xh, Y);
                                 harctér.Controls.Add(harcos1);
+
+                                System.Windows.Forms.Label ell1 = new System.Windows.Forms.Label();
+                                ell1.Name = "jellenfél";
+                                ell1.TextAlign = ContentAlignment.MiddleCenter;
+                                ell1.Text = jellenfél + Environment.NewLine + jsebzése + "/" + jélete + Environment.NewLine + jtípuse;
+                                ell1.BorderStyle = BorderStyle.FixedSingle;
+                                ell1.Size = new System.Drawing.Size(70, 50);
+                                ell1.Location = new Point(Xe, Y);
+                                harctér.Controls.Add(ell1);
+
+                                if (Y > 680)
+                                {
+                                    Y = 50;
+                                    Xe += 200;
+                                    Xh += 200;
+                                }
+                                else
+                                {
+                                    Y += 70;
+                                }
                             }
                         }
                     }
@@ -656,83 +824,55 @@ namespace Duszaverseny_2025
                         break;
                     }
                 }
-                else //játékos támad, kivel, mennyi sebzés (típussal), kire, mennyi élet marad
+                else if (jharcos != "" && jellenfél != "") //játékos támad, kivel, mennyi sebzés (típussal), kire, mennyi élet marad
                 {
                     if (jtípuse == jtípush)
                     {
-                        jélete -= jsebzésh;
-                        if (jélete < 0)
-                        {
-                            jélete = 0;
-                        }
-                        System.Windows.Forms.Label ell1 = new System.Windows.Forms.Label();
-                        ell1.Name = "jellenfél";
-                        ell1.TextAlign = ContentAlignment.MiddleCenter;
-                        ell1.Text = jellenfél + Environment.NewLine + jélete + "/" + jsebzése + Environment.NewLine + jtípuse;
-                        ell1.BorderStyle = BorderStyle.FixedSingle;
-                        ell1.Size = new System.Drawing.Size(70, 50);
-                        ell1.Location = new Point(Xe, Y);
-                        harctér.Controls.Add(ell1);
-
-                        System.Windows.Forms.Label harcos1 = new System.Windows.Forms.Label();
-                        harcos1.Name = "jharcos";
-                        harcos1.TextAlign = ContentAlignment.MiddleCenter;
-                        harcos1.Text = jharcos + Environment.NewLine + jéleth + "/" + jsebzésh + Environment.NewLine + jtípush;
-                        harcos1.BorderStyle = BorderStyle.FixedSingle;
-                        harcos1.Size = new System.Drawing.Size(70, 50);
-                        harcos1.Location = new Point(Xh, Y);
-                        harctér.Controls.Add(harcos1);
+                        jélete -= jsebzésh;                     
                     }
                     else if ((jtípuse == "Tűz" && jtípush == "Levegő") || (jtípuse == "Levegő" && jtípush == "Tűz") || (jtípuse == "Föld" && jtípush == "Víz") || (jtípuse == "Víz" && jtípush == "Föld"))
                     {
                         jélete -= jsebzésh / 2;
-                        if (jélete < 0)
-                        {
-                            jélete = 0;
-                        }
-                        System.Windows.Forms.Label ell1 = new System.Windows.Forms.Label();
-                        ell1.Name = "jellenfél";
-                        ell1.TextAlign = ContentAlignment.MiddleCenter;
-                        ell1.Text = jellenfél + Environment.NewLine + jélete + "/" + jsebzése + Environment.NewLine + jtípuse;
-                        ell1.BorderStyle = BorderStyle.FixedSingle;
-                        ell1.Size = new System.Drawing.Size(70, 50);
-                        ell1.Location = new Point(Xe, Y);
-                        harctér.Controls.Add(ell1);
-
-                        System.Windows.Forms.Label harcos1 = new System.Windows.Forms.Label();
-                        harcos1.Name = "jharcos";
-                        harcos1.TextAlign = ContentAlignment.MiddleCenter;
-                        harcos1.Text = jharcos + Environment.NewLine + jéleth + "/" + jsebzésh + Environment.NewLine + jtípush;
-                        harcos1.BorderStyle = BorderStyle.FixedSingle;
-                        harcos1.Size = new System.Drawing.Size(70, 50);
-                        harcos1.Location = new Point(Xh, Y);
-                        harctér.Controls.Add(harcos1);
                     }
                     else
                     {
                         jélete -= jsebzésh * 2;
-                        if (jélete < 0)
-                        {
-                            jélete = 0;
-                        }
-                        System.Windows.Forms.Label ell1 = new System.Windows.Forms.Label();
-                        ell1.Name = "jellenfél";
-                        ell1.TextAlign = ContentAlignment.MiddleCenter;
-                        ell1.Text = jellenfél + Environment.NewLine + jélete + "/" + jsebzése + Environment.NewLine + jtípuse;
-                        ell1.BorderStyle = BorderStyle.FixedSingle;
-                        ell1.Size = new System.Drawing.Size(70, 50);
-                        ell1.Location = new Point(Xe, Y);
-                        harctér.Controls.Add(ell1);
-
-                        System.Windows.Forms.Label harcos1 = new System.Windows.Forms.Label();
-                        harcos1.Name = "jharcos";
-                        harcos1.TextAlign = ContentAlignment.MiddleCenter;
-                        harcos1.Text = jharcos + Environment.NewLine + jéleth + "/" + jsebzésh + Environment.NewLine + jtípush;
-                        harcos1.BorderStyle = BorderStyle.FixedSingle;
-                        harcos1.Size = new System.Drawing.Size(70, 50);
-                        harcos1.Location = new Point(Xh, Y);
-                        harctér.Controls.Add(harcos1);
                     }
+
+                    if (jélete < 0)
+                    {
+                        jélete = 0;
+                    }
+
+                    System.Windows.Forms.Label ell1 = new System.Windows.Forms.Label();
+                    ell1.Name = "jellenfél";
+                    ell1.TextAlign = ContentAlignment.MiddleCenter;
+                    ell1.Text = jellenfél + Environment.NewLine + jsebzése + "/" + jélete + Environment.NewLine + jtípuse;
+                    ell1.BorderStyle = BorderStyle.FixedSingle;
+                    ell1.Size = new System.Drawing.Size(70, 50);
+                    ell1.Location = new Point(Xe, Y);
+                    harctér.Controls.Add(ell1);
+
+                    System.Windows.Forms.Label harcos1 = new System.Windows.Forms.Label();
+                    harcos1.Name = "jharcos";
+                    harcos1.TextAlign = ContentAlignment.MiddleCenter;
+                    harcos1.Text = jharcos + Environment.NewLine + jsebzésh + "/" + jéleth + Environment.NewLine + jtípush;
+                    harcos1.BorderStyle = BorderStyle.FixedSingle;
+                    harcos1.Size = new System.Drawing.Size(70, 50);
+                    harcos1.Location = new Point(Xh, Y);
+                    harctér.Controls.Add(harcos1);
+
+                    if (Y > 680)
+                    {
+                        Y = 50;
+                        Xe += 200;
+                        Xh += 200;
+                    }
+                    else
+                    {
+                        Y += 70;
+                    }
+
                     if (jélete <= 0)
                     {
                         jellenfél = "";
@@ -741,29 +881,84 @@ namespace Duszaverseny_2025
                         jtípuse = "";
                     }
                 }
-                Y += 70;
-            }/*
+            }
+            Button back = new Button();
+            back.Size = new System.Drawing.Size(100, 100);
+            back.Location = new Point(900, 695);
+            back.Text = "Vissza a főmenüre";
+            back.Click += (s, e) => this.Controls.Remove(harctér);
+            harctér.Controls.Add (back);
+            System.Windows.Forms.Label nyeremeny = new System.Windows.Forms.Label();
+            nyeremeny.Size = new System.Drawing.Size(100, 100);
+            nyeremeny.Location = new Point(900, 495);
+            nyeremeny.Text = "";
+            nyeremeny.BorderStyle = BorderStyle.FixedSingle;
+            harctér.Controls.Add(nyeremeny);
+
             if (!veszitett)
             {
-                if (jutalom == "")
+                if (jutalom == "kartya")
                 {
-                    foreach (int i in kartyak.Keys)
+
+                    string buttonname = "A mélység királynője";
+                    Button kikapcs = this.Controls
+                        .OfType<Button>()
+                        .FirstOrDefault(b => b.Name == buttonname);
+                    if (kikapcs != null)
                     {
-                        bool van = false;
-                        foreach (int j in playercards.Keys)
+                        kikapcs.Enabled = false;
+                    }
+
+                    Random rnd = new Random();
+                    int ujkartya;
+                    while (true)
+                    {
+                        ujkartya = rnd.Next(0, 11);
+                        int j = 0;
+                        foreach (int i in playercards.Keys)
                         {
-                            if (playercards[j].Item1 == kartyak[i].Item1)
+                            if (kartyak[ujkartya].Item1 == playercards[i].Item1)
                             {
-                                van = true;
+                                j++;
                             }
                         }
-                        if (!van)
+                        if (j == 0)
                         {
-                            playercards.Add(playercards.Count - 1, kartyak[i]);
-                            swharc.WriteLine("jatekos nyert;" + kartyak[i].Item1);
                             break;
                         }
                     }
+                    playercards[playercards.Count] = (kartyak[ujkartya].Item1, kartyak[ujkartya].Item2, kartyak[ujkartya].Item3, kartyak[ujkartya].Item4);
+                    nyeremeny.Text = "Játékos nyert!\nNyeremény: " + kartyak[ujkartya].Item1;
+                    Console.WriteLine(playercards[10].Item1);
+
+                    System.Windows.Forms.Button lbl = new System.Windows.Forms.Button();
+                    lbl.Name = "gyujtemeny" + (playercards.Count-1).ToString();
+                    
+                    lbl.TextAlign = ContentAlignment.MiddleCenter;
+                    lbl.Text = playercards[playercards.Count-1].Item1 + Environment.NewLine + playercards[playercards.Count-1].Item2 + "/" + playercards[playercards.Count-1].Item3 + Environment.NewLine + playercards[playercards.Count-1].Item4;
+                    lbl.Size = new Size(85, 100);
+                    lbl.Location = new Point(5+(playercards.Count-1)*99, 340);
+                    lbl.Click += Button_Click;
+                    this.Controls.Add(lbl);
+
+                    foreach (int i in playercards.Keys)
+                    {
+                        if (paklint.Contains(i))
+                        {
+
+                        }
+                        else
+                        {
+                            string buttonName = "gyujtemeny" + i;
+                            Control[] found = this.Controls.Find(buttonName, true);
+                            if (found.Length > 0 && found[0] is Button btn)
+                            {
+                                btn.Enabled = true;
+                            }
+                        }
+                    }
+
+                    
                 }
                 else
                 {
@@ -771,87 +966,37 @@ namespace Duszaverseny_2025
                     {
                         if (playercards[i].Item1 == jharcos)
                         {
-                            if (jutalom == "eletero")
+                            if (jutalom == "sebzés")
                             {
-                                var card = playercards[i];
-                                card.Item3 += 2;
-                                playercards[i] = card;
-                                swharc.WriteLine("jatekos nyert;" + jutalom + ";" + jharcos);
-                                break;
+                                playercards[i] = (playercards[i].Item1, playercards[i].Item2+1, playercards[i].Item3, playercards[i].Item4);
+                                nyeremeny.Text = "Játékos nyert +1 sebzést " + playercards[i].Item1 + "-re!";
                             }
-                            else if (jutalom == "sebzes")
+                            else
                             {
-                                var card = playercards[i];
-                                card.Item2 += 1;
-                                playercards[i] = card;
-                                swharc.WriteLine("jatekos nyert;" + jutalom + ";" + jharcos);
-                                break;
+                                playercards[i] = (playercards[i].Item1, playercards[i].Item2, playercards[i].Item3+2, playercards[i].Item4);
+                                nyeremeny.Text = "Játékos nyert +2 életet " + playercards[i].Item1 + "-re!";
                             }
+                            string buttonName = "gyujtemeny" + i;
+                            Control[] found = this.Controls.Find(buttonName, true);
+                            if (found.Length > 0 && found[0] is Button btn)
+                            {
+                                btn.Text = playercards[i].Item1 + Environment.NewLine + playercards[i].Item2 + "/" + playercards[i].Item3 + Environment.NewLine + playercards[i].Item4;
+                            }
+                            string buttonName1 = "paklibtn" + i;
+                            Control[] found1 = this.Controls.Find(buttonName1, true);
+                            if (found1.Length > 0 && found1[0] is Button btn1)
+                            {
+                                btn1.Text = playercards[i].Item1 + Environment.NewLine + playercards[i].Item2 + "/" + playercards[i].Item3 + Environment.NewLine + playercards[i].Item4;
+                            }
+                            break;
                         }
                     }
                 }
-                swharc.Close();
-            }*/
-
-
-
-
-            //this.Controls.Remove(harctér);
-
+            }            
         }
+        
 
-        private void PakliClick(object sender, EventArgs e)
-        {
-            Button button = sender as Button;
-            string last = button.Name.Last<char>().ToString();
-            string asd = playercards[Convert.ToInt32(last)].Item1;
-            Pakli.Remove(asd);
-            foreach (var btn in this.Controls.OfType<Button>())
-            {
-                if (btn.Location.Y == button.Location.Y && btn.Location.X > button.Location.X)
-                {
-                    btn.Location = new Point(btn.Location.X-99, btn.Location.Y);
-                }
-                else if (btn.Name == "gyujtemeny" + last)
-                {
-                    btn.Enabled = true;
-                }
-            }
-            paklix -= 99;
-            Controls.Remove(button);
-            button.Dispose();
-        }
-
-        private void ÚjPakli_Click(object sender, EventArgs e)
-        {
-            paklix = 0;
-            Pakli.Clear();
-            foreach (Control ctrl in Controls)
-            {
-                if (ctrl is Button btn)
-                {
-                    if (btn.Name.StartsWith("gyujtemeny"))
-                    {
-                        btn.Enabled = true;
-                    }
-                    else if (btn.Name == "ÚjPakli")
-                    {
-                        btn.Enabled = false;
-                    }
-                    else if (btn.Name == "KészPakli")
-                    {
-                        btn.Enabled = true;
-                    }
-                }
-            }
-            foreach (var btn in this.Controls.OfType<Button>().Where(b => b.Name.StartsWith("paklibtn")).ToList())
-            {
-                this.Controls.Remove(btn);
-                btn.Dispose();
-            }
-        }
-
-        private void KészPakli_Click(object sender, EventArgs e)
+        /*private void KészPakli_Click(object sender, EventArgs e)
         {
             int felekerint;
             if (playercards.Count % 2 == 0)
@@ -884,6 +1029,11 @@ namespace Duszaverseny_2025
                     }
                 }
             }
+        }*/
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
