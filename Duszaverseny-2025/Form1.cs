@@ -191,7 +191,6 @@ namespace Duszaverseny_2025
                 lbl.Size = new Size(85, 100);
                 lbl.Location = new Point(x, 180);
                 lbl.BorderStyle = BorderStyle.FixedSingle;
-                lbl.Click += Button_Click;
                 this.Controls.Add(lbl);
                 x = x + 99;
             }
