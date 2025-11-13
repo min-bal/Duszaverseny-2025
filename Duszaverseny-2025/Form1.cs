@@ -76,124 +76,72 @@ namespace Duszaverseny_2025
             {"A mélység királynője", ("Liora", "Arin", "Selia", "Nerun", "Torak", "Priestess Selia") }
         };
         List<string> Pakli = new List<string>();
+
+        private void Label(string name, string displaytext, int x, int y, int fontsize, int width, int height, bool border)
+        {
+            System.Windows.Forms.Label label = new System.Windows.Forms.Label();
+            label.Name = name;
+            label.Text = displaytext;
+            label.Font = new Font("Microsoft Sans Seriff", fontsize);
+            label.Location = new Point(x, y);
+            label.Size = new System.Drawing.Size(width, height);
+            if (border) {
+                label.TextAlign = ContentAlignment.MiddleCenter;
+                label.BorderStyle = BorderStyle.FixedSingle;
+            }
+            this.Controls.Add(label);
+        }
+
+        private void Buttons(string name, string displaytext, int x, int y, int fontsize, int width, int height, EventHandler onClick)
+        {
+            System.Windows.Forms.Button button = new System.Windows.Forms.Button();
+            button.Name = name;
+            button.TextAlign = ContentAlignment.MiddleCenter;
+            button.Font = new System.Drawing.Font("Microsoft Sans Serif", fontsize);
+            button.Text = displaytext;
+            button.Size = new Size(width, height);
+            button.Location = new Point(x, y);
+            button.Click += onClick;
+            this.Controls.Add(button);
+        }
+
         private void kartyaklbl()
         {
             int x = 5;
-            System.Windows.Forms.Label info1lbl = new System.Windows.Forms.Label();
-            info1lbl.Name = "info1";
-            info1lbl.Text = "Kártyák:";
-            info1lbl.Font = new Font("Microsoft Sans Seriff", 14);
-            info1lbl.Location = new Point(3, 0);
-            info1lbl.Size = new System.Drawing.Size(120, 30);
-            this.Controls.Add(info1lbl);
+            string EXTRAINFO = "Pakli módosításához nyomd meg az alábbi kártyákat." + Environment.NewLine + "Pakli kiürítéséhez nyomd meg az új pakli gombot." + Environment.NewLine + "A pakliban gyűjteményednek legfeljebb fele szerepelhet.";
+            Label("info1", "Kártyák:",3,0,14,120,30, false);
             for (int i = 0; i < 11; i++)
             {
-                System.Windows.Forms.Label lbl = new System.Windows.Forms.Label();
-                lbl.Name = "kartyak" + i.ToString();
-                lbl.TextAlign = ContentAlignment.MiddleCenter;
-                lbl.BorderStyle = BorderStyle.FixedSingle;
-                lbl.Text = kartyak[i].Item1 + Environment.NewLine + kartyak[i].Item2 + "/" + kartyak[i].Item3 + Environment.NewLine + kartyak[i].Item4;
-                lbl.Size = new Size(85, 100);
-                lbl.Location = new Point(x, 30);
-                this.Controls.Add(lbl);
+                string disptext = kartyak[i].Item1 + Environment.NewLine + kartyak[i].Item2 + "/" + kartyak[i].Item3 + Environment.NewLine + kartyak[i].Item4;
+                Label("kartyak"+i.ToString(),disptext,x,30,8,85,100,true);
                 x = x + 99;
             }
-        }
+            x = 5;
 
-        private void Playerlabel()
-        {
-            
-            System.Windows.Forms.Label info2lbl = new System.Windows.Forms.Label();
-            info2lbl.Name = "info2";
-            info2lbl.Text = "Te kártyáid:";
-            info2lbl.Font = new Font("Microsoft Sans Seriff", 14);
-            info2lbl.Location = new Point(2, 300);
-            info2lbl.Size = new System.Drawing.Size(150, 30);
-            this.Controls.Add(info2lbl);
-            
-        }
-
-        private void Paklilabel()
-        {
-            int x = 5;
-            System.Windows.Forms.Label info3lbl = new System.Windows.Forms.Label();
-            info3lbl.Name = "info3";
-            info3lbl.Text = "Paklid:";
-            info3lbl.Font = new Font("Microsoft Sans Seriff", 14);
-            info3lbl.Location = new Point(3, 450);
-            info3lbl.Size = new System.Drawing.Size(110, 30);
-            this.Controls.Add(info3lbl);
-
-            /*Button KészPakli = new System.Windows.Forms.Button();
-            KészPakli.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            KészPakli.Location = new System.Drawing.Point(120, 443);
-            KészPakli.Name = "KészPakli";
-            KészPakli.Size = new System.Drawing.Size(150, 40);
-            KészPakli.TabIndex = 0;
-            KészPakli.Text = "Pakli használata";
-            KészPakli.UseVisualStyleBackColor = true;
-            KészPakli.Click += new System.EventHandler(KészPakli_Click);
-            this.Controls.Add(KészPakli);*/
-            Button ÚjPakli = new System.Windows.Forms.Button();
-            ÚjPakli.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            ÚjPakli.Location = new System.Drawing.Point(120, 443);
-            ÚjPakli.Name = "ÚjPakli";
-            ÚjPakli.Size = new System.Drawing.Size(120, 40);
-            ÚjPakli.TabIndex = 0;
-            ÚjPakli.Text = "Új pakli";
-            ÚjPakli.UseVisualStyleBackColor = true;
-            ÚjPakli.Enabled = true;
-            ÚjPakli.Click += new System.EventHandler(ÚjPakli_Click);
-            this.Controls.Add(ÚjPakli);
-
-            System.Windows.Forms.Label info6lbl = new System.Windows.Forms.Label();
-            info6lbl.Name = "info6";
-            info6lbl.Text = "Pakli módosításához nyomd meg az alábbi kártyákat."+ Environment.NewLine +"Pakli kiürítéséhez nyomd meg az új pakli gombot." + Environment.NewLine + "A pakliban gyűjteményednek legfeljebb fele szerepelhet.";
-            info6lbl.Font = new Font("Microsoft Sans Seriff", 12);
-            info6lbl.Location = new Point(302, 270);
-            info6lbl.Size = new System.Drawing.Size(800, 70);
-            this.Controls.Add(info6lbl);
-        }
-
-        private void kartyaidbuttons()
-        {
-            int x = 5;
-            foreach (int i in playercards.Keys)
-            {
-                System.Windows.Forms.Button lbl = new System.Windows.Forms.Button();
-                lbl.Name = "gyujtemeny" + i.ToString();
-                lbl.TextAlign = ContentAlignment.MiddleCenter;
-                lbl.Text = playercards[i].Item1 + Environment.NewLine + playercards[i].Item2 + "/" + playercards[i].Item3 + Environment.NewLine + playercards[i].Item4;
-                lbl.Size = new Size(85, 100);
-                lbl.Location = new Point(x, 340);
-                lbl.Click += Button_Click;
-                this.Controls.Add(lbl);
-                x = x + 99;
-            }
-        }
-
-        private void vezerek()
-        {
-            int x = 5;
-            System.Windows.Forms.Label info4lbl = new System.Windows.Forms.Label();
-            info4lbl.Name = "info4";
-            info4lbl.Text = "Vezérek:";
-            info4lbl.Font = new Font("Microsoft Sans Seriff", 14);
-            info4lbl.Location = new Point(2, 150);
-            info4lbl.Size = new System.Drawing.Size(150, 30);
-            this.Controls.Add(info4lbl);
+            Label("info2", "Vezérek:", 3, 150, 14, 150, 30, false);
             foreach (int i in vezerkartyak.Keys)
             {
-                System.Windows.Forms.Label lbl = new System.Windows.Forms.Label();
-                lbl.Name = "vezerek" + i.ToString();
-                lbl.TextAlign = ContentAlignment.MiddleCenter;
-                lbl.Text = vezerkartyak[i].Item1 + Environment.NewLine + vezerkartyak[i].Item2 + "/" + vezerkartyak[i].Item3 + Environment.NewLine + vezerkartyak[i].Item4;
-                lbl.Size = new Size(85, 100);
-                lbl.Location = new Point(x, 180);
-                lbl.BorderStyle = BorderStyle.FixedSingle;
-                this.Controls.Add(lbl);
+                string disptext = vezerkartyak[i].Item1 + Environment.NewLine + vezerkartyak[i].Item2 + "/" + vezerkartyak[i].Item3 + Environment.NewLine + vezerkartyak[i].Item4;
+                Label("vezerek" + i.ToString(), disptext, x, 180, 8, 85, 100, true);
                 x = x + 99;
             }
+            x = 5;
+
+            Label("info3", "Te kártyáid:",3,300,14,150,30, false);
+            x = 5;
+            foreach (int i in playercards.Keys)
+            {
+                string disptext = playercards[i].Item1 + Environment.NewLine + playercards[i].Item2 + "/" + playercards[i].Item3 + Environment.NewLine + playercards[i].Item4;
+                Buttons("gyujtemeny"+i.ToString(),disptext,x,340,8,85,100,Button_Click);
+                x = x + 99;
+            }
+            x = 5;
+
+            Label("info4","Paklid:",3,450,14,110,30,false);
+            Buttons("ÚjPakli","Új pakli",120,443,12,120,40,ÚjPakli_Click);
+            Label("extrainfo",EXTRAINFO,302,270,12,800,70,false);
+
+            Label("info5","Kazamaták:",2,600,14,150,30,false);
         }
 
         List<int> paklint = new List<int>();
@@ -352,10 +300,6 @@ namespace Duszaverseny_2025
         {
             InitializeComponent();
             kartyaklbl();
-            Playerlabel();
-            kartyaidbuttons();
-            Paklilabel();
-            vezerek();
             KazmataGombok();
 
         }
@@ -363,13 +307,7 @@ namespace Duszaverseny_2025
         private void KazmataGombok()
         {
             int x = 5;
-            System.Windows.Forms.Label info5lbl = new System.Windows.Forms.Label();
-            info5lbl.Name = "info5";
-            info5lbl.Text = "Kazamaták:";
-            info5lbl.Font = new Font("Microsoft Sans Seriff", 14);
-            info5lbl.Location = new Point(2, 600);
-            info5lbl.Size = new System.Drawing.Size(150, 30);
-            this.Controls.Add(info5lbl);
+            //200 sor->
             foreach (string nev in kazamataegyszeru.Keys)
             {
                 System.Windows.Forms.Button lbl = new System.Windows.Forms.Button();
