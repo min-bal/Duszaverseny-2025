@@ -75,18 +75,31 @@ namespace Duszaverseny_2025
         {
             InitializeComponent();
             menu.Hide();
+            menu.BackColor = Color.Black;
             playerscreen.Hide();
+            playerscreen.BackColor = Color.Red;
             savestart.Hide();
+            savestart.BackColor = Color.Green;
             mester.Hide();
+            mester.BackColor = Color.Yellow;
             ujkartya.Hide();
+            ujkartya.BackColor = Color.Blue;
             ujvezer.Hide();
+            ujvezer.BackColor = Color.Magenta;
             sebzeseletero.Hide();
+            sebzeseletero.BackColor = Color.Green;
             ujkazamata.Hide();
+            ujkazamata.BackColor = Color.Blue;
             gyujtemeny.Hide();
+            gyujtemeny.BackColor = Color.Cyan;
             egyszeruk.Hide();
+            egyszeruk.BackColor = Color.Blue;
             konnyuk.Hide();
+            konnyuk.BackColor = Color.Green;
             nehezk.Hide();
+            nehezk.BackColor = Color.Yellow;
             megak.Hide();
+            megak.BackColor = Color.Green;
             menuu();
         }
         
@@ -1380,12 +1393,22 @@ namespace Duszaverseny_2025
                     StreamReader sr = new StreamReader(dialog.FileName);
                     Világsoronként(sr, "con/con");
                     sr.Close();
+                    MainScreen();
+
                     savestart.Hide();
                     savestart.Controls.Clear();
                     savestart.SendToBack();
-                    MainScreen();
-                    playerscreen.Dock = DockStyle.Fill;
+
+                    foreach (Control ctrl in this.Controls)
+                    {
+                        if (ctrl is Panel panel && panel.Visible)
+                        {
+                            panel.Hide();
+                        }
+                    }
+                    playerscreen.Show();
                     playerscreen.BringToFront();
+                    playerscreen.Dock = DockStyle.Fill;
                 }
             }
             else if (name == "loadsavefile") //mentes kivalasztasahoz belepes
@@ -1550,6 +1573,14 @@ namespace Duszaverseny_2025
             int vezerkartyan = 0;
             int playercardsn = 0;
             bool ujjatakos = false;
+            kartyak.Clear();
+            playercards.Clear();
+            vezerkartyak.Clear();
+            kazamataegyszeru.Clear();
+            kazamatakicsi.Clear();
+            kazamatanagy.Clear();
+            kazamatamega.Clear();
+            Pakli.Clear();
             while (!sr.EndOfStream)
             {
                 string sor = sr.ReadLine();
