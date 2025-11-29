@@ -51,6 +51,7 @@ namespace Duszaverseny_2025
         Dictionary<int, (string, int, int, string)> vezerkartyak = new Dictionary<int, (string, int, int, string)>();
         Dictionary<int, (string, int, int, string)> playercards = new Dictionary<int, (string, int, int, string)>(); //properies of the player's cards
         List<string> Pakli = new List<string>();
+        int paklix = 5;
 
         Dictionary<int, (string, string, string)> kazamataegyszeru = new Dictionary<int, (string, string, string)>(); //név, ellenfél, jutalom
         Dictionary<int, (string, string, string, string, string, string)> kazamatakicsi = new Dictionary<int, (string, string, string, string, string, string)>(); //név, ellenfél*3, vezér, jutalom
@@ -1385,17 +1386,13 @@ namespace Duszaverseny_2025
                     savestart.Hide();
                     savestart.Controls.Clear();
                     savestart.SendToBack();
-
-                    foreach (Control ctrl in this.Controls)
-                    {
-                        if (ctrl is Panel panel && panel.Visible)
-                        {
-                            panel.Hide();
-                        }
-                    }
                     playerscreen.Show();
+
+                    playerscreen.Visible = true;
                     playerscreen.BringToFront();
                     playerscreen.Dock = DockStyle.Fill;
+                    this.Controls.Add(playerscreen);
+
                 }
             }
             else if (name == "loadsavefile") //mentes kivalasztasahoz belepes
@@ -1678,40 +1675,49 @@ namespace Duszaverseny_2025
         private void MainScreen()
         {
             int x = 5;
-            System.Windows.Forms.Label info3lbl = new System.Windows.Forms.Label();
-            info3lbl.Name = "info3";
-            info3lbl.Text = "Paklid:";
-            info3lbl.Font = new Font("Microsoft Sans Seriff", 14);
-            info3lbl.Location = new Point(3, 450);
-            info3lbl.Size = new System.Drawing.Size(110, 30);
-            playerscreen.Controls.Add(info3lbl);
 
-            Button ÚjPakli = new System.Windows.Forms.Button();
-            ÚjPakli.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            ÚjPakli.Location = new System.Drawing.Point(120, 443);
-            ÚjPakli.Name = "ÚjPakli";
-            ÚjPakli.Size = new System.Drawing.Size(120, 40);
-            ÚjPakli.TabIndex = 0;
-            ÚjPakli.Text = "Új pakli";
-            ÚjPakli.UseVisualStyleBackColor = true;
-            ÚjPakli.Enabled = true;
-            ÚjPakli.Click += new System.EventHandler(ÚjPakli_Click);
-            playerscreen.Controls.Add(ÚjPakli);
+            label("Paklid:","info",110,30,3,450,14,playerscreen);
 
-            System.Windows.Forms.Label info6lbl = new System.Windows.Forms.Label();
-            info6lbl.Name = "info6";
-            info6lbl.Text = "Pakli módosításához nyomd meg az alábbi kártyákat."+ Environment.NewLine +"Pakli kiürétéséhez nyomd meg az új pakli gombot." + Environment.NewLine + "A pakliban gyűjteményednek legfeljebb fele szerepelhet.";
-            info6lbl.Font = new Font("Microsoft Sans Seriff", 12);
-            info6lbl.Location = new Point(302, 270);
-            info6lbl.Size = new System.Drawing.Size(800, 70);
-            playerscreen.Controls.Add(info6lbl);
+            button("Új pakli", "újpakli", 120,40,120,443,12,playerscreen,ÚjPakli_Click);
+
+            string infoText = "Pakli módosításához nyomd meg az alábbi kártyákat."+ Environment.NewLine +"Pakli kiürétéséhez nyomd meg az új pakli gombot." + Environment.NewLine + "A pakliban gyűjteményednek legfeljebb fele szerepelhet.";
+            label(infoText,"info", 800,70,302,270,12,playerscreen);
+
+            label("Vezérek:","info",150,30,2,150,14,playerscreen);
+
+
+            foreach (int i in vezerkartyak.Keys)
+            {
+                System.Windows.Forms.Label lbl = new System.Windows.Forms.Label();
+                lbl.Name = "vezerek" + i.ToString();
+                lbl.TextAlign = ContentAlignment.MiddleCenter;
+                lbl.Text = vezerkartyak[i].Item1 + Environment.NewLine + vezerkartyak[i].Item2 + "/" + vezerkartyak[i].Item3 + Environment.NewLine + vezerkartyak[i].Item4;
+                lbl.Size = new Size(85, 100);
+                lbl.Location = new Point(x, 180);
+                lbl.BorderStyle = BorderStyle.FixedSingle;
+                this.Controls.Add(lbl);
+                x = x + 99;
+            }
+
+            x = 5;
+            foreach (int i in playercards.Keys)
+            {
+                System.Windows.Forms.Button lbl = new System.Windows.Forms.Button();
+                lbl.Name = "gyujtemeny" + i.ToString();
+                lbl.TextAlign = ContentAlignment.MiddleCenter;
+                lbl.Text = playercards[i].Item1 + Environment.NewLine + playercards[i].Item2 + "/" + playercards[i].Item3 + Environment.NewLine + playercards[i].Item4;
+                lbl.Size = new Size(85, 100);
+                lbl.Location = new Point(x, 340);
+                lbl.Click += Button_Click;
+                this.Controls.Add(lbl);
+                x = x + 99;
+            }
         }
 
 
         List<int> paklint = new List<int>();
         private void ÚjPakli_Click(object sender, EventArgs e)
         {
-            int paklix = 0;
             Pakli.Clear();
             paklint.Clear();
             foreach (Control ctrl in Controls)
@@ -1742,10 +1748,122 @@ namespace Duszaverseny_2025
             }
         }
 
+        private void Button_Click(object sender, EventArgs e)
+        {
+            Button clicked = sender as Button;
 
+            clicked.Enabled = false;
 
+            int felekerint;
+            if (playercards.Count % 2 == 0)
+            {
+                felekerint = playercards.Count / 2;
+            }
+            else
+            {
+                felekerint = (playercards.Count + 1) / 2;
+            }
 
+            if (Pakli.Count < felekerint)
+            {
+                System.Windows.Forms.Button lbl = new System.Windows.Forms.Button();
 
+                lbl.TextAlign = ContentAlignment.MiddleCenter;
+                lbl.AutoSize = false;
+
+                int nmb;
+                if (clicked.Name.Length == 11)
+                {
+                    nmb = int.Parse(clicked.Name.Last().ToString());
+                }
+                else
+                {
+                    nmb = int.Parse(clicked.Name.Substring(clicked.Name.Length - 2));
+                }
+                paklint.Add(nmb);
+                lbl.Name = "paklibtn" + nmb;
+                lbl.Text = playercards[nmb].Item1.ToString() + "\r\n" + playercards[nmb].Item2.ToString() + "/" + playercards[nmb].Item3.ToString() + "\r\n" + playercards[nmb].Item4.ToString();
+                lbl.Size = new Size(85, 100);
+                lbl.Location = new Point(paklix, 490);
+                lbl.Click += new System.EventHandler(PakliClick);
+                playerscreen.Controls.Add(lbl);
+                paklix += 99;
+                Pakli.Add(playercards[nmb].Item1);
+                foreach (var btn in playerscreen.Controls.OfType<Button>())
+                {
+                    if (btn.Name == "kazmgomb1" || btn.Name == "kazmgomb2")
+                    {
+                        btn.Enabled = true;
+                    }
+                    else if (btn.Name == "kazmgomb3" && kartyak.Count != playercards.Count)
+                    {
+                        btn.Enabled = true;
+                    }
+                }
+            }
+            if (Pakli.Count == felekerint)
+            {
+                foreach (var btn in playerscreen.Controls.OfType<Button>().Where(b => b.Name.StartsWith("gyujtemeny")).ToList())
+                {
+                    btn.Enabled = false;
+                }
+            }
+
+        }
+
+        private void PakliClick(object sender, EventArgs e)
+        {
+            Button button = sender as Button;
+            int nmb;
+            if (button.Name.Length == 9)
+            {
+                nmb = int.Parse(button.Name.Last().ToString());
+            }
+            else
+            {
+                nmb = int.Parse(button.Name.Substring(button.Name.Length - 2));
+            }
+            string last = nmb.ToString();
+            string asd = playercards[Convert.ToInt32(last)].Item1;
+            Pakli.Remove(asd);
+            paklint.Remove(nmb);
+            foreach (var btn in playerscreen.Controls.OfType<Button>())
+            {
+                if (btn.Location.Y == button.Location.Y && btn.Location.X > button.Location.X)
+                {
+                    btn.Location = new Point(btn.Location.X - 99, btn.Location.Y);
+                }
+                else if (btn.Name == "gyujtemeny" + last)
+                {
+                    btn.Enabled = true;
+                }
+                if ((btn.Name == "kazmgomb1" || btn.Name == "kazmgomb2" || btn.Name == "kazmgomb3") && Pakli.Count == 0)
+                {
+                    btn.Enabled = false;
+                }
+            }
+
+            paklix -= 99;
+            Controls.Remove(button);
+            button.Dispose();
+
+            foreach (int i in playercards.Keys)
+            {
+                if (paklint.Contains(i))
+                {
+
+                }
+                else
+                {
+                    string buttonName = "gyujtemeny" + i;
+                    Control[] found = playerscreen.Controls.Find(buttonName, true);
+                    if (found.Length > 0 && found[0] is Button btn)
+                    {
+                        btn.Enabled = true;
+                    }
+                }
+            }
+        }
 
 
 
@@ -1854,27 +1972,7 @@ namespace Duszaverseny_2025
 
         private void vezerek()
         {
-            int x = 5;
-            System.Windows.Forms.Label info4lbl = new System.Windows.Forms.Label();
-            info4lbl.Name = "info4";
-            info4lbl.Text = "Vezérek:";
-            info4lbl.Font = new Font("Microsoft Sans Seriff", 14);
-            info4lbl.Location = new Point(2, 150);
-            info4lbl.Size = new System.Drawing.Size(150, 30);
-            this.Controls.Add(info4lbl);
-            foreach (int i in vezerkartyak.Keys)
-            {
-                System.Windows.Forms.Label lbl = new System.Windows.Forms.Label();
-                lbl.Name = "vezerek" + i.ToString();
-                lbl.TextAlign = ContentAlignment.MiddleCenter;
-                lbl.Text = vezerkartyak[i].Item1 + Environment.NewLine + vezerkartyak[i].Item2 + "/" + vezerkartyak[i].Item3 + Environment.NewLine + vezerkartyak[i].Item4;
-                lbl.Size = new Size(85, 100);
-                lbl.Location = new Point(x, 180);
-                lbl.BorderStyle = BorderStyle.FixedSingle;
-                lbl.Click += Button_Click;
-                this.Controls.Add(lbl);
-                x = x + 99;
-            }
+
         }
 
         List<int> paklint = new List<int>();
@@ -1940,60 +2038,6 @@ namespace Duszaverseny_2025
                 //KészPakli_Click(this, EventArgs.Empty);
             }
 
-    }
-
-        private void PakliClick(object sender, EventArgs e)
-        {
-            Button button = sender as Button;
-            int nmb;
-            if (button.Name.Length == 9)
-            {
-                nmb = int.Parse(button.Name.Last().ToString());
-            }
-            else
-            {
-                nmb = int.Parse(button.Name.Substring(button.Name.Length - 2));
-            }
-            string last = nmb.ToString();
-            string asd = playercards[Convert.ToInt32(last)].Item1;
-            Pakli.Remove(asd);
-            paklint.Remove(nmb);
-            foreach (var btn in this.Controls.OfType<Button>())
-            {
-                if (btn.Location.Y == button.Location.Y && btn.Location.X > button.Location.X)
-                {
-                    btn.Location = new Point(btn.Location.X - 99, btn.Location.Y);
-                }
-                else if (btn.Name == "gyujtemeny" + last)
-                {
-                    btn.Enabled = true;
-                }
-                if ((btn.Name == "kazmgomb1" || btn.Name == "kazmgomb2" || btn.Name == "kazmgomb3") && Pakli.Count == 0)
-                {
-                    btn.Enabled = false;
-                }
-            }
-            
-            paklix -= 99;
-            Controls.Remove(button);
-            button.Dispose();
-
-        foreach (int i in playercards.Keys)
-        {
-            if (paklint.Contains(i))
-            {
-
-            }
-            else
-            {
-                string buttonName = "gyujtemeny" + i;
-                Control[] found = this.Controls.Find(buttonName, true);
-                if (found.Length > 0 && found[0] is Button btn)
-                {
-                    btn.Enabled = true;
-                }
-            }
-        }
     }
 
         private void ÚjPakli_Click(object sender, EventArgs e)
@@ -2235,6 +2279,45 @@ namespace Duszaverseny_2025
                 
             }
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         private void Harc(string típus)
         {
@@ -2705,47 +2788,7 @@ namespace Duszaverseny_2025
                 }
             }            
         }
-        
 
-        private void KészPakli_Click(object sender, EventArgs e)
-        {
-            int felekerint;
-            if (playercards.Count % 2 == 0)
-            {
-                felekerint = playercards.Count / 2;
-            }
-            else
-            {
-                felekerint = (playercards.Count + 1) / 2;
-            }
-
-            if (Pakli.Count <= felekerint)
-            { 
-                foreach (Control ctrl in Controls)
-                {
-                    if (ctrl is Button btn) 
-                    {
-                        if (btn.Name.StartsWith("gyujtemeny") || btn.Name.StartsWith("paklibtn"))
-                        {
-                            btn.Enabled = false;
-                        }
-                        else if (btn.Name == "ÚjPakli")
-                        {
-                            btn.Enabled = true;
-                        }
-                        else if (btn.Name == "KészPakli")
-                        {
-                            btn.Enabled = false;
-                        }
-                    }
-                }
-            }
-
-            if (ellélet < 0)
-            {
-                ellélet = 0;
-            }
-            return ellélet;
         }
         }*/
     }
