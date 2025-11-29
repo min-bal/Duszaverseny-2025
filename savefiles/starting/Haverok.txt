@@ -1,0 +1,25 @@
+uj kartya;Pisti;22;31,tuz
+uj kartya;Józsi;12;4,viz
+uj kartya;Albert;23;35,levego
+uj kartya;Máté;22;10,fold
+uj kartya;Jani;21;42,tuz
+uj kartya;Soma;8;24,viz
+uj kartya;Feri;13;32,levego
+uj kartya;Viktor;5;5,fold
+
+uj vezer;v Pisti;Pisti;sebzes
+uj vezer;v Viktor;Viktor;eletero
+uj vezer;v Jani;Jani;sebzes
+
+uj kazamata;egyszeru;Az Utolsó Pizzaszelet;Józsi;Sebzés
+uj kazamata;kicsi;;Józsi;Soma;Feri;v Jani;Sebzés
+uj kazamata;nagy;Matek TZ;Józsi;Albert;Máté;Soma;Feri;v Jani
+uj kazamata;mega;Virsliparti;Józsi;Albert;Máté;Soma;Feri;v Pisti;v Viktor;v Jani;jutalom
+
+uj jatekos
+
+felvetel gyujtemenybe;Józsi
+felvetel gyujtemenybe;Albert
+felvetel gyujtemenybe;Máté
+felvetel gyujtemenybe;Soma
+felvetel gyujtemenybe;Feri

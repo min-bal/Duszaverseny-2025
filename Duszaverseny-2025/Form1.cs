@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SqlTypes;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -14,6 +15,11 @@ using System.Windows.Forms;
 
 namespace Duszaverseny_2025
 { 
+    //dmg: 2-100, hp: 1-100, kartya neve: max 14 karakter --> vezerkartya neve max 16 karakter
+    /*TODO
+    Alaphelyzetet tovabb vinni jatekmesterkent --> jatekmester is valaszthat alaphelyzetekbol (beolvasas kell hozza)
+    Kartya kitorolhetove tehetese --> a belole szarmaztatott vezer, a kazamatak ahol ellenfelkent szerepelt szinten torlodnek*/
+
     public partial class Form1 : Form
     {
         Dictionary<string, string> tipusok = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
@@ -24,8 +30,21 @@ namespace Duszaverseny_2025
             { "levego", "Levegő" }
         };
 
+        string egyszerukazamatanameinput;
+        string konnyukazamatanameinput;
+        string nehezkazamatanameinput;
+        string megakazamatanameinput;
+        string savefilenameinput;
+
         string selected = string.Empty;
         int ujkartyasorszam = 0;
+        int gyujtemenysorszam = 0;
+        int ujvezersorszam = 0;
+        int ujkiskazamatasorszam = 0;
+        int ujegyszerukazamatasorszam = 0;
+        int ujnagykazamatasorszam = 0;
+        int ujmegakazamatasorszam = 0;
+        int vezerrefejlesztessorszam;
 
         //panelek
         Panel menu = new Panel();
@@ -33,13 +52,30 @@ namespace Duszaverseny_2025
         Panel mester = new Panel();
         Panel ujkartya = new Panel();
         Panel ujvezer = new Panel();
+        Panel sebzeseletero = new Panel();
         Panel ujkazamata = new Panel();
         Panel gyujtemeny = new Panel();
+        Panel egyszeruk = new Panel();
+        Panel konnyuk = new Panel();
+        Panel nehezk = new Panel();
+        Panel megak = new Panel();        
+
         public Form1()
         {
             InitializeComponent();
+            menu.Hide();
+            savestart.Hide();
+            mester.Hide();
+            ujkartya.Hide();
+            ujvezer.Hide();
+            sebzeseletero.Hide();
+            ujkazamata.Hide();
+            gyujtemeny.Hide();
+            egyszeruk.Hide();
+            konnyuk.Hide();
+            nehezk.Hide();
+            megak.Hide();
             menuu();
-
         }
         
         private void button(string text, string name, int sx, int sy, int locx, int locy, int fontsize, Panel panel)
@@ -80,6 +116,8 @@ namespace Duszaverseny_2025
 
         private void menuu()
         {
+            menu.Controls.Clear();
+            menu.Show();
             menu.Dock = DockStyle.Fill;
             this.Controls.Add(menu);
             menu.BringToFront();
@@ -93,9 +131,10 @@ namespace Duszaverseny_2025
         Dictionary<int, (string, int, int, string)> vezerkartyak = new Dictionary<int, (string, int, int, string)>();
         Dictionary<int, (string, int, int, string)> playercards = new Dictionary<int, (string, int, int, string)>(); //properies of the player's cards
 
-        Dictionary<string, (string, string)> kazamataegyszeru = new Dictionary<string, (string, string)>(); //név, ellenfél, jutalom
-        Dictionary<string, (string, string, string, string, string)> kazamatakicsi = new Dictionary<string, (string, string, string, string, string)>(); //név, ellenfél*3, vezér, jutalom
-        Dictionary<string, (string, string, string, string, string, string)> kazamatanagy = new Dictionary<string, (string, string, string, string, string, string)>(); //név, ellenfél*5, vezér
+        Dictionary<int, (string, string, string)> kazamataegyszeru = new Dictionary<int, (string, string, string)>(); //név, ellenfél, jutalom
+        Dictionary<int, (string, string, string, string, string, string)> kazamatakicsi = new Dictionary<int, (string, string, string, string, string, string)>(); //név, ellenfél*3, vezér, jutalom
+        Dictionary<int, (string, string, string, string, string, string, string)> kazamatanagy = new Dictionary<int, (string, string, string, string, string, string, string)>(); //név, ellenfél*5, vezér
+        Dictionary<int, (string, string, string, string, string, string, string, string, string, string)> kazamatamega = new Dictionary<int, (string, string, string, string, string, string, string, string, string, string)>(); //név, ellenfél*5, vezér*3, jutalom
 
         private void button_Click(object sender, EventArgs e)
         {
@@ -114,6 +153,7 @@ namespace Duszaverseny_2025
                             panel.Hide();
                         }
                     }
+                    savestart.Controls.Clear();
                     savestart.Show();
                     savestart.Dock = DockStyle.Fill;
                     this.Controls.Add(savestart);
@@ -121,7 +161,7 @@ namespace Duszaverseny_2025
 
                     button("Mentések", "sfiles", 200, 200, 150, 300, 20, savestart);
                     button("Alaphelyzetek", "default", 200, 200, 700, 300, 20, savestart);
-                }
+                }                
                 else if (name == "default") //alaphelyzetek kivalasztasahoz belepes
                 {
 
@@ -132,6 +172,14 @@ namespace Duszaverseny_2025
                 }
                 else if (name == "jatekm") //jatekmester panelre belepes
                 {
+                    kartyak.Clear();
+                    playercards.Clear();
+                    vezerkartyak.Clear();
+                    kazamataegyszeru.Clear();
+                    kazamatakicsi.Clear();
+                    kazamatanagy.Clear();
+                    kazamatamega.Clear();
+
                     foreach (Control ctrl in this.Controls)
                     {
                         if (ctrl is Panel panel && panel.Visible)
@@ -139,6 +187,7 @@ namespace Duszaverseny_2025
                             panel.Hide();
                         }
                     }
+                    mester.Controls.Clear();
                     mester.Show();
                     mester.Dock = DockStyle.Fill;
                     this.Controls.Add(mester);
@@ -152,6 +201,100 @@ namespace Duszaverseny_2025
                     label("Név:", "name", 200, 50, 400, 300, 20, mester);
                     textbox("ujsavename", 200, 50, 400, 400, mester);
                 }
+                else if (name == "done")
+                {
+                    TextBox button = mester.Controls.OfType<TextBox>()
+                                        .FirstOrDefault(b => b.Name == "ujsavename");
+                    if (button != null)
+                    {
+                        savefilenameinput = button.Text;
+                    }
+
+                    var txtFilePath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\savefiles\starting\"));
+                    var fileName = savefilenameinput+".txt";                
+
+                    string fullPath = Path.Combine(txtFilePath, fileName);
+
+                    if (File.Exists(fullPath)) { }
+                    else
+                    {
+                        if (savefilenameinput != "" && savefilenameinput != null && kartyak.Count > 0 && playercards.Count > 0 && (kazamataegyszeru.Count+kazamatakicsi.Count+kazamatanagy.Count+kazamatamega.Count) > 0)
+                        {
+                            var txtFinalPath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\savefiles\starting\" + savefilenameinput + ".txt"));
+                            StreamWriter sw = new StreamWriter(txtFinalPath);
+                            for (int i = 0; i < kartyak.Count; i++)
+                            {
+                                sw.WriteLine("uj kartya;" + kartyak[i].Item1 + ";" + kartyak[i].Item2 + ";" + kartyak[i].Item3 + ";" + kartyak[i].Item4);
+                            }
+                            sw.WriteLine();
+                            if (vezerkartyak.Count > 0)
+                            {
+                                for (int i = 0; i < vezerkartyak.Count; i++)
+                                {
+                                    for (int j = 0; j < kartyak.Count; j++)
+                                    {
+                                        if ("v " + kartyak[j].Item1 == vezerkartyak[i].Item1)
+                                        {
+                                            string se = string.Empty;
+                                            if (vezerkartyak[i].Item2 == kartyak[j].Item2)
+                                            {
+                                                se = "sebzes";
+                                            }
+                                            else
+                                            {
+                                                se = "eletero";
+                                            }
+
+                                            sw.WriteLine("uj vezer;" + vezerkartyak[i].Item1 + ";" + kartyak[j].Item1 + ";" + se);
+                                        }
+                                    }
+                                }
+                                sw.WriteLine();
+                            }
+                            for (int i = 0; i < kazamataegyszeru.Count; i++)
+                            {
+                                sw.WriteLine("uj kazamata;egyszeru;" + kazamataegyszeru[i].Item1 + ";" + kazamataegyszeru[i].Item2 + ";" + kazamataegyszeru[i].Item3);
+                            }
+                            if (kazamatakicsi.Count > 0)
+                            {
+                                for (int i = 0; i < kazamatakicsi.Count; i++)
+                                {
+                                    sw.WriteLine("uj kazamata;kicsi;" + kazamatakicsi[i].Item1 + ";" + kazamatakicsi[i].Item2 + ";" + kazamatakicsi[i].Item3 + ";" + kazamatakicsi[i].Item4 + ";" + kazamatakicsi[i].Item5 + ";" + kazamatakicsi[i].Item6);
+                                }
+                            }
+                            if (kazamatanagy.Count > 0)
+                            {
+                                for (int i = 0; i < kazamatanagy.Count; i++)
+                                {
+                                    sw.WriteLine("uj kazamata;nagy;" + kazamatanagy[i].Item1 + ";" + kazamatanagy[i].Item2 + ";" + kazamatanagy[i].Item3 + ";" + kazamatanagy[i].Item4 + ";" + kazamatanagy[i].Item5 + ";" + kazamatanagy[i].Item6 + ";" + kazamatanagy[i].Item7);
+                                }
+                            }
+                            if (kazamatamega.Count > 0)
+                            {
+                                for (int i = 0; i < kazamatamega.Count; i++)
+                                {
+                                    sw.WriteLine("uj kazamata;mega;" + kazamatamega[i].Item1 + ";" + kazamatamega[i].Item2 + ";" + kazamatamega[i].Item3 + ";" + kazamatamega[i].Item4 + ";" + kazamatamega[i].Item5 + ";" + kazamatamega[i].Item6 + ";" + kazamatamega[i].Item7 + ";" + kazamatamega[i].Item8 + ";" + kazamatamega[i].Item9 + ";" + kazamatamega[i].Item10);
+                                }
+                            }
+                            sw.WriteLine();
+                            sw.WriteLine("uj jatekos");
+                            sw.WriteLine();
+                            for (int i = 0; i < playercards.Count; i++)
+                            {
+                                sw.WriteLine("felvetel gyujtemenybe;" + playercards[i].Item1);
+                            }
+                            sw.Close();
+                            foreach (Control ctrl in this.Controls)
+                            {
+                                if (ctrl is Panel panel && panel.Visible)
+                                {
+                                    panel.Hide();
+                                }
+                            }
+                            menu.Show();
+                        }
+                    }                    
+                }
                 else if (name == "ujkartya") //kartya hozzadasa
                 {
                     foreach (Control ctrl in this.Controls)
@@ -161,6 +304,7 @@ namespace Duszaverseny_2025
                             panel.Hide();
                         }
                     }
+                    ujkartya.Controls.Clear();
                     ujkartya.Show();
                     ujkartya.Dock = DockStyle.Fill;
                     this.Controls.Add(ujkartya);
@@ -198,7 +342,7 @@ namespace Duszaverseny_2025
                         }
                         btn.BackColor = Color.LightBlue;
                         selected = btn.Name;
-                    }                    
+                    }
                 }
                 else if (name == "add") //uj kartya hozzadasa
                 {
@@ -218,7 +362,7 @@ namespace Duszaverseny_2025
                         if (int.TryParse(txtbb.Text, out ujkdmg))
                         {
                             ujkdmg = Convert.ToInt32(txtbb.Text);
-                        }                        
+                        }
                     }
                     TextBox txtbbb = ujkartya.Controls.OfType<TextBox>()
                           .FirstOrDefault(t => t.Name == "ujkhpinput");
@@ -230,16 +374,35 @@ namespace Duszaverseny_2025
                         }
                     }
 
-                    if (ujkname != string.Empty && ujkdmg != 0 && ujkhp != 0 && ujkname.Length <= 16 && ujkdmg >= 2 && ujkdmg <= 100 && ujkhp >= 1 && ujkhp <= 100)
+                    if (ujkname != string.Empty && ujkdmg != 0 && ujkhp != 0 && ujkname.Length <= 14 && ujkdmg >= 2 && ujkdmg <= 100 && ujkhp >= 1 && ujkhp <= 100) //csak akkor engedi letrehozni ha van megadva nev, ami max 14 karakter vezerre fejlesztes miatt, mert igy a vezer neve max 16 karakter lesz, tipus, dmg-és hp <= 100
                     {
-                        kartyak.Add(ujkartyasorszam, (ujkname, ujkdmg, ujkhp, selected));
-                        ujkartyasorszam++;
+                        if (kartyak.Count > 0)
+                        {
+                            bool vane = false;
+                            for (int i = 0; i < kartyak.Count; i++)
+                            {
+                                if (ujkname == kartyak[i].Item1) { vane = true; }  //van-e mar ilyen nevu kartya, ha van nem engedi letrehozni                             
+                            }
+                            if (vane == false)
+                            {
+                                kartyak.Add(ujkartyasorszam, (ujkname, ujkdmg, ujkhp, selected));
+                                ujkartyasorszam++;
 
-                        ujkartya.Hide();
-                        mester.Show();
+                                ujkartya.Hide();
+                                mester.Show();
+                            }
+                        }
+                        else
+                        {
+                            kartyak.Add(ujkartyasorszam, (ujkname, ujkdmg, ujkhp, selected));
+                            ujkartyasorszam++;
+
+                            ujkartya.Hide();
+                            mester.Show();
+                        }
                     }
                 }
-                else if (name == "visszamester")
+                else if (name == "visszamester") //vissza a jatekmester menure
                 {
                     foreach (Control ctrl in this.Controls)
                     {
@@ -250,7 +413,64 @@ namespace Duszaverseny_2025
                     }
                     mester.Show();
                 }
-                else if (name == "ujvezer")
+                else if (name == "ujvezer") //kartya vezerre fejlesztese
+                {
+                    if ((kartyak.Count - vezerkartyak.Count) < 1) { }
+                    else
+                    {
+                        foreach (Control ctrl in this.Controls)
+                        {
+                            if (ctrl is Panel panel && panel.Visible)
+                            {
+                                panel.Hide();
+                            }
+                        }
+
+                        ujvezer.Controls.Clear();
+                        ujvezer.Show();
+                        ujvezer.Dock = DockStyle.Fill;
+                        this.Controls.Add(ujvezer);
+                        ujvezer.BringToFront();
+
+                        button("Vissza", "visszamester", 150, 100, 0, 0, 20, ujvezer);
+
+                        int x = 150;
+                        int y = 0;
+                        bool vanev = false;
+                        for (int i = 0; i < kartyak.Count; i++)
+                        {
+                            if (vezerkartyak.Count > 0)
+                            {
+                                for (int j = 0; j < vezerkartyak.Count; j++)
+                                {
+                                    if (vezerkartyak[j].Item1 == "v " + kartyak[i].Item1) { vanev = true; }
+                                }
+                                if (vanev == false)
+                                {
+                                    button(kartyak[i].Item1, kartyak[i].Item1 + "ujvezer", 75, 100, x, y, 10, ujvezer);
+                                    x += 75;
+                                    if (x > 975)
+                                    {
+                                        y += 100;
+                                        x = 0;
+                                    }
+                                }
+                                else { vanev = false; }
+                            }
+                            else
+                            {
+                                button(kartyak[i].Item1, kartyak[i].Item1 + "ujvezer", 75, 100, x, y, 10, ujvezer);
+                                x += 75;
+                                if (x > 975)
+                                {
+                                    y += 100;
+                                    x = 0;
+                                }
+                            }
+                        }
+                    }
+                }
+                else if (name == "ujkazamata") //kazamata hozzaadas :skull:
                 {
                     if (kartyak.Count < 1) { }
                     else
@@ -263,34 +483,990 @@ namespace Duszaverseny_2025
                             }
                         }
 
-                        ujvezer.Show();
-                        ujvezer.Dock = DockStyle.Fill;
-                        this.Controls.Add(ujvezer);
-                        ujvezer.BringToFront();
+                        ujkazamata.Controls.Clear();
+                        ujkazamata.Show();
+                        ujkazamata.Dock = DockStyle.Fill;
+                        this.Controls.Add(ujkazamata);
+                        ujkazamata.BringToFront();
 
-                        int x = 0;
-                        int y = 0;
-                        for (int i = 0; i < kartyak.Count; i++)
+                        button("Vissza", "visszamester", 100, 100, 400, 400, 20, ujkazamata);
+                        button("Egyszerű", "egyszeruk", 200, 200, 0, 0, 20, ujkazamata);
+                        button("Könnyű", "konnyuk", 200, 200, 200, 0, 20, ujkazamata);
+                        button("Nehéz", "nehezk", 200, 200, 0, 200, 20, ujkazamata);
+                        button("Mega", "megak", 200, 200, 200, 200, 20, ujkazamata);
+                    }
+                }
+                else if (name == "visszakazamata")
+                {
+                    foreach (Control ctrl in this.Controls)
+                    {
+                        if (ctrl is Panel panel && panel.Visible)
                         {
-                            button(kartyak[i].Item1, kartyak[i].Item1, 75, 100, x, y, 10, ujvezer);
-                            x+=75;
+                            panel.Hide();
+                        }
+                    }
+                    ujkazamata.Show();
+                }
+                else if (name == "egyszeruk" && kartyak.Count > 0)
+                {
+                    foreach (Control ctrl in this.Controls)
+                    {
+                        if (ctrl is Panel panel && panel.Visible)
+                        {
+                            panel.Hide();
+                        }
+                    }
+
+                    egyszeruk.Controls.Clear();
+                    egyszeruk.Show();
+                    egyszeruk.Dock = DockStyle.Fill;
+                    this.Controls.Add(egyszeruk);
+                    egyszeruk.BringToFront();
+
+                    button("Vissza", "visszakazamata", 150, 100, 0, 0, 20, egyszeruk);
+                    button("Kész", "kazamatadone", 150, 100, 150, 0, 20, egyszeruk);
+                    textbox("egyszeruknameinput", 300, 100, 300, 0, egyszeruk);
+                    button("Sebzés", "jutalomse", 150, 100, 600, 0, 20, egyszeruk);
+
+                    int x = 750;
+                    int y = 0;
+                    for (int i = 0; i < kartyak.Count; i++)
+                    {
+                        button(kartyak[i].Item1, kartyak[i].Item1 + "egyszerukazamataba", 75, 100, x, y, 10, egyszeruk);
+                        x += 75;
+                        if (x > 975)
+                        {
+                            y += 100;
+                            x = 0;
+                        }
+                    }
+                    for (int i = 0; i < vezerkartyak.Count; i++)
+                    {
+                        button(vezerkartyak[i].Item1, vezerkartyak[i].Item1 + "egyszerukazamataba", 75, 100, x, y, 10, egyszeruk);
+                        x += 75;
+                        if (x > 975)
+                        {
+                            y += 100;
+                            x = 0;
                         }
                     }
                 }
-                else if (name == "ujkazamata")
+                else if (name == "konnyuk" && kartyak.Count > 3 && vezerkartyak.Count > 0)
                 {
-                    if (kartyak.Count < 1) { }
-                    else
+                    foreach (Control ctrl in this.Controls)
                     {
-                        
+                        if (ctrl is Panel panel && panel.Visible)
+                        {
+                            panel.Hide();
+                        }
+                    }
+
+                    konnyuk.Controls.Clear();
+                    konnyuk.Show();
+                    konnyuk.Dock = DockStyle.Fill;
+                    this.Controls.Add(konnyuk);
+                    konnyuk.BringToFront();
+
+                    button("Vissza", "visszakazamata", 150, 100, 0, 0, 20, konnyuk);
+                    button("Kész", "kazamatadone", 150, 100, 150, 0, 20, konnyuk);
+                    textbox("konnyuknameinput", 300, 100, 300, 0, konnyuk);
+                    button("Sebzés", "jutalomse", 150, 100, 600, 0, 20, konnyuk);
+
+                    int x = 750;
+                    int y = 0;
+                    for (int i = 0; i < kartyak.Count; i++)
+                    {
+                        button(kartyak[i].Item1, kartyak[i].Item1 + "konnyukazamataba", 75, 100, x, y, 10, konnyuk);
+                        x += 75;
+                        if (x > 975)
+                        {
+                            y += 100;
+                            x = 0;
+                        }
+                    }
+                    for (int i = 0; i < vezerkartyak.Count; i++)
+                    {
+                        button(vezerkartyak[i].Item1, vezerkartyak[i].Item1 + "konnyukazamataba", 75, 100, x, y, 10, konnyuk);
+                        x += 75;
+                        if (x > 975)
+                        {
+                            y += 100;
+                            x = 0;
+                        }
                     }
                 }
-                else if (name == "gyujtemeny")
+                else if (name == "jutalomse")
+                {
+                    Button button = egyszeruk.Controls.OfType<Button>()
+                            .FirstOrDefault(b => b.Name == "jutalomse");
+                    if (button != null)
+                    {
+                        if (button.Text == "Sebzés")
+                        {
+                            button.Text = "Életerő";
+                        }
+                        else
+                        {
+                            button.Text = "Sebzés";
+                        }
+                    }
+                    Button buttonn = konnyuk.Controls.OfType<Button>()
+                            .FirstOrDefault(b => b.Name == "jutalomse");
+                    if (buttonn != null)
+                    {
+                        if (buttonn.Text == "Sebzés")
+                        {
+                            buttonn.Text = "Életerő";
+                        }
+                        else
+                        {
+                            buttonn.Text = "Sebzés";
+                        }
+                    }
+                }
+                else if (name == "nehezk" && kartyak.Count > 5 && vezerkartyak.Count > 0)
+                {
+                    foreach (Control ctrl in this.Controls)
+                    {
+                        if (ctrl is Panel panel && panel.Visible)
+                        {
+                            panel.Hide();
+                        }
+                    }
+
+                    nehezk.Controls.Clear();
+                    nehezk.Show();
+                    nehezk.Dock = DockStyle.Fill;
+                    this.Controls.Add(nehezk);
+                    nehezk.BringToFront();
+
+                    button("Vissza", "visszakazamata", 150, 100, 0, 0, 20, nehezk);
+                    button("Kész", "kazamatadone", 150, 100, 150, 0, 20, nehezk);
+                    textbox("nehezknameinput", 300, 100, 300, 0, nehezk);
+
+                    int x = 600;
+                    int y = 0;
+                    for (int i = 0; i < kartyak.Count; i++)
+                    {
+                        button(kartyak[i].Item1, kartyak[i].Item1 + "nehezkazamataba", 75, 100, x, y, 10, nehezk);
+                        x += 75;
+                        if (x > 975)
+                        {
+                            y += 100;
+                            x = 0;
+                        }
+                    }
+                    for (int i = 0; i < vezerkartyak.Count; i++)
+                    {
+                        button(vezerkartyak[i].Item1, vezerkartyak[i].Item1 + "nehezkazamataba", 75, 100, x, y, 10, nehezk);
+                        x += 75;
+                        if (x > 975)
+                        {
+                            y += 100;
+                            x = 0;
+                        }
+                    }
+                }
+                else if (name == "megak" && kartyak.Count > 7 && vezerkartyak.Count > 2)
+                {
+                    foreach (Control ctrl in this.Controls)
+                    {
+                        if (ctrl is Panel panel && panel.Visible)
+                        {
+                            panel.Hide();
+                        }
+                    }
+
+                    megak.Controls.Clear();
+                    megak.Show();
+                    megak.Dock = DockStyle.Fill;
+                    this.Controls.Add(megak);
+                    megak.BringToFront();
+
+                    button("Vissza", "visszakazamata", 150, 100, 0, 0, 20, megak);
+                    button("Kész", "kazamatadone", 150, 100, 150, 0, 20, megak);
+                    textbox("megaknameinput", 300, 100, 300, 0, megak);
+
+                    int x = 600;
+                    int y = 0;
+                    for (int i = 0; i < kartyak.Count; i++)
+                    {
+                        button(kartyak[i].Item1, kartyak[i].Item1 + "megakazamataba", 75, 100, x, y, 10, megak);
+                        x += 75;
+                        if (x > 975)
+                        {
+                            y += 100;
+                            x = 0;
+                        }
+                    }
+                    for (int i = 0; i < vezerkartyak.Count; i++)
+                    {
+                        button(vezerkartyak[i].Item1, vezerkartyak[i].Item1 + "megakazamataba", 75, 100, x, y, 10, megak);
+                        x += 75;
+                        if (x > 975)
+                        {
+                            y += 100;
+                            x = 0;
+                        }
+                    }
+                }
+                else if (name == "kazamatadone")
+                {
+                    if (egyszeruk.Visible) //egyszeru kazamatak
+                    {
+                        List<string> selectedkartyak = new List<string>();
+                        selectedkartyak.Clear();
+                        for (int i = 0; i < kartyak.Count; i++)
+                        {
+                            Button button = egyszeruk.Controls.OfType<Button>()
+                                .FirstOrDefault(b => b.Name == kartyak[i].Item1 + "egyszerukazamataba");
+                            if (button != null)
+                            {
+                                if (button.BackColor == Color.Yellow)
+                                {
+                                    selectedkartyak.Add(kartyak[i].Item1);
+                                }
+                            }
+                        }
+                        List<string> selectedvezer = new List<string>();
+                        selectedvezer.Clear();
+                        if (vezerkartyak.Count > 0)
+                        {
+                            for (int i = 0; i < vezerkartyak.Count; i++)
+                            {
+                                Button button = egyszeruk.Controls.OfType<Button>()
+                                    .FirstOrDefault(b => b.Name == vezerkartyak[i].Item1 + "egyszerukazamataba");
+                                if (button != null)
+                                {
+                                    if (button.BackColor == Color.Yellow)
+                                    {
+                                        selectedvezer.Add(vezerkartyak[i].Item1);
+                                    }
+                                }
+                            }
+                        }
+                        TextBox txtb = egyszeruk.Controls.OfType<TextBox>()
+                                .FirstOrDefault(b => b.Name == "egyszeruknameinput");
+                        if (txtb != null)
+                        {
+                            egyszerukazamatanameinput = txtb.Text;
+                        }
+                        string jutalom = string.Empty;
+                        Button button1 = egyszeruk.Controls.OfType<Button>()
+                                .FirstOrDefault(b => b.Name == "jutalomse");
+                        if (button1 != null)
+                        {
+                            jutalom = button1.Text;
+                        }
+                        if (selectedvezer.Count == 0 && selectedkartyak.Count == 1 && egyszerukazamatanameinput != "" && egyszerukazamatanameinput != null) //0 vezer, 1 kartya, van megadva nev
+                        {                            
+                            if (kazamataegyszeru.Count> 0)
+                            {
+                                bool vane = false;
+                                for (int i = 0; i < kazamataegyszeru.Count; i++)
+                                {
+                                    if (kazamataegyszeru[i].Item1 == txtb.Name)
+                                    {
+                                        vane = true;
+                                    }
+                                }
+                                if (vane == false)
+                                {
+                                    kazamataegyszeru.Add(ujegyszerukazamatasorszam, (egyszerukazamatanameinput, selectedkartyak[0], jutalom));
+                                    ujegyszerukazamatasorszam++;
+                                    egyszeruk.Hide();
+                                    ujkazamata.Show();
+                                }
+                            }
+                            else
+                            {
+                                kazamataegyszeru.Add(ujegyszerukazamatasorszam, (egyszerukazamatanameinput, selectedkartyak[0], jutalom));
+                                ujegyszerukazamatasorszam++;
+                                egyszeruk.Hide();
+                                ujkazamata.Show();
+                            }
+                        }
+                    }
+                    else if (konnyuk.Visible) //konnyu kazamatak
+                    {
+                        List<string> selectedkartyak = new List<string>();
+                        selectedkartyak.Clear();
+                        for (int i = 0; i < kartyak.Count; i++)
+                        {
+                            Button button = konnyuk.Controls.OfType<Button>()
+                                .FirstOrDefault(b => b.Name == kartyak[i].Item1 + "konnyukazamataba");
+                            if (button != null)
+                            {
+                                if (button.BackColor == Color.Yellow)
+                                {
+                                    selectedkartyak.Add(kartyak[i].Item1);
+                                }
+                            }
+                        }
+                        List<string> selectedvezer = new List<string>();
+                        selectedvezer.Clear ();
+                        if (vezerkartyak.Count > 0)
+                        {
+                            for (int i = 0; i < vezerkartyak.Count; i++)
+                            {
+                                Button button = konnyuk.Controls.OfType<Button>()
+                                    .FirstOrDefault(b => b.Name == vezerkartyak[i].Item1 + "konnyukazamataba");
+                                if (button != null)
+                                {
+                                    if (button.BackColor == Color.Yellow)
+                                    {
+                                        selectedvezer.Add(vezerkartyak[i].Item1);
+                                    }
+                                }
+                            }
+                        }
+                        TextBox txtb = konnyuk.Controls.OfType<TextBox>()
+                                .FirstOrDefault(b => b.Name == "konnyuknameinput");
+                        if (txtb != null)
+                        {
+                            konnyukazamatanameinput = txtb.Text;
+                        }
+                        string jutalom = string.Empty;
+                        Button button1 = konnyuk.Controls.OfType<Button>()
+                                .FirstOrDefault(b => b.Name == "jutalomse");
+                        if (button1 != null)
+                        {
+                            jutalom = button1.Text;
+                        }
+                        if (selectedvezer.Count == 1 && selectedkartyak.Count == 3 && konnyukazamatanameinput != "" && konnyukazamatanameinput != null) //1 vezer, 3 kartya, van megadva nev
+                        {
+                            if (kazamatakicsi.Count>0)
+                            {
+                                bool vane = false;
+                                for (int i = 0; i < kazamatakicsi.Count; i++)
+                                {
+                                    if (kazamatakicsi[i].Item1 == txtb.Name)
+                                    {
+                                        vane = true;
+                                    }
+                                }
+                                if (vane == false)
+                                {
+                                    kazamatakicsi.Add(ujkiskazamatasorszam, (egyszerukazamatanameinput, selectedkartyak[0], selectedkartyak[1], selectedkartyak[2], selectedvezer[0], jutalom));
+                                    ujkiskazamatasorszam++;
+                                    konnyuk.Hide();
+                                    ujkazamata.Show();
+                                }
+                            }
+                            else
+                            {
+                                kazamatakicsi.Add(ujkiskazamatasorszam, (egyszerukazamatanameinput, selectedkartyak[0], selectedkartyak[1], selectedkartyak[2], selectedvezer[0], jutalom));
+                                ujkiskazamatasorszam++;
+                                konnyuk.Hide();
+                                ujkazamata.Show();
+                            }
+                        }
+                    }
+                    else if (nehezk.Visible) //nehez kazamatak
+                    {
+                        List<string> selectedkartyak = new List<string>();
+                        selectedkartyak.Clear();
+                        for (int i = 0; i < kartyak.Count; i++)
+                        {
+                            Button button = nehezk.Controls.OfType<Button>()
+                                .FirstOrDefault(b => b.Name == kartyak[i].Item1 + "nehezkazamataba");
+                            if (button != null)
+                            {
+                                if (button.BackColor == Color.Yellow)
+                                {
+                                    selectedkartyak.Add(kartyak[i].Item1);
+                                }
+                            }
+                        }
+                        List<string> selectedvezer = new List<string>();
+                        selectedvezer.Clear();
+                        if (vezerkartyak.Count > 0)
+                        {
+                            for (int i = 0; i < vezerkartyak.Count; i++)
+                            {
+                                Button button = nehezk.Controls.OfType<Button>()
+                                    .FirstOrDefault(b => b.Name == vezerkartyak[i].Item1 + "nehezkazamataba");
+                                if (button != null)
+                                {
+                                    if (button.BackColor == Color.Yellow)
+                                    {
+                                        selectedvezer.Add(vezerkartyak[i].Item1);
+                                    }
+                                }
+                            }
+                        }
+                        TextBox txtb = nehezk.Controls.OfType<TextBox>()
+                                .FirstOrDefault(b => b.Name == "nehezknameinput");
+                        if (txtb != null)
+                        {
+                            nehezkazamatanameinput = txtb.Text;
+                        }
+                        if (selectedvezer.Count == 1 && selectedkartyak.Count == 5 && nehezkazamatanameinput != "" && nehezkazamatanameinput != null) //1 vezer, 5 kartya, van megadva nev
+                        {
+                            if (kazamatanagy.Count>0)
+                            {
+                                bool vane = false; //vane mar ilyen nevu
+                                for (int i = 0; i < kazamatanagy.Count; i++)
+                                {
+                                    if (kazamatanagy[i].Item1 == txtb.Name)
+                                    {
+                                        vane = true;
+                                    }
+                                }
+                                if (vane == false)
+                                {
+                                    kazamatanagy.Add(ujnagykazamatasorszam, (nehezkazamatanameinput, selectedkartyak[0], selectedkartyak[1], selectedkartyak[2], selectedkartyak[3], selectedkartyak[4], selectedvezer[0]));
+                                    ujnagykazamatasorszam++;
+                                    nehezk.Hide();
+                                    ujkazamata.Show();
+                                }
+                            }
+                            else
+                            {
+                                kazamatanagy.Add(ujnagykazamatasorszam, (nehezkazamatanameinput, selectedkartyak[0], selectedkartyak[1], selectedkartyak[2], selectedkartyak[3], selectedkartyak[4], selectedvezer[0]));
+                                ujnagykazamatasorszam++;
+                                nehezk.Hide();
+                                ujkazamata.Show();
+                            }
+                        }
+                    }
+                    else if (megak.Visible) //mega kazamatak
+                    {
+                        List<string> selectedkartyak = new List<string>();
+                        selectedkartyak.Clear();
+                        for (int i = 0; i < kartyak.Count; i++)
+                        {
+                            Button button = megak.Controls.OfType<Button>()
+                                .FirstOrDefault(b => b.Name == kartyak[i].Item1 + "megakazamataba");
+                            if (button != null)
+                            {
+                                if (button.BackColor == Color.Yellow)
+                                {
+                                    selectedkartyak.Add(kartyak[i].Item1);
+                                }
+                            }
+                        }
+                        List<string> selectedvezer = new List<string>();
+                        selectedvezer.Clear();
+                        if (vezerkartyak.Count > 0)
+                        {
+                            for (int i = 0; i < vezerkartyak.Count; i++)
+                            {
+                                Button button = megak.Controls.OfType<Button>()
+                                    .FirstOrDefault(b => b.Name == vezerkartyak[i].Item1 + "megakazamataba");
+                                if (button != null)
+                                {
+                                    if (button.BackColor == Color.Yellow)
+                                    {
+                                        selectedvezer.Add(vezerkartyak[i].Item1);
+                                    }
+                                }
+                            }
+                        }
+                        TextBox txtb = megak.Controls.OfType<TextBox>()
+                                .FirstOrDefault(b => b.Name == "megaknameinput");
+                        if (txtb != null)
+                        {
+                            megakazamatanameinput = txtb.Text;
+                        }
+                        if (selectedvezer.Count == 3 && selectedkartyak.Count == 5 && megakazamatanameinput != "" && megakazamatanameinput != null) //3 vezer, 5 kartya, van megadva nev
+                        {
+                            if (kazamatamega.Count > 0)
+                            {
+                                bool vane = false; //vane mar ilyen nevu
+                                for (int i = 0; i < kazamatamega.Count; i++)
+                                {
+                                    if (kazamatanagy[i].Item1 == txtb.Name)
+                                    {
+                                        vane = true;
+                                    }
+                                }
+                                if (vane == false)
+                                {
+                                    kazamatamega.Add(ujmegakazamatasorszam, (megakazamatanameinput, selectedkartyak[0], selectedkartyak[1], selectedkartyak[2], selectedkartyak[3], selectedkartyak[4], selectedvezer[0], selectedvezer[1], selectedvezer[2], "jutalom"));
+                                    ujmegakazamatasorszam++;
+                                    megak.Hide();
+                                    ujkazamata.Show();
+                                }
+                            }
+                            else
+                            {
+                                kazamatamega.Add(ujmegakazamatasorszam, (megakazamatanameinput, selectedkartyak[0], selectedkartyak[1], selectedkartyak[2], selectedkartyak[3], selectedkartyak[4], selectedvezer[0], selectedvezer[1], selectedvezer[2], "jutalom"));
+                                ujmegakazamatasorszam++;
+                                megak.Hide();
+                                ujkazamata.Show();
+                            }
+                        }
+                    }
+                }
+                else if (name == "gyujtemeny") //gyujtemeny kivalasztasa
                 {
                     if (kartyak.Count < 1) { }
                     else
                     {
+                        foreach (Control ctrl in this.Controls)
+                        {
+                            if (ctrl is Panel panel && panel.Visible)
+                            {
+                                panel.Hide();
+                            }
+                        }
 
+                        gyujtemeny.Controls.Clear();
+                        gyujtemeny.Show();
+                        gyujtemeny.Dock = DockStyle.Fill;
+                        this.Controls.Add(gyujtemeny);
+                        gyujtemeny.BringToFront();
+
+                        button("Vissza", "visszamester", 150, 100, 0, 0, 20, gyujtemeny);
+                        button("Kész", "gyujtemenydone", 150, 100, 150, 0, 20, gyujtemeny);
+
+                        int x = 300;
+                        int y = 0;
+                        for (int i = 0; i < kartyak.Count; i++)
+                        {
+                            button(kartyak[i].Item1, kartyak[i].Item1 + "gyujtemenybee", 75, 100, x, y, 10, gyujtemeny);
+
+                            for (int j = 0; j < kartyak.Count; j++)
+                            {
+                                Button button = gyujtemeny.Controls.OfType<Button>()
+                                  .FirstOrDefault(b => b.Name == kartyak[i].Item1 + "gyujtemenybee");
+                                if (button != null && playercards.Count > 0)
+                                {
+                                    for (int k = 0; k < playercards.Count; k++)
+                                    {
+                                        if (playercards[k].Item1 == kartyak[i].Item1)
+                                        {
+                                            button.BackColor = Color.Yellow;
+                                        }
+                                    }
+                                }
+                            }
+                            x += 75;
+                            if (x > 975)
+                            {
+                                y += 100;
+                                x = 0;
+                            }
+                        }
+                    }
+                }
+                else if (name == "dmg") //uj vezer sebzesduplazas
+                {
+                    if (kartyak[vezerrefejlesztessorszam].Item2 > 50)
+                    {
+                        vezerkartyak.Add(ujvezersorszam, ("v " + kartyak[vezerrefejlesztessorszam].Item1, 100, kartyak[vezerrefejlesztessorszam].Item3, kartyak[vezerrefejlesztessorszam].Item4));
+                    }
+                    else
+                    {
+                        vezerkartyak.Add(ujvezersorszam, ("v " + kartyak[vezerrefejlesztessorszam].Item1, (kartyak[vezerrefejlesztessorszam].Item2) * 2, kartyak[vezerrefejlesztessorszam].Item3, kartyak[vezerrefejlesztessorszam].Item4));
+                    }                    
+                    ujvezersorszam++;
+                    foreach (Control ctrl in this.Controls)
+                    {
+                        if (ctrl is Panel panel && panel.Visible)
+                        {
+                            panel.Hide();
+                        }
+                    }
+                    mester.Show();
+                }
+                else if (name == "hp") //uj vezer eletduplazas
+                {
+                    if (kartyak[vezerrefejlesztessorszam].Item3 > 50)
+                    {
+                        vezerkartyak.Add(ujvezersorszam, ("v " + kartyak[vezerrefejlesztessorszam].Item1, kartyak[vezerrefejlesztessorszam].Item2, 100, kartyak[vezerrefejlesztessorszam].Item4));
+                    }
+                    else
+                    {
+                        vezerkartyak.Add(ujvezersorszam, ("v " + kartyak[vezerrefejlesztessorszam].Item1, kartyak[vezerrefejlesztessorszam].Item2, (kartyak[vezerrefejlesztessorszam].Item3) * 2, kartyak[vezerrefejlesztessorszam].Item4));
+                    }
+                    ujvezersorszam++;
+                    foreach (Control ctrl in this.Controls)
+                    {
+                        if (ctrl is Panel panel && panel.Visible)
+                        {
+                            panel.Hide();
+                        }
+                    }
+                    mester.Show();
+                }
+                else if (name == "gyujtemenydone") //gyujtemeny kivalasztva
+                {
+                    foreach (Control ctrl in this.Controls)
+                    {
+                        if (ctrl is Panel panel && panel.Visible)
+                        {
+                            panel.Hide();
+                        }
+                    }
+                    mester.Show();
+                    playercards.Clear();
+                    gyujtemenysorszam = 0;
+                    for (int i = 0; i < kartyak.Count; i++)
+                    {
+                        Button button = gyujtemeny.Controls.OfType<Button>()
+                          .FirstOrDefault(b => b.Name == kartyak[i].Item1 + "gyujtemenybee");
+                        if (button != null)
+                        {
+                            if (button.BackColor == Color.Yellow)
+                            {
+                                playercards.Add(gyujtemenysorszam, (kartyak[i].Item1, kartyak[i].Item2, kartyak[i].Item3, kartyak[i].Item4));
+                                gyujtemenysorszam++;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < kartyak.Count; i++)
+                    {
+                        if (name == kartyak[i].Item1 + "ujvezer") //vezernek valaszthato kartyak
+                        {
+                            foreach (Control ctrl in this.Controls)
+                            {
+                                if (ctrl is Panel panel && panel.Visible)
+                                {
+                                    panel.Hide();
+                                }
+                            }
+
+                            vezerrefejlesztessorszam = i;
+
+                            sebzeseletero.Controls.Clear();
+                            sebzeseletero.Show();
+                            sebzeseletero.Dock = DockStyle.Fill;
+                            this.Controls.Add(sebzeseletero);
+                            sebzeseletero.BringToFront();
+
+                            button("Életerő", "hp", 200, 200, 350, 400, 20, sebzeseletero);
+                            button("Sebzés", "dmg", 200, 200, 700, 400, 20, sebzeseletero);
+                        }
+
+                        if (name == kartyak[i].Item1 + "gyujtemenybee") //gyujtemenybe valasztott / kivett kartya
+                        {
+                            Button button = gyujtemeny.Controls.OfType<Button>()
+                          .FirstOrDefault(b => b.Name == kartyak[i].Item1 + "gyujtemenybee");
+                            if (button != null)
+                            {
+                                if (button.BackColor == Color.Yellow)
+                                {
+                                    button.BackColor = Color.White;
+                                }
+                                else { button.BackColor = Color.Yellow; }
+                            }
+                        }
+
+                        if (vezerkartyak.Count > i)
+                        {
+                            if (name == vezerkartyak[i].Item1 + "egyszerukazamataba")
+                            {
+                                Button button = egyszeruk.Controls.OfType<Button>()
+                              .FirstOrDefault(b => b.Name == vezerkartyak[i].Item1 + "egyszerukazamataba");
+                                if (button != null)
+                                {
+                                    string alap = string.Empty;
+                                    for (int j = 0; j < kartyak.Count; j ++)
+                                    {
+                                        if ("v "+kartyak[j].Item1 == vezerkartyak[i].Item1)
+                                        {
+                                            alap = kartyak[j].Item1;
+                                        }
+                                    }
+
+                                    Button butn = egyszeruk.Controls.OfType<Button>()
+                                        .FirstOrDefault(b => b.Name == alap + "egyszerukazamataba");
+                                    if (butn != null)
+                                    {
+                                        if (butn.BackColor == Color.Yellow)
+                                        {
+
+                                        }
+                                        else
+                                        {
+                                            if (button.BackColor == Color.Yellow)
+                                            {
+                                                button.BackColor = Color.White;
+                                            }
+                                            else { button.BackColor = Color.Yellow; }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (button.BackColor == Color.Yellow)
+                                        {
+                                            button.BackColor = Color.White;
+                                        }
+                                        else { button.BackColor = Color.Yellow; }
+                                    }
+                                }
+                            }
+
+                            if (name == vezerkartyak[i].Item1 + "konnyukazamataba")
+                            {
+                                Button button = konnyuk.Controls.OfType<Button>()
+                              .FirstOrDefault(b => b.Name == vezerkartyak[i].Item1 + "konnyukazamataba");
+                                if (button != null)
+                                {
+                                    string alap = string.Empty;
+                                    for (int j = 0; j < kartyak.Count; j++)
+                                    {
+                                        if ("v " + kartyak[j].Item1 == vezerkartyak[i].Item1)
+                                        {
+                                            alap = kartyak[j].Item1;
+                                        }
+                                    }
+
+                                    Button butn = konnyuk.Controls.OfType<Button>()
+                                        .FirstOrDefault(b => b.Name == alap + "konnyukazamataba");
+                                    if (butn != null)
+                                    {
+                                        if (butn.BackColor == Color.Yellow)
+                                        {
+
+                                        }
+                                        else
+                                        {
+                                            if (button.BackColor == Color.Yellow)
+                                            {
+                                                button.BackColor = Color.White;
+                                            }
+                                            else { button.BackColor = Color.Yellow; }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (button.BackColor == Color.Yellow)
+                                        {
+                                            button.BackColor = Color.White;
+                                        }
+                                        else { button.BackColor = Color.Yellow; }
+                                    }
+                                }
+                            }
+
+                            if (name == vezerkartyak[i].Item1 + "nehezkazamataba")
+                            {
+                                Button button = nehezk.Controls.OfType<Button>()
+                              .FirstOrDefault(b => b.Name == vezerkartyak[i].Item1 + "nehezkazamataba");
+                                if (button != null)
+                                {
+                                    string alap = string.Empty;
+                                    for (int j = 0; j < kartyak.Count; j++)
+                                    {
+                                        if ("v " + kartyak[j].Item1 == vezerkartyak[i].Item1)
+                                        {
+                                            alap = kartyak[j].Item1;
+                                        }
+                                    }
+
+                                    Button butn = nehezk.Controls.OfType<Button>()
+                                        .FirstOrDefault(b => b.Name == alap + "nehezkazamataba");
+                                    if (butn != null)
+                                    {
+                                        if (butn.BackColor == Color.Yellow)
+                                        {
+
+                                        }
+                                        else
+                                        {
+                                            if (button.BackColor == Color.Yellow)
+                                            {
+                                                button.BackColor = Color.White;
+                                            }
+                                            else { button.BackColor = Color.Yellow; }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (button.BackColor == Color.Yellow)
+                                        {
+                                            button.BackColor = Color.White;
+                                        }
+                                        else { button.BackColor = Color.Yellow; }
+                                    }
+                                }
+                            }
+
+                            if (name == vezerkartyak[i].Item1 + "megakazamataba")
+                            {
+                                Button button = megak.Controls.OfType<Button>()
+                              .FirstOrDefault(b => b.Name == vezerkartyak[i].Item1 + "megakazamataba");
+                                if (button != null)
+                                {
+                                    string alap = string.Empty;
+                                    for (int j = 0; j < kartyak.Count; j++)
+                                    {
+                                        if ("v " + kartyak[j].Item1 == vezerkartyak[i].Item1)
+                                        {
+                                            alap = kartyak[j].Item1;
+                                        }
+                                    }
+
+                                    Button butn = megak.Controls.OfType<Button>()
+                                        .FirstOrDefault(b => b.Name == alap + "megakazamataba");
+                                    if (butn != null)
+                                    {
+                                        if (butn.BackColor == Color.Yellow)
+                                        {
+
+                                        }
+                                        else
+                                        {
+                                            if (button.BackColor == Color.Yellow)
+                                            {
+                                                button.BackColor = Color.White;
+                                            }
+                                            else { button.BackColor = Color.Yellow; }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (button.BackColor == Color.Yellow)
+                                        {
+                                            button.BackColor = Color.White;
+                                        }
+                                        else { button.BackColor = Color.Yellow; }
+                                    }
+                                }
+                            }
+                        }
+                               
+                        if (name == kartyak[i].Item1 + "egyszerukazamataba")
+                        {
+                            Button button = egyszeruk.Controls.OfType<Button>()
+                            .FirstOrDefault(b => b.Name == kartyak[i].Item1 + "egyszerukazamataba");
+                            if (button != null)
+                            {
+                                Button butn = egyszeruk.Controls.OfType<Button>()
+                                        .FirstOrDefault(b => b.Name == "v "+kartyak[i].Item1 + "egyszerukazamataba");
+                                if (butn != null)
+                                {
+                                    if (butn.BackColor == Color.Yellow)
+                                    {
+
+                                    }
+                                    else
+                                    {
+                                        if (button.BackColor == Color.Yellow)
+                                        {
+                                            button.BackColor = Color.White;
+                                        }
+                                        else { button.BackColor = Color.Yellow; }
+                                    }
+                                }
+                                else 
+                                {
+                                    if (button.BackColor == Color.Yellow)
+                                    {
+                                        button.BackColor = Color.White;
+                                    }
+                                    else { button.BackColor = Color.Yellow; }
+                                }                                
+                            }
+                        }
+
+                        if (name == kartyak[i].Item1 + "konnyukazamataba")
+                        {
+                            Button button = konnyuk.Controls.OfType<Button>()
+                            .FirstOrDefault(b => b.Name == kartyak[i].Item1 + "konnyukazamataba");
+                            if (button != null)
+                            {
+                                Button butn = konnyuk.Controls.OfType<Button>()
+                                        .FirstOrDefault(b => b.Name == "v " + kartyak[i].Item1 + "konnyukazamataba");
+                                if (butn != null)
+                                {
+                                    if (butn.BackColor == Color.Yellow)
+                                    {
+
+                                    }
+                                    else
+                                    {
+                                        if (button.BackColor == Color.Yellow)
+                                        {
+                                            button.BackColor = Color.White;
+                                        }
+                                        else { button.BackColor = Color.Yellow; }
+                                    }
+                                }
+                                else
+                                {
+                                    if (button.BackColor == Color.Yellow)
+                                    {
+                                        button.BackColor = Color.White;
+                                    }
+                                    else { button.BackColor = Color.Yellow; }
+                                }
+                            }
+                        }
+
+                        if (name == kartyak[i].Item1 + "nehezkazamataba")
+                        {
+                            Button button = nehezk.Controls.OfType<Button>()
+                            .FirstOrDefault(b => b.Name == kartyak[i].Item1 + "nehezkazamataba");
+                            if (button != null)
+                            {
+                                Button butn = nehezk.Controls.OfType<Button>()
+                                        .FirstOrDefault(b => b.Name == "v " + kartyak[i].Item1 + "nehezkazamataba");
+                                if (butn != null)
+                                {
+                                    if (butn.BackColor == Color.Yellow)
+                                    {
+
+                                    }
+                                    else
+                                    {
+                                        if (button.BackColor == Color.Yellow)
+                                        {
+                                            button.BackColor = Color.White;
+                                        }
+                                        else { button.BackColor = Color.Yellow; }
+                                    }
+                                }
+                                else
+                                {
+                                    if (button.BackColor == Color.Yellow)
+                                    {
+                                        button.BackColor = Color.White;
+                                    }
+                                    else { button.BackColor = Color.Yellow; }
+                                }
+                            }
+                        }
+
+                        if (name == kartyak[i].Item1 + "megakazamataba")
+                        {
+                            Button button = megak.Controls.OfType<Button>()
+                            .FirstOrDefault(b => b.Name == kartyak[i].Item1 + "megakazamataba");
+                            if (button != null)
+                            {
+                                Button butn = megak.Controls.OfType<Button>()
+                                        .FirstOrDefault(b => b.Name == "v " + kartyak[i].Item1 + "megakazamataba");
+                                if (butn != null)
+                                {
+                                    if (butn.BackColor == Color.Yellow)
+                                    {
+
+                                    }
+                                    else
+                                    {
+                                        if (button.BackColor == Color.Yellow)
+                                        {
+                                            button.BackColor = Color.White;
+                                        }
+                                        else { button.BackColor = Color.Yellow; }
+                                    }
+                                }
+                                else
+                                {
+                                    if (button.BackColor == Color.Yellow)
+                                    {
+                                        button.BackColor = Color.White;
+                                    }
+                                    else { button.BackColor = Color.Yellow; }
+                                }
+                            }
+                        }                        
                     }
                 }
             }
@@ -420,7 +1596,7 @@ namespace Duszaverseny_2025
             KészPakli.Text = "Pakli használata";
             KészPakli.UseVisualStyleBackColor = true;
             KészPakli.Click += new System.EventHandler(KészPakli_Click);
-            this.Controls.Add(KészPakli);*/
+            this.Controls.Add(KészPakli);
             Button ÚjPakli = new System.Windows.Forms.Button();
             ÚjPakli.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             ÚjPakli.Location = new System.Drawing.Point(120, 443);
@@ -1354,6 +2530,6 @@ namespace Duszaverseny_2025
                 ellélet = 0;
             }
             return ellélet;
-        }
+        }*/
     }
 }

@@ -1,0 +1,32 @@
+uj kartya;Red;8;6,tuz
+uj kartya;Chuck;5;4,viz
+uj kartya;Bomb;9;7,fold
+uj kartya;Matilda;5;3,levego
+uj kartya;Terence;100;100,fold
+uj kartya;Stella;3;4,levego
+uj kartya;Bubbles;6;3,tuz
+uj kartya;Hal;7;3,viz
+uj kartya;Silver;5;6,fold
+
+uj vezer;v Matilda;Matilda;eletero
+uj vezer;v Silver;Silver;sebzes
+uj vezer;v Bubbles;Bubbles;sebzes
+
+uj kazamata;egyszeru;Big Guy;Terence;Életerő
+
+uj kazamata;kicsi;;Bomb;Stella;Hal;v Bubbles;Sebzés
+uj kazamata;kicsi;Big Guy;Red;Bomb;Hal;v Silver;Életerő
+
+uj kazamata;nagy;Protect The Eggs;Red;Chuck;Bomb;Stella;Hal;v Matilda
+uj kazamata;nagy;Keep Your Head Up;Red;Chuck;Bomb;Terence;Stella;v Matilda
+
+uj kazamata;mega;Pig City;Red;Chuck;Bomb;Stella;Hal;v Matilda;v Silver;v Bubbles;jutalom
+uj kazamata;mega;Egg Making;Red;Bomb;Terence;Stella;Hal;v Matilda;v Silver;v Bubbles;jutalom
+
+uj jatekos
+
+felvetel gyujtemenybe;Red
+felvetel gyujtemenybe;Chuck
+felvetel gyujtemenybe;Bomb
+felvetel gyujtemenybe;Matilda
+felvetel gyujtemenybe;Terence
