@@ -46,9 +46,12 @@ namespace Duszaverseny_2025
         int ujnagykazamatasorszam = 0;
         int ujmegakazamatasorszam = 0;
         int vezerrefejlesztessorszam;
+        string loadedPath;
+        string savename;
+        int currentdifficulty;
 
         Dictionary<int, (string, int, int, string)> kartyak = new Dictionary<int, (string, int, int, string)>(); //név, sebzés, életerő, típus
-        Dictionary<int, (string, int, int, string)> vezerkartyak = new Dictionary<int, (string, int, int, string)>();
+        Dictionary<int, (string, int, int, string, string, string)> vezerkartyak = new Dictionary<int, (string, int, int, string, string, string)>();
         Dictionary<int, (string, int, int, string)> playercards = new Dictionary<int, (string, int, int, string)>(); //properies of the player's cards
         List<string> Pakli = new List<string>();
         int paklix = 5;
@@ -1385,14 +1388,18 @@ namespace Duszaverseny_2025
             {
                 OpenFileDialog dialog = new OpenFileDialog();
                 dialog.Title = "Select a file";
-                dialog.Filter = "Game Save Files (*.gamesave)|*.gamesave";
+                dialog.Filter = "Játékkörnyezet Fájlok (*.gamedefaultsave)|*.gamedefaultsave";
 
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
                     string selectedFile = dialog.FileName;
-                    Console.WriteLine("You picked: " + selectedFile);
                     StreamReader sr = new StreamReader(dialog.FileName);
                     ComboBox combo = savestart.Controls["difficulty"] as ComboBox;
+                    currentdifficulty = combo.SelectedIndex;
+                    savename = Path.GetFileNameWithoutExtension(dialog.FileName);
+                    loadedPath = selectedFile;
+                    Console.WriteLine(loadedPath);
+                    
                     Világsoronként(sr, "con/con");
                     sr.Close();
                     MainScreen();
@@ -1411,7 +1418,34 @@ namespace Duszaverseny_2025
             }
             else if (name == "loadsavefile") //mentes kivalasztasahoz belepes
             {
+                OpenFileDialog dialog = new OpenFileDialog();
+                dialog.Title = "Select a file";
+                dialog.Filter = "Játék Mentés Fájlok (*.gamesave)|*.gamesave";
 
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    string selectedFile = dialog.FileName;
+                    StreamReader sr = new StreamReader(dialog.FileName);
+                    ComboBox combo = savestart.Controls["difficulty"] as ComboBox;
+                    currentdifficulty = combo.SelectedIndex;
+                    savename = Path.GetFileNameWithoutExtension(dialog.FileName);
+                    loadedPath = selectedFile;
+
+                    Világsoronként(sr, "con/aux");
+                    sr.Close();
+                    MainScreen();
+
+                    savestart.Hide();
+                    savestart.Controls.Clear();
+                    savestart.SendToBack();
+                    playerscreen.Show();
+
+                    playerscreen.Visible = true;
+                    playerscreen.BringToFront();
+                    playerscreen.Dock = DockStyle.Fill;
+                    this.Controls.Add(playerscreen);
+
+                }
             }
         }
 
@@ -1429,7 +1463,7 @@ namespace Duszaverseny_2025
                 }
 
                 var txtFilePath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\savefiles\starting\"));
-                var fileName = savefilenameinput + ".gamesave";
+                var fileName = savefilenameinput + ".gamedefaultsave";
 
                 string fullPath = Path.Combine(txtFilePath, fileName);
 
@@ -1441,7 +1475,7 @@ namespace Duszaverseny_2025
                 {
                     if (savefilenameinput != "" && savefilenameinput != null && kartyak.Count > 0 && playercards.Count > 0 && (kazamataegyszeru.Count + kazamatakicsi.Count + kazamatanagy.Count + kazamatamega.Count) > 0)
                     {
-                        var txtFinalPath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\savefiles\starting\" + savefilenameinput + ".gamesave"));
+                        var txtFinalPath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\savefiles\starting\" + savefilenameinput + ".gamedefaultsave"));
                         StreamWriter sw = new StreamWriter(txtFinalPath);
                         for (int i = 0; i < kartyak.Count; i++)
                         {
@@ -1527,11 +1561,11 @@ namespace Duszaverseny_2025
             {
                 if (kartyak[vezerrefejlesztessorszam].Item2 > 50)
                 {
-                    vezerkartyak.Add(ujvezersorszam, ("v " + kartyak[vezerrefejlesztessorszam].Item1, 100, kartyak[vezerrefejlesztessorszam].Item3, kartyak[vezerrefejlesztessorszam].Item4));
+                    vezerkartyak.Add(ujvezersorszam, ("v " + kartyak[vezerrefejlesztessorszam].Item1, 100, kartyak[vezerrefejlesztessorszam].Item3, kartyak[vezerrefejlesztessorszam].Item4, kartyak[vezerrefejlesztessorszam].Item1, "sebzes"));
                 }
                 else
                 {
-                    vezerkartyak.Add(ujvezersorszam, ("v " + kartyak[vezerrefejlesztessorszam].Item1, (kartyak[vezerrefejlesztessorszam].Item2) * 2, kartyak[vezerrefejlesztessorszam].Item3, kartyak[vezerrefejlesztessorszam].Item4));
+                    vezerkartyak.Add(ujvezersorszam, ("v " + kartyak[vezerrefejlesztessorszam].Item1, (kartyak[vezerrefejlesztessorszam].Item2) * 2, kartyak[vezerrefejlesztessorszam].Item3, kartyak[vezerrefejlesztessorszam].Item4, kartyak[vezerrefejlesztessorszam].Item1, "sebzes"));
                 }
                 ujvezersorszam++;
                 foreach (Control ctrl in this.Controls)
@@ -1547,11 +1581,11 @@ namespace Duszaverseny_2025
             {
                 if (kartyak[vezerrefejlesztessorszam].Item3 > 50)
                 {
-                    vezerkartyak.Add(ujvezersorszam, ("v " + kartyak[vezerrefejlesztessorszam].Item1, kartyak[vezerrefejlesztessorszam].Item2, 100, kartyak[vezerrefejlesztessorszam].Item4));
+                    vezerkartyak.Add(ujvezersorszam, ("v " + kartyak[vezerrefejlesztessorszam].Item1, kartyak[vezerrefejlesztessorszam].Item2, 100, kartyak[vezerrefejlesztessorszam].Item4, kartyak[vezerrefejlesztessorszam].Item1, "eletero"));
                 }
                 else
                 {
-                    vezerkartyak.Add(ujvezersorszam, ("v " + kartyak[vezerrefejlesztessorszam].Item1, kartyak[vezerrefejlesztessorszam].Item2, (kartyak[vezerrefejlesztessorszam].Item3) * 2, kartyak[vezerrefejlesztessorszam].Item4));
+                    vezerkartyak.Add(ujvezersorszam, ("v " + kartyak[vezerrefejlesztessorszam].Item1, kartyak[vezerrefejlesztessorszam].Item2, (kartyak[vezerrefejlesztessorszam].Item3) * 2, kartyak[vezerrefejlesztessorszam].Item4, kartyak[vezerrefejlesztessorszam].Item1, "eletero"));
                 }
                 ujvezersorszam++;
                 foreach (Control ctrl in this.Controls)
@@ -1604,101 +1638,91 @@ namespace Duszaverseny_2025
                     continue;
                 }
                 string[] sorreszek = sor.Split(';');
-                if (!ujjatakos)
+                try
                 {
-                    if (sorreszek[0] == "uj kartya")
+                    if (!ujjatakos)
                     {
-                        kartyak[kartyan] = (sorreszek[1], Convert.ToInt32(sorreszek[2]), Convert.ToInt32(sorreszek[3]), sorreszek[4]);
-                        kartyan++;
-                    }
-                    if (sorreszek[0] == "uj vezer")
-                    {
-                        string alapnev = sorreszek[2];
-                        foreach (int m in kartyak.Keys)
+                        if (sorreszek[0] == "difficulty")
                         {
-                            if (kartyak[m].Item1 == alapnev)
+                            currentdifficulty = Convert.ToInt32(sorreszek[1]);
+                        }
+                        if (sorreszek[0] == "uj kartya")
+                        {
+                            kartyak[kartyan] = (sorreszek[1], Convert.ToInt32(sorreszek[2]), Convert.ToInt32(sorreszek[3]), sorreszek[4]);
+                            kartyan++;
+                        }
+                        if (sorreszek[0] == "uj vezer")
+                        {
+                            string alapnev = sorreszek[2];
+                            foreach (int m in kartyak.Keys)
                             {
-                                if (sorreszek[3] == "sebzes")
+                                if (kartyak[m].Item1 == alapnev)
                                 {
-                                    vezerkartyak[vezerkartyan] = (sorreszek[1], kartyak[m].Item2 * 2, kartyak[m].Item3, kartyak[m].Item4);
+                                    if (sorreszek[3] == "sebzes")
+                                    {
+                                        vezerkartyak[vezerkartyan] = (sorreszek[1], kartyak[m].Item2 * 2, kartyak[m].Item3, kartyak[m].Item4, alapnev, "sebzes");
+                                    }
+                                    else if (sorreszek[3] == "eletero")
+                                    {
+                                        vezerkartyak[vezerkartyan] = (sorreszek[1], kartyak[m].Item2, kartyak[m].Item3 * 2, kartyak[m].Item4, alapnev, "eletero");
+                                    }
+                                    vezerkartyan++;
                                 }
-                                else
-                                {
-                                    vezerkartyak[vezerkartyan] = (sorreszek[1], kartyak[m].Item2, kartyak[m].Item3 * 2, kartyak[m].Item4);
-                                }
-                                vezerkartyan++;
                             }
                         }
-                    }
-                    if (sorreszek[0] == "uj kazamata")
-                    {
-                        if (sorreszek[1] == "egyszeru")
+                        if (sorreszek[0] == "uj kazamata")
                         {
-                            if (bemenet == "con/con")
+                            if (sorreszek[1] == "egyszeru")
                             {
                                 kazamataegyszeru[kazamataegyszeru.Count] = (sorreszek[2], sorreszek[3], sorreszek[4]);
                             }
-                        }
-                        else if (sorreszek[1] == "kicsi")
-                        {
-                            string[] ellenfelek = sorreszek[3].Split(',');
-                            if (bemenet == "con/con")
+                            else if (sorreszek[1] == "kicsi")
                             {
+                                string[] ellenfelek = sorreszek[3].Split(',');
                                 kazamatakicsi[kazamatakicsi.Count] = (sorreszek[2], ellenfelek[0], ellenfelek[1], ellenfelek[2], sorreszek[4], sorreszek[5]);
+                                Console.WriteLine(kazamatakicsi[kazamatakicsi.Count-1]);
                             }
-                        }
-                        else if (sorreszek[1] == "nagy")
-                        {
-                            string[] ellenfelek = sorreszek[3].Split(',');
-                            if (bemenet == "con/con")
+                            else if (sorreszek[1] == "nagy")
                             {
+                                string[] ellenfelek = sorreszek[3].Split(',');
                                 kazamatanagy[kazamatanagy.Count] = (sorreszek[2], ellenfelek[0], ellenfelek[1], ellenfelek[2], ellenfelek[3], ellenfelek[4], sorreszek[4]);
                             }
-                        }
-                        else if (sorreszek[1] == "mega")
-                        {
-                            string[] ellenfelek = sorreszek[3].Split(',');
-                            string[] vezerellenfelek = sorreszek[4].Split(',');
-                            kazamatamega[kazamatamega.Count] = (sorreszek[2], ellenfelek[0], ellenfelek[1], ellenfelek[2], ellenfelek[3], ellenfelek[4], vezerellenfelek[0], vezerellenfelek[1], vezerellenfelek[2], sorreszek[5]);
+                            else if (sorreszek[1] == "mega")
+                            {
+                                string[] ellenfelek = sorreszek[3].Split(',');
+                                string[] vezerellenfelek = sorreszek[4].Split(',');
+                                kazamatamega[kazamatamega.Count] = (sorreszek[2], ellenfelek[0], ellenfelek[1], ellenfelek[2], ellenfelek[3], ellenfelek[4], vezerellenfelek[0], vezerellenfelek[1], vezerellenfelek[2], sorreszek[5]);
+                            }
                         }
                     }
-                }
-                if (sorreszek[0] == "uj jatekos")
-                {
-                    ujjatakos = true;
-                }
-                if (sorreszek[0] == "felvetel gyujtemenybe")
-                {
-                    foreach (int i in kartyak.Keys)
+                    if (sorreszek[0] == "uj jatekos")
                     {
-                        if (kartyak[i].Item1 == sorreszek[1])
+                        ujjatakos = true;
+                    }
+                    if (sorreszek[0] == "felvetel gyujtemenybe")
+                    {
+                        if (bemenet == "con/con")
                         {
-                            playercards[playercardsn] = (kartyak[i].Item1, kartyak[i].Item2, kartyak[i].Item3, kartyak[i].Item4);
+                            foreach (int i in kartyak.Keys)
+                            {
+                                if (kartyak[i].Item1 == sorreszek[1])
+                                {
+                                    playercards[playercardsn] = (kartyak[i].Item1, kartyak[i].Item2, kartyak[i].Item3, kartyak[i].Item4);
+                                    playercardsn++;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            playercards[playercardsn] = (sorreszek[1], Convert.ToInt32(sorreszek[2]), Convert.ToInt32(sorreszek[3]), sorreszek[4]);
                             playercardsn++;
                         }
                     }
                 }
-                if (sorreszek[0] == "uj pakli")
+                catch (Exception ex)
                 {
-                    if (sorreszek.Length > 1)
-                    {
-                        Pakli.Clear();
-                        string[] nevek = sorreszek[1].Split(',');
-                        int max;
-                        if (nevek.Length % 2 == 1)
-                        {
-                            max = (nevek.Length + 1) / 2;
-                        }
-                        else
-                        {
-                            max = nevek.Length / 2;
-                        }
-
-                        foreach (string j in nevek)
-                        {
-                            Pakli.Add(j);
-                        }
-                    }
+                    Console.WriteLine("Hiba történt a fájl olvasása során!");
+                    Console.WriteLine(ex);
                 }
             }
         }
@@ -1712,7 +1736,8 @@ namespace Duszaverseny_2025
             button("Új pakli", "újpakli", 120, 40, 120, 443, 12, playerscreen, ÚjPakli_Click);
 
             string infoText = "Pakli módosításához nyomd meg az alábbi kártyákat." + Environment.NewLine + "Pakli kiürétéséhez nyomd meg az új pakli gombot." + Environment.NewLine + "A pakliban gyűjteményednek legfeljebb fele szerepelhet.";
-            label(infoText, "info", 800, 70, 302, 270, 12, playerscreen);
+            label(infoText, "info", 400, 70, 302, 270, 12, playerscreen);
+            button("Játék mentése","SaveGame",100,85,750,260,14,playerscreen,Save);
 
             label("Vezérek:", "info", 100, 30, 2, 150, 14, playerscreen);
 
@@ -1854,7 +1879,7 @@ namespace Duszaverseny_2025
                 {
                     btn.Enabled = true;
                 }
-                if ((btn.Name == "kazmgomb1" || btn.Name == "kazmgomb2" || btn.Name == "kazmgomb3") && Pakli.Count == 0)
+                if ((btn.Name.StartsWith("kazmgomb") && Pakli.Count == 0))
                 {
                     btn.Enabled = false;
                 }
@@ -2000,6 +2025,63 @@ namespace Duszaverseny_2025
                 label("Jutalom: " + kazamatamega[i].Item10, "kazmjut", 85, 44, x, 580 + counter * 50, 8, playerscreen);
                 x += 99;
                 label("Típus: nagy", "kazminfo", 85, 44, x, 580 + counter * 50, 8, playerscreen);
+            }
+        }
+
+        private void Save(object sender, EventArgs e)
+        {
+            Button btn = sender as Button;
+            if (btn != null && btn.Name == "SaveGame")
+            {
+                //default env + stats for player cards+difficulty number
+                StringBuilder sb = new StringBuilder();
+                foreach (int i in kartyak.Keys)
+                {
+                    sb.Append("uj kartya;").Append(kartyak[i].Item1 + ";" + kartyak[i].Item2.ToString() + ";" + kartyak[i].Item3.ToString() + ";" + kartyak[i].Item4).Append(Environment.NewLine);
+                }
+                foreach (int i in vezerkartyak.Keys)
+                {
+                    sb.Append("uj vezer;").Append(vezerkartyak[i].Item1 + ";" + vezerkartyak[i].Item5 + ";" + vezerkartyak[i].Item6).Append(Environment.NewLine);
+                }
+                foreach (int i in kazamataegyszeru.Keys)
+                {
+                    sb.Append("uj kazamata;egyszeru;").Append(kazamataegyszeru[i].Item1 + ";" + kazamataegyszeru[i].Item2 + ";" + kazamataegyszeru[i].Item3).Append(Environment.NewLine);
+                }
+                foreach (int i in kazamatakicsi.Keys)
+                {
+                    sb.Append("uj kazamata;kicsi;").Append(kazamatakicsi[i].Item1 + ";" + kazamatakicsi[i].Item2 + "," + kazamatakicsi[i].Item3 + "," + kazamatakicsi[i].Item4 + ";" + kazamatakicsi[i].Item5 + ";" + kazamatakicsi[i].Item6).Append(Environment.NewLine);
+                }
+                foreach (int i in kazamatanagy.Keys)
+                {
+                    sb.Append("uj kazamata;nagy;").Append(kazamatanagy[i].Item1 + ";" + kazamatanagy[i].Item2 + "," + kazamatanagy[i].Item3 + "," + kazamatanagy[i].Item4 + "," + kazamatanagy[i].Item5 + "," + kazamatanagy[i].Item6 + ";" + kazamatanagy[i].Item7).Append(Environment.NewLine);
+                }
+                foreach (int i in kazamatamega.Keys)
+                {
+                    sb.Append("uj kazamata;mega;").Append(kazamatamega[i].Item1 + ";" + kazamatamega[i].Item2 + "," + kazamatamega[i].Item3 + "," + kazamatamega[i].Item4 + "," + kazamatamega[i].Item5 + "," + kazamatamega[i].Item6 + ";" + kazamatamega[i].Item7 + "," + kazamatamega[i].Item8 + "," + kazamatamega[i].Item9 + ";" + kazamatamega[i].Item10).Append(Environment.NewLine);
+                }
+                sb.Append("uj jatekos").Append(Environment.NewLine);
+                foreach (int i in playercards.Keys)
+                {
+                    sb.Append("felvetel gyujtemenybe;").Append(playercards[i].Item1 + ";" + playercards[i].Item2.ToString() + ";" + playercards[i].Item3.ToString() + ";" + playercards[i].Item4).Append(Environment.NewLine);
+                }
+                string SAVE = "difficulty;" + currentdifficulty.ToString() + Environment.NewLine + sb.ToString();
+
+                if (loadedPath.EndsWith(".gamedefaultsave"))
+                {
+                    FolderBrowserDialog dialog = new FolderBrowserDialog();
+                    dialog.Description = "Válszad ki a mentés helyét! \nFájl neve: " + savename+".gamesave";
+                    dialog.ShowNewFolderButton = true;
+
+                    if (dialog.ShowDialog() == DialogResult.OK)
+                    {
+                        string filePath = Path.Combine(dialog.SelectedPath, savename + ".gamesave");
+                        File.WriteAllText(filePath, SAVE);
+                    }
+                }
+                else
+                {
+                    File.WriteAllText(loadedPath, SAVE);
+                }
             }
         }
 
