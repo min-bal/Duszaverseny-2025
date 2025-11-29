@@ -75,31 +75,18 @@ namespace Duszaverseny_2025
         {
             InitializeComponent();
             menu.Hide();
-            menu.BackColor = Color.Black;
             playerscreen.Hide();
-            playerscreen.BackColor = Color.Red;
             savestart.Hide();
-            savestart.BackColor = Color.Green;
             mester.Hide();
-            mester.BackColor = Color.Yellow;
             ujkartya.Hide();
-            ujkartya.BackColor = Color.Blue;
             ujvezer.Hide();
-            ujvezer.BackColor = Color.Magenta;
             sebzeseletero.Hide();
-            sebzeseletero.BackColor = Color.Green;
             ujkazamata.Hide();
-            ujkazamata.BackColor = Color.Blue;
             gyujtemeny.Hide();
-            gyujtemeny.BackColor = Color.Cyan;
             egyszeruk.Hide();
-            egyszeruk.BackColor = Color.Blue;
             konnyuk.Hide();
-            konnyuk.BackColor = Color.Green;
             nehezk.Hide();
-            nehezk.BackColor = Color.Yellow;
             megak.Hide();
-            megak.BackColor = Color.Green;
             menuu();
         }
         
@@ -1764,13 +1751,13 @@ namespace Duszaverseny_2025
 
 
 
-        /*elso fordulo
-        public Form1()
+        /*elso fordulo*/
+        /*public Form1()
         {
             InitializeComponent();
                         
             //elsofordulo
-            /*kartyaklbl();
+            kartyaklbl();
             Playerlabel();
             kartyaidbuttons();
             Paklilabel();
@@ -1778,53 +1765,6 @@ namespace Duszaverseny_2025
             KazmataGombok();
         }
         int paklix = 5; //pakliba levo kartyak elhelyezesehez kell
-        Dictionary<int, (string, int, int, string)> kartyak = new Dictionary<int, (string, int, int, string)> //név, sebzés, életerő, típus
-        {
-            {0, ("Arin", 2, 5, "Föld") },
-            {1, ("Liora", 2, 4, "Levegő") },
-            {2, ("Nerun", 3, 3, "Tűz") },
-            {3, ("Selia", 2, 6, "Víz") },
-            {4, ("Torak", 3, 4, "Föld") },
-            {5, ("Emera", 2, 5, "Levegő") },
-            {6, ("Vorn", 2, 7, "Víz") },
-            {7, ("Kael", 3, 5, "Tűz") },
-            {8, ("Myra", 2, 6, "Föld") },
-            {9, ("Thalen", 3, 5, "Levegő") },
-            {10, ("Isara", 2, 6, "Víz") }
-        }; 
-        Dictionary<int, (string, int, int, string, string)> vezerkartyak = new Dictionary<int, (string, int, int, string, string)>
-        {
-            {0, ("Lord Torak", 6, 4, "Föld", "(Vezér)") },
-            {1, ("Priestess Selia", 2, 12, "Víz", "(Vezér)") }
-        };
-        Dictionary<int, (string, int, int, string)> playercards = new Dictionary<int, (string, int, int, string)> //properies of the player's cards
-        {
-            {0, ("Arin", 2, 5, "Föld") },
-            {1, ("Liora", 2, 4, "Levegő") },
-            {2, ("Selia", 2, 6, "Víz") },
-            {3, ("Nerun", 3, 3, "Tűz") },
-            {4, ("Torak", 3, 4, "Föld") },
-            {5, ("Emera", 2, 5, "Levegő") },
-            {6, ("Kael", 3, 5, "Tűz") },
-            {7, ("Myra", 2, 6, "Föld") },
-            {8, ("Thalen", 3, 5, "Levegő") },
-            {9, ("Isara", 2, 6, "Víz") }
-        };
-
-        Dictionary<string, (string, string)> kazamataegyszeru = new Dictionary<string, (string, string)> //név, ellenfél, jutalom
-        {
-            {"Barlangi Portya", ("Nerun", "sebzés") }
-        };
-        Dictionary<string, (string, string, string, string, string)> kazamatakicsi = new Dictionary<string, (string, string, string, string, string)> //név, ellenfél*3, vezér, jutalom
-        {
-            {"Ősi Szentély", ("Arin", "Emera", "Selia", "Lord Torak", "életerő") }
-        }; 
-        Dictionary<string, (string, string, string, string, string, string)> kazamatanagy = new Dictionary<string, (string, string, string, string, string, string)> //név, ellenfél*5, vezér
-        {
-            {"A mélység királynője", ("Liora", "Arin", "Selia", "Nerun", "Torak", "Priestess Selia") }
-        };
-        List<string> Pakli = new List<string>();
-
         private void Label(string name, string displaytext, int x, int y, int fontsize, int width, int height, bool border)
         {
             System.Windows.Forms.Label label = new System.Windows.Forms.Label();
@@ -2088,7 +2028,7 @@ namespace Duszaverseny_2025
                 }
             }
         }
-
+        /*
         public Form1()
         {
             InitializeComponent();
@@ -2800,13 +2740,13 @@ namespace Duszaverseny_2025
                     }
                 }
             }
-        }
 
             if (ellélet < 0)
             {
                 ellélet = 0;
             }
             return ellélet;
+        }
         }*/
     }
     }
