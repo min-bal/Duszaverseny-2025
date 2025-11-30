@@ -49,6 +49,7 @@ namespace Duszaverseny_2025
         string loadedPath;
         string savename;
         int currentdifficulty;
+        int powerupcount;
 
         Dictionary<int, (string, int, int, string)> kartyak = new Dictionary<int, (string, int, int, string)>(); //név, sebzés, életerő, típus
         Dictionary<int, (string, int, int, string, string, string)> vezerkartyak = new Dictionary<int, (string, int, int, string, string, string)>();
@@ -74,6 +75,7 @@ namespace Duszaverseny_2025
         Panel konnyuk = new Panel();
         Panel nehezk = new Panel();
         Panel megak = new Panel();
+        Panel buffselect = new Panel();
 
         public Form1()
         {
@@ -91,6 +93,7 @@ namespace Duszaverseny_2025
             konnyuk.Hide();
             nehezk.Hide();
             megak.Hide();
+            buffselect.Hide();
             menuu();
         }
 
@@ -865,7 +868,7 @@ namespace Duszaverseny_2025
                         }
                     }
                 }
-                else if (megak.Visible) //mega kazamatak
+                else if (megak.Visible)
                 {
                     List<string> selectedkartyak = new List<string>();
                     selectedkartyak.Clear();
@@ -918,7 +921,7 @@ namespace Duszaverseny_2025
                             }
                             if (vane == false)
                             {
-                                kazamatamega.Add(ujmegakazamatasorszam, (megakazamatanameinput, selectedkartyak[0], selectedkartyak[1], selectedkartyak[2], selectedkartyak[3], selectedkartyak[4], selectedvezer[0], selectedvezer[1], selectedvezer[2], "jutalom"));
+                                kazamatamega.Add(ujmegakazamatasorszam, (megakazamatanameinput, selectedkartyak[0], selectedkartyak[1], selectedkartyak[2], selectedkartyak[3], selectedkartyak[4], selectedvezer[0], selectedvezer[1], selectedvezer[2], "kartya"));
                                 ujmegakazamatasorszam++;
                                 megak.Hide();
                                 ujkazamata.Show();
@@ -926,7 +929,7 @@ namespace Duszaverseny_2025
                         }
                         else
                         {
-                            kazamatamega.Add(ujmegakazamatasorszam, (megakazamatanameinput, selectedkartyak[0], selectedkartyak[1], selectedkartyak[2], selectedkartyak[3], selectedkartyak[4], selectedvezer[0], selectedvezer[1], selectedvezer[2], "jutalom"));
+                            kazamatamega.Add(ujmegakazamatasorszam, (megakazamatanameinput, selectedkartyak[0], selectedkartyak[1], selectedkartyak[2], selectedkartyak[3], selectedkartyak[4], selectedvezer[0], selectedvezer[1], selectedvezer[2], "kartya"));
                             ujmegakazamatasorszam++;
                             megak.Hide();
                             ujkazamata.Show();
@@ -1398,7 +1401,6 @@ namespace Duszaverseny_2025
                     currentdifficulty = combo.SelectedIndex;
                     savename = Path.GetFileNameWithoutExtension(dialog.FileName);
                     loadedPath = selectedFile;
-                    Console.WriteLine(loadedPath);
                     
                     Világsoronként(sr, "con/con");
                     sr.Close();
@@ -1659,7 +1661,6 @@ namespace Duszaverseny_2025
                         if (sorreszek[0] == "difficulty")
                         {
                             currentdifficulty = Convert.ToInt32(sorreszek[1]);
-                            Console.WriteLine(currentdifficulty);
                         }
                         if (sorreszek[0] == "uj kartya")
                         {
@@ -1695,7 +1696,6 @@ namespace Duszaverseny_2025
                             {
                                 string[] ellenfelek = sorreszek[3].Split(',');
                                 kazamatakicsi[kazamatakicsi.Count] = (sorreszek[2], ellenfelek[0], ellenfelek[1], ellenfelek[2], sorreszek[4], sorreszek[5]);
-                                Console.WriteLine(kazamatakicsi[kazamatakicsi.Count-1]);
                             }
                             else if (sorreszek[1] == "nagy")
                             {
@@ -1750,8 +1750,8 @@ namespace Duszaverseny_2025
 
             button("Új pakli", "újpakli", 120, 40, 120, 443, 12, playerscreen, ÚjPakli_Click);
 
-            string infoText = "Pakli módosításához nyomd meg az alábbi kártyákat." + Environment.NewLine + "Pakli kiürétéséhez nyomd meg az új pakli gombot." + Environment.NewLine + "A pakliban gyűjteményednek legfeljebb fele szerepelhet.";
-            label(infoText, "info", 400, 70, 302, 270, 12, playerscreen);
+            string infoText = "Kártyák adatai: név, sebzés/életerő, típus"+Environment.NewLine+"Pakli módosításához nyomd meg az alábbi kártyákat." + Environment.NewLine + "Pakli kiürétéséhez nyomd meg az új pakli gombot." + Environment.NewLine + "A pakliban gyűjteményednek legfeljebb fele szerepelhet.";
+            label(infoText, "info", 400, 70, 302, 270, 10, playerscreen);
             button("Játék mentése","SaveGame",100,85,750,260,14,playerscreen,Save);
 
             label("Vezérek:", "info", 100, 30, 2, 150, 14, playerscreen);
@@ -1942,7 +1942,7 @@ namespace Duszaverseny_2025
                 lbl.Size = new Size(85, 50);
                 lbl.Location = new Point(x, 580 + counter * 50);
                 lbl.Enabled = false;
-                lbl.Click += (s, e) => Harc(i,"egyszeru");
+                lbl.Click += (s, e) => SelectBuffsScreen(i,"egyszeru");
                 playerscreen.Controls.Add(lbl);
                 x = x + 99;
 
@@ -1964,7 +1964,7 @@ namespace Duszaverseny_2025
                 lbl.Size = new Size(85, 50);
                 lbl.Location = new Point(x, 580 + counter * 50);
                 lbl.Enabled = false;
-                lbl.Click += (s, e) => Harc(i,"kicsi");
+                lbl.Click += (s, e) => SelectBuffsScreen(i,"kicsi");
                 playerscreen.Controls.Add(lbl);
                 x = x + 99;
 
@@ -1992,7 +1992,7 @@ namespace Duszaverseny_2025
                 lbl.Size = new Size(85, 50);
                 lbl.Location = new Point(x, 580 + counter * 50);
                 lbl.Enabled = false;
-                lbl.Click += (s, e) => Harc(i,"nagy");
+                lbl.Click += (s, e) => SelectBuffsScreen(i,"nagy");
                 playerscreen.Controls.Add(lbl);
                 x = x + 99;
 
@@ -2021,7 +2021,7 @@ namespace Duszaverseny_2025
                 lbl.Size = new Size(85, 50);
                 lbl.Location = new Point(x, 580 + counter * 50);
                 lbl.Enabled = false;
-                lbl.Click += (s, e) => Harc(i,"mega");
+                lbl.Click += (s, e) => SelectBuffsScreen(i,"mega");
                 playerscreen.Controls.Add(lbl);
                 x = x + 99;
                 label(kazamatamega[i].Item2, "kazmell", 85, 44, x, 580 + counter * 50, 8, playerscreen);
@@ -2042,7 +2042,7 @@ namespace Duszaverseny_2025
                 x += 99;
                 label("Jutalom: " + kazamatamega[i].Item10, "kazmjut", 85, 44, x, 580 + counter * 50, 8, playerscreen);
                 x += 99;
-                label("Típus: nagy", "kazminfo", 85, 44, x, 580 + counter * 50, 8, playerscreen);
+                label("Típus: mega", "kazminfo", 85, 44, x, 580 + counter * 50, 8, playerscreen);
             }
         }
 
@@ -2103,13 +2103,111 @@ namespace Duszaverseny_2025
             }
         }
 
-        private void Harc(int key, string típus)
+        private void SelectBuffsScreen(int key, string típus)
         {
+            int x = 5;
+            if (powerupcount == 0)
+            {
+                Dictionary<string, string> Pairs = new Dictionary<string, string>();
+                Harc(key, típus, Pairs);
+            }
+            else
+            {
+                buffselect.Show();
+                buffselect.BackColor = Color.LightGray;
+                buffselect.Dock = DockStyle.Fill;
+                this.Controls.Add(buffselect);
+                playerscreen.Hide();
+                buffselect.BringToFront();
+
+                label("Válaszd ki a kártyákat, amiket erősíteni szeretnél a körre\nPiros: sebzés duplázása, Kék: életerő duplázása\nErősítések száma: " + powerupcount, "info", 500,60,5,5,12,buffselect);
+                foreach (string s in Pakli)
+                {
+                    foreach (int i in playercards.Keys)
+                    {
+                        if (s == playercards[i].Item1) {
+                            string gyujtemenyText = playercards[i].Item1 + '\n' + playercards[i].Item2 + "/" + playercards[i].Item3 + '\n' + tipusok[playercards[i].Item4];
+                            button(gyujtemenyText, s, 85, 100, x, 100, 8, buffselect, SelectBuff);
+                            x = x + 99;
+                            break;
+                        }
+                    }
+                }
+
+                Button start = new Button();
+                start.Size = new System.Drawing.Size(100, 80);
+                start.Location = new Point(5, 200);
+                start.Text = "Harc indítása";
+                start.Name = "indít";
+                start.Font = new Font("Microsoft Sans Seriff", 14);
+                start.Click += (s,e) => HarcIndítás(key,típus);
+                buffselect.Controls.Add(start);
+            }
+        }
+
+        private void SelectBuff(object sender, EventArgs e)
+        {
+            Button btn = sender as Button;
+            string name = btn.Name;
+            string[] lines = btn.Text.Split('\n');
+            string[] numbs = lines[1].Split('/');
+            int damage = Convert.ToInt32(numbs[0]);
+            int health = Convert.ToInt32(numbs[1]);
+            if (powerupcount > 0 && btn.BackColor == Color.LightGray)
+            {
+                btn.BackColor = Color.Red;
+                btn.Text = lines[0] + '\n' + (damage * 2).ToString() + '/' + health.ToString() + '\n' + lines[2];
+                powerupcount--;
+            }
+            else if (btn.BackColor == Color.Red)
+            {
+                btn.BackColor = Color.Blue;
+                btn.Text = lines[0] + '\n' + (damage / 2).ToString() + '/' + (health * 2).ToString() + '\n' + lines[2];
+            }
+            else if (btn.BackColor == Color.Blue)
+            {
+                btn.BackColor = Color.LightGray;
+                btn.Text = lines[0] + '\n' + damage.ToString() + '/' + (health / 2).ToString() + '\n' + lines[2];
+                powerupcount++;
+            }
+        }
+
+        private void HarcIndítás(int key, string típus)
+        {
+            Dictionary<string, string> Pairs = new Dictionary<string, string>();
+
+            foreach (Control c in buffselect.Controls)
+            {
+                if (c is Button btn)
+                {
+                    if (btn.BackColor == Color.Red)
+                    {
+                        Pairs.Add(btn.Name,"sebzes");
+                        Console.WriteLine(btn.Name);
+                    }
+                    else if (btn.BackColor == Color.Blue)
+                    {
+                        Pairs.Add(btn.Name,"eletero");
+                        Console.WriteLine(btn.Name);
+                    }
+                }
+                c.Dispose();
+            }
+            this.Controls.Remove(buffselect);
+            Harc(key, típus, Pairs);
+        }
+
+        private void Harc(int key, string típus, Dictionary<string,string> buffs)
+        {
+            foreach (string s in buffs.Keys) {
+                Console.WriteLine(s+ " " + buffs[s]);
+            }
             Panel harctér = new Panel();
             harctér.BackColor = Color.LightGray;
             harctér.Dock = DockStyle.Fill;
             this.Controls.Add(harctér);
             playerscreen.Hide();
+            buffselect.Hide();
             harctér.BringToFront();
 
             Queue<string> simaellenfelek = new Queue<string>();
@@ -2152,7 +2250,7 @@ namespace Duszaverseny_2025
                 simaellenfelek.Enqueue(kazamatanagy[key].Item5);
                 simaellenfelek.Enqueue(kazamatanagy[key].Item6);
                 vezer.Enqueue(kazamatanagy[key].Item7);
-                jutalom = "kartya";
+                jutalom = "powerup";
             }
             else if (típus == "mega")
             {
@@ -2192,11 +2290,29 @@ namespace Duszaverseny_2025
             {
                 if (playercards[i].Item1 == jharcos)
                 {
-                    jéleth = playercards[i].Item3;
-                    jsebzésh = playercards[i].Item2;
+                    if (buffs.ContainsKey(jharcos))
+                    {
+                        Console.WriteLine(jharcos);
+                        if (buffs[jharcos] == "sebzes")
+                        {
+                            jsebzésh = playercards[i].Item2 * 2;
+                            jéleth = playercards[i].Item3;
+                        }
+                        else
+                        {
+                            jéleth = playercards[i].Item3 * 2;
+                            jsebzésh = playercards[i].Item2;
+                        }
+                    }
+                    else
+                    {
+                        jéleth = playercards[i].Item3;
+                        jsebzésh = playercards[i].Item2;
+                    }
                     jtípush = playercards[i].Item4;
                     string labelText = jharcos + Environment.NewLine + jsebzésh + "/" + jéleth + Environment.NewLine + jtípush;
                     label(labelText,"jharcos",70,50,Xh,Y,8,harctér);
+                    break;
                 }
             }
             Y += 70;
@@ -2208,10 +2324,6 @@ namespace Duszaverseny_2025
                     veszitett = true;
                     break;
                 }
-                Console.WriteLine("katakomba jön");
-                Console.WriteLine(jellenfél);
-                Console.WriteLine(simaellenfelek.Count);
-                Console.WriteLine(vezer.Count);
 
                 if (jellenfél == "") //kazamata uj kartyat hoz be
                 {
@@ -2283,21 +2395,15 @@ namespace Duszaverseny_2025
                 {
                     if (jtípuse == jtípush)
                     {
-                        Console.WriteLine(jéleth);
                         jéleth -= AppDiff(jsebzése,currentdifficulty,0);
-                        Console.WriteLine(jéleth);
                     }
                     else if ((tipusok[jtípuse] == "Tűz" && tipusok[jtípush] == "Levegő") || (tipusok[jtípuse] == "Levegő" && tipusok[jtípush] == "Tűz") || (tipusok[jtípuse] == "Föld" && tipusok[jtípush] == "Víz") || (tipusok[jtípuse] == "Víz" && tipusok[jtípush] == "Föld"))
                     {
-                        Console.WriteLine(jéleth);
                         jéleth -= AppDiff(jsebzése, currentdifficulty, 0) / 2;
-                        Console.WriteLine(jéleth);
                     }
                     else
                     {
-                        Console.WriteLine(jéleth);
                         jéleth -= AppDiff(jsebzése, currentdifficulty, 0) * 2;
-                        Console.WriteLine(jéleth);
                     }
 
                     if (jéleth < 0)
@@ -2331,10 +2437,6 @@ namespace Duszaverseny_2025
                     }
                 }
 
-                Console.WriteLine("játékos jön");
-                Console.WriteLine(jharcos);
-                Console.WriteLine(harcosok.Count);
-
                 if (jharcos == "") //játékos hoz elo kartyat
                 {
                     if (harcosok.Count > 0)
@@ -2344,8 +2446,25 @@ namespace Duszaverseny_2025
                         {
                             if (playercards[i].Item1 == jharcos)
                             {
-                                jéleth = playercards[i].Item3;
-                                jsebzésh = playercards[i].Item2;
+                                if (buffs.ContainsKey(jharcos))
+                                {
+                                    Console.WriteLine(jharcos);
+                                    if (buffs[jharcos] == "sebzes")
+                                    {
+                                        jsebzésh = playercards[i].Item2 * 2;
+                                        jéleth = playercards[i].Item3;
+                                    }
+                                    else
+                                    {
+                                        jéleth = playercards[i].Item3 * 2;
+                                        jsebzésh = playercards[i].Item2;
+                                    }
+                                }
+                                else
+                                {
+                                    jéleth = playercards[i].Item3;
+                                    jsebzésh = playercards[i].Item2;
+                                }
                                 jtípush = playercards[i].Item4;
 
                                 string labelText = jharcos + Environment.NewLine + jsebzésh + "/" + jéleth + Environment.NewLine + jtípush;
@@ -2378,21 +2497,15 @@ namespace Duszaverseny_2025
                 {
                     if (jtípuse == jtípush)
                     {
-                        Console.WriteLine(jélete);
                         jélete -= AppDiff(jsebzésh,currentdifficulty,1);
-                        Console.WriteLine(jélete);
                     }
                     else if ((tipusok[jtípuse] == "Tűz" && tipusok[jtípush] == "Levegő") || (tipusok[jtípuse] == "Levegő" && tipusok[jtípush] == "Tűz") || (tipusok[jtípuse] == "Föld" && tipusok[jtípush] == "Víz") || (tipusok[jtípuse] == "Víz" && tipusok[jtípush] == "Föld"))
                     {
-                        Console.WriteLine(jélete);
                         jélete -= AppDiff(jsebzésh, currentdifficulty, 1) / 2;
-                        Console.WriteLine(jélete);
                     }
                     else
-                    {
-                        Console.WriteLine(jélete);
+                    { 
                         jélete -= AppDiff(jsebzésh, currentdifficulty, 1) * 2;
-                        Console.WriteLine(jélete);
                     }
 
                     if (jélete < 0)
@@ -2427,10 +2540,6 @@ namespace Duszaverseny_2025
                         jtípuse = "";
                     }
                 }
-                Console.WriteLine("vége a körnek");
-                Console.WriteLine(jharcos);
-                Console.WriteLine(harcosok.Count);
-
             }
 
             Button back = new Button();
@@ -2537,9 +2646,10 @@ namespace Duszaverseny_2025
                         }
                     }
                 }
-                else
+                else if (jutalom == "powerup")
                 {
-
+                    powerupcount += 1;
+                    nyeremeny.Text = "Játékos nyert "+Environment.NewLine+"Választható erősítés";
                 }
             }
         }
@@ -3379,7 +3489,7 @@ namespace Duszaverseny_2025
                             }
                             playercards[playercards.Count] = (kartyak[ujkartya].Item1, kartyak[ujkartya].Item2, kartyak[ujkartya].Item3, kartyak[ujkartya].Item4);
                             nyeremeny.Text = "Játékos nyert!\nNyeremény: " + kartyak[ujkartya].Item1;
-                            Console.WriteLine(playercards[10].Item1);
+                            (playercards[10].Item1);
 
                             System.Windows.Forms.Button lbl = new System.Windows.Forms.Button();
                             lbl.Name = "gyujtemeny" + (playercards.Count - 1).ToString();
