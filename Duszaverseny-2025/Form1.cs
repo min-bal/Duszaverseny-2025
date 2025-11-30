@@ -151,6 +151,27 @@ namespace Duszaverseny_2025
 
         private void menuu()
         {
+            foreach (Control ctrl in this.Controls)
+            {
+                if (ctrl is Panel panel && panel.Visible)
+                {
+                    panel.Hide();
+                }
+            }
+            kartyak.Clear();
+            playercards.Clear();
+            vezerkartyak.Clear();
+            kazamataegyszeru.Clear();
+            kazamatakicsi.Clear();
+            kazamatanagy.Clear();
+            kazamatamega.Clear();
+            ujkartyasorszam = 0;
+            gyujtemenysorszam = 0;
+            ujvezersorszam = 0;
+            ujkiskazamatasorszam = 0;
+            ujegyszerukazamatasorszam = 0;
+            ujnagykazamatasorszam = 0;
+            ujmegakazamatasorszam = 0;
             menu.Controls.Clear();
             menu.Show();
             menu.BackColor = Color.DimGray;
@@ -169,6 +190,20 @@ namespace Duszaverseny_2025
             string name = btn.Name;
             if (name == "jatekosgomb") //jatekos menube belepes
             {
+                kartyak.Clear();
+                playercards.Clear();
+                vezerkartyak.Clear();
+                kazamataegyszeru.Clear();
+                kazamatakicsi.Clear();
+                kazamatanagy.Clear();
+                kazamatamega.Clear();
+                ujkartyasorszam = 0;
+                gyujtemenysorszam = 0;
+                ujvezersorszam = 0;
+                ujkiskazamatasorszam = 0;
+                ujegyszerukazamatasorszam = 0;
+                ujnagykazamatasorszam = 0;
+                ujmegakazamatasorszam = 0;
                 foreach (Control ctrl in this.Controls)
                 {
                     if (ctrl is Panel panel && panel.Visible)
@@ -210,7 +245,13 @@ namespace Duszaverseny_2025
                 kazamatakicsi.Clear();
                 kazamatanagy.Clear();
                 kazamatamega.Clear();
-
+                ujkartyasorszam = 0;
+                gyujtemenysorszam = 0;
+                ujvezersorszam = 0;
+                ujkiskazamatasorszam = 0;
+                ujegyszerukazamatasorszam = 0;
+                ujnagykazamatasorszam = 0;
+                ujmegakazamatasorszam = 0;
                 foreach (Control ctrl in this.Controls)
                 {
                     if (ctrl is Panel panel && panel.Visible)
@@ -226,13 +267,20 @@ namespace Duszaverseny_2025
                 mester.BringToFront();
 
                 label("Új világ létrehozása:", "ujvilaginfo", 500, 75, 0, 25, 35, mester, Color.Transparent, Color.Black);
+                label("Új világ létrehozásához egy nem üres gyűjtemény, legalább egy kazamata definiálása, illetve egy név megadása szükséges.", "ujvilagfeltetel", 500, 35, 0, 100, 10, mester, Color.Transparent, Color.Black);
                 textbox("ujsavename", 400, 35, 500, 50, mester, Color.White, Color.Black, 20, "Új világ");
-                button("Kész", "done", 150, 75, 925, 25, 20, mester, SaveNewfile, Color.DarkGray, Color.Black, Color.Red);
-                button("Új kártya\nhozzáadása\n(legalább 1)", "ujkartya", 200, 200, 150, 200, 20, mester, Újdolgok, Color.DarkGray, Color.Black, Color.Red);
-                button("Vezér", "ujvezer", 200, 100, 700, 200, 20, mester, Újdolgok, Color.DarkGray, Color.Black, Color.Red);
-                button("Kazamata", "ujkazamata", 200, 100, 150, 600, 20, mester, Újdolgok, Color.DarkGray, Color.Black, Color.Red);
-                button("Gyűjtemény", "gyujtemeny", 200, 100, 700, 600, 20, mester, Újdolgok, Color.DarkGray, Color.Black, Color.Red);         
+                button("Kész", "done", 150, 75, 925, 25, 20, mester, SaveNewfile, Color.DarkGray, Color.Black, Color.DarkRed);
+                button("Új kártya\nhozzáadása", "ujkartya", 400, 100, 50, 200, 20, mester, Újdolgok, Color.DarkGray, Color.Black, Color.DarkRed);
+                button("Új vezér\nhozzáadása", "ujvezer", 400, 100, 650, 200, 20, mester, Újdolgok, Color.DarkGray, Color.Black, Color.DarkRed);
+                button("Új kazamata\nhozzáadása", "ujkazamata", 400, 100, 50, 500, 20, mester, Újdolgok, Color.DarkGray, Color.Black, Color.DarkRed);
+                button("Gyűjtemény\nkiválasztása", "gyujtemeny", 400, 100, 650, 500, 20, mester, Újdolgok, Color.DarkGray, Color.Black, Color.DarkRed);
+                button("Vissza", "visszamenu", 150, 75, 35, 745, 20, mester, menuuu, Color.DarkGray, Color.Black, Color.DarkRed);
             }
+        }
+
+        private void menuuu(object sender, EventArgs e)
+        {
+            menuu();
         }
 
         private void Újdolgok(object sender, EventArgs e)
@@ -250,23 +298,24 @@ namespace Duszaverseny_2025
                 }
                 ujkartya.Controls.Clear();
                 ujkartya.Show();
+                ujkartya.BackColor = Color.DimGray;
                 ujkartya.Dock = DockStyle.Fill;
                 this.Controls.Add(ujkartya);
                 ujkartya.BringToFront();
 
-                label("Kártya neve:", "ujkname", 300, 50, 150, 75, 20, ujkartya, Color.Black, Color.White);
-                textbox("ujknameinput", 300, 50, 150, 150, ujkartya, Color.Black, Color.White, 20, "asd");
-                label("Kártya sebzése:", "ujkdmg", 300, 50, 700, 75, 20, ujkartya, Color.Black, Color.White);
-                textbox("ujkdmginput", 300, 50, 700, 150, ujkartya, Color.Black, Color.White, 20, "asd");
-                label("Kártya életereje:", "ujkhp", 300, 50, 150, 575, 20, ujkartya, Color.Black, Color.White);
-                textbox("ujkhpinput", 300, 50, 150, 650, ujkartya, Color.Black, Color.White, 20, "asd");
-                label("Kártya típusa:", "ujktype", 300, 50, 700, 375, 20, ujkartya, Color.Black, Color.White);
-                button("Tűz", "tuz", 100, 100, 600, 450, 20, ujkartya, ColortheTypes, Color.Black, Color.White, Color.Black);
-                button("Víz", "viz", 100, 100, 800, 450, 20, ujkartya, ColortheTypes, Color.Black, Color.White, Color.Black);
-                button("Levegő", "levego", 100, 100, 600, 650, 20, ujkartya, ColortheTypes, Color.Black, Color.White, Color.Black);
-                button("Föld", "fold", 100, 100, 800, 650, 20, ujkartya, ColortheTypes, Color.Black, Color.White, Color.Black);
-                button("Hozzáadás", "registercard", 100, 100, 350, 350, 20, ujkartya, Újdolgok, Color.Black, Color.White, Color.Black);
-                button("Vissza", "visszamester", 100, 100, 50, 400, 20, ujkartya, button_Click, Color.Black, Color.White, Color.Black);
+                label("Új kártya neve:", "ujkname", 300, 50, 150, 75, 20, ujkartya, Color.Transparent, Color.Black);
+                textbox("ujknameinput", 350, 35, 125, 150, ujkartya, Color.White, Color.Black, 20, "Max 16 karakter");
+                label("Új kártya sebzése:", "ujkdmg", 300, 50, 150, 325, 20, ujkartya, Color.Transparent, Color.Black);
+                textbox("ujkdmginput", 350, 35, 125, 400, ujkartya, Color.White, Color.Black, 20, "2 és 100 közötti szám");
+                label("Új kártya életereje:", "ujkhp", 300, 50, 150, 575, 20, ujkartya, Color.Transparent, Color.Black);
+                textbox("ujkhpinput", 350, 35, 125, 650, ujkartya, Color.White, Color.Black, 20, "1 és 100 közötti szám");
+                label("Új kártya típusa:", "ujktype", 300, 50, 650, 75, 20, ujkartya, Color.Transparent, Color.Black);
+                button("Tűz", "tuz", 150, 150, 625, 200, 20, ujkartya, ColortheTypes, Color.DarkGray, Color.Black, Color.Orange);
+                button("Víz", "viz", 150, 150, 825, 200, 20, ujkartya, ColortheTypes, Color.DarkGray, Color.Black, Color.Blue);
+                button("Levegő", "levego", 150, 150, 625, 400, 20, ujkartya, ColortheTypes, Color.DarkGray, Color.Black, Color.LightBlue);
+                button("Föld", "fold", 150, 150, 825, 400, 20, ujkartya, ColortheTypes, Color.DarkGray, Color.Black, Color.SaddleBrown);
+                button("Hozzáadás", "registercard", 200, 75, 825, 745, 20, ujkartya, Újdolgok, Color.DarkGray, Color.Black, Color.DarkRed);
+                button("Vissza", "visszamester", 150, 75, 35, 745, 20, ujkartya, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
             }
             else if (name == "ujvezer") //kartya vezerre fejlesztese
             {
@@ -282,44 +331,52 @@ namespace Duszaverseny_2025
                     }
 
                     ujvezer.Controls.Clear();
+                    ujvezer.BackColor = Color.DimGray;
                     ujvezer.Show();
                     ujvezer.Dock = DockStyle.Fill;
                     this.Controls.Add(ujvezer);
                     ujvezer.BringToFront();
 
-                    button("Vissza", "visszamester", 150, 100, 0, 0, 20, ujvezer, button_Click, Color.Black, Color.White, Color.Black);
+                    button("Vissza", "visszamester", 150, 75, 35, 745, 20, ujvezer, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
 
-                    int x = 150;
-                    int y = 0;
+                    Color border = new Color();
+                    string tipisekezettel = string.Empty;
+
+                    int x = 10;
+                    int y = 10;
                     bool vanev = false;
                     for (int i = 0; i < kartyak.Count; i++)
                     {
+                        if (kartyak[i].Item4 == "tuz") { border = Color.Orange; tipisekezettel = "Tűz"; }
+                        else if (kartyak[i].Item4 == "viz") { border = Color.Blue; tipisekezettel = "VÍz"; }
+                        else if (kartyak[i].Item4 == "levego") { border = Color.LightBlue; tipisekezettel = "Levegő"; }
+                        else if (kartyak[i].Item4 == "fold") { border = Color.SaddleBrown; tipisekezettel = "Föld"; }
                         if (vezerkartyak.Count > 0)
                         {
                             for (int j = 0; j < vezerkartyak.Count; j++)
                             {
-                                if (vezerkartyak[j].Item1 == "v " + kartyak[i].Item1) { vanev = true; }
+                                if (vezerkartyak[j].Item5 == kartyak[i].Item1) { vanev = true; }
                             }
                             if (vanev == false)
                             {
-                                button(kartyak[i].Item1, kartyak[i].Item1 + "ujvezer", 75, 100, x, y, 10, ujvezer, button_Click, Color.Black, Color.White, Color.Black);
-                                x += 75;
-                                if (x > 975)
+                                button(kartyak[i].Item1 + Environment.NewLine + "⚔️" + kartyak[i].Item2 + "/" + kartyak[i].Item3 + "❤️" + Environment.NewLine + tipisekezettel, kartyak[i].Item1 + "ujvezer", 100, 130, x, y, 10, ujvezer, button_Click, Color.DarkGray, Color.Black, border);
+                                x += 110;
+                                if (x > 1000)
                                 {
-                                    y += 100;
-                                    x = 0;
+                                    y += 140;
+                                    x = 10;
                                 }
                             }
                             else { vanev = false; }
                         }
                         else
                         {
-                            button(kartyak[i].Item1, kartyak[i].Item1 + "ujvezer", 75, 100, x, y, 10, ujvezer, button_Click, Color.Black, Color.White, Color.Black);
-                            x += 75;
-                            if (x > 975)
+                            button(kartyak[i].Item1 + Environment.NewLine + "⚔️" + kartyak[i].Item2 + "/" + kartyak[i].Item3 + "❤️" + Environment.NewLine + tipisekezettel, kartyak[i].Item1 + "ujvezer", 100, 130, x, y, 10, ujvezer, button_Click, Color.DarkGray, Color.Black, border);
+                            x += 110;
+                            if (x > 1000)
                             {
-                                y += 100;
-                                x = 0;
+                                y += 140;
+                                x = 10;
                             }
                         }
                     }
@@ -365,19 +422,25 @@ namespace Duszaverseny_2025
                     }
 
                     gyujtemeny.Controls.Clear();
+                    gyujtemeny.BackColor = Color.DimGray;
                     gyujtemeny.Show();
                     gyujtemeny.Dock = DockStyle.Fill;
                     this.Controls.Add(gyujtemeny);
                     gyujtemeny.BringToFront();
 
-                    button("Vissza", "visszamester", 150, 100, 0, 0, 20, gyujtemeny, button_Click, Color.Black, Color.White, Color.Black);
-                    button("Kész", "gyujtemenydone", 150, 100, 150, 0, 20, gyujtemeny, Újdolgok, Color.Black, Color.White, Color.Black);
+                    button("Kész", "gyujtemenydone", 150, 75, 35, 745, 20, gyujtemeny, Újdolgok, Color.DarkGray, Color.Black, Color.DarkRed);
 
-                    int x = 300;
-                    int y = 0;
+                    Color border = new Color();
+                    string tipisekezettel = string.Empty;
+                    int x = 10;
+                    int y = 10;
                     for (int i = 0; i < kartyak.Count; i++)
                     {
-                        button(kartyak[i].Item1, kartyak[i].Item1 + "gyujtemenybee", 75, 100, x, y, 10, gyujtemeny, button_Click, Color.Black, Color.White, Color.Black);
+                        if (kartyak[i].Item4 == "tuz") { border = Color.Orange; tipisekezettel = "Tűz"; }
+                        else if (kartyak[i].Item4 == "viz") { border = Color.Blue; tipisekezettel = "VÍz"; }
+                        else if (kartyak[i].Item4 == "levego") { border = Color.LightBlue; tipisekezettel = "Levegő"; }
+                        else if (kartyak[i].Item4 == "fold") { border = Color.SaddleBrown; tipisekezettel = "Föld"; }
+                        button(kartyak[i].Item1 + Environment.NewLine + "⚔️" + kartyak[i].Item2 + "/" + kartyak[i].Item3 + "❤️" + Environment.NewLine + tipisekezettel, kartyak[i].Item1 + "gyujtemenybee", 100, 130, x, y, 10, gyujtemeny, button_Click, Color.DarkGray, Color.Black, border);
 
                         for (int j = 0; j < kartyak.Count; j++)
                         {
@@ -389,16 +452,16 @@ namespace Duszaverseny_2025
                                 {
                                     if (playercards[k].Item1 == kartyak[i].Item1)
                                     {
-                                        button.BackColor = Color.Yellow;
+                                        button.BackColor = Color.White;
                                     }
                                 }
                             }
                         }
-                        x += 75;
-                        if (x > 975)
+                        x += 110;
+                        if (x > 1000)
                         {
-                            y += 100;
-                            x = 0;
+                            y += 140;
+                            x = 10;
                         }
                     }
                 }
@@ -421,7 +484,7 @@ namespace Duszaverseny_2025
                       .FirstOrDefault(b => b.Name == kartyak[i].Item1 + "gyujtemenybee");
                     if (button != null)
                     {
-                        if (button.BackColor == Color.Yellow)
+                        if (button.BackColor == Color.White)
                         {
                             playercards.Add(gyujtemenysorszam, (kartyak[i].Item1, kartyak[i].Item2, kartyak[i].Item3, kartyak[i].Item4));
                             gyujtemenysorszam++;
@@ -459,7 +522,7 @@ namespace Duszaverseny_2025
                     }
                 }
 
-                if (ujkname != string.Empty && ujkdmg != 0 && ujkhp != 0 && ujkname.Length <= 14 && ujkdmg >= 2 && ujkdmg <= 100 && ujkhp >= 1 && ujkhp <= 100) //csak akkor engedi letrehozni ha van megadva nev, ami max 14 karakter vezerre fejlesztes miatt, mert igy a vezer neve max 16 karakter lesz, tipus, dmg-és hp <= 100
+                if (ujkname != string.Empty && ujkdmg != 0 && ujkhp != 0 && ujkname.Length <= 16 && ujkdmg >= 2 && ujkdmg <= 100 && ujkhp >= 1 && ujkhp <= 100) //csak akkor engedi letrehozni ha van megadva nev, ami max 14 karakter vezerre fejlesztes miatt, mert igy a vezer neve max 16 karakter lesz, tipus, dmg-és hp <= 100
                 {
                     if (kartyak.Count > 0)
                     {
@@ -475,6 +538,15 @@ namespace Duszaverseny_2025
 
                             ujkartya.Hide();
                             mester.Show();
+                        }
+                        else
+                        {
+                            TextBox doboz = ujkartya.Controls.OfType<TextBox>()
+                            .FirstOrDefault(t => t.Name == "ujknameinput");
+                            if (doboz != null)
+                            {
+                                doboz.Text = "Már van ilyen nevű kártya";
+                            }
                         }
                     }
                     else
@@ -679,7 +751,7 @@ namespace Duszaverseny_2025
                             .FirstOrDefault(b => b.Name == kartyak[i].Item1 + "egyszerukazamataba");
                         if (button != null)
                         {
-                            if (button.BackColor == Color.Yellow)
+                            if (button.BackColor == Color.White)
                             {
                                 selectedkartyak.Add(kartyak[i].Item1);
                             }
@@ -695,7 +767,7 @@ namespace Duszaverseny_2025
                                 .FirstOrDefault(b => b.Name == vezerkartyak[i].Item1 + "egyszerukazamataba");
                             if (button != null)
                             {
-                                if (button.BackColor == Color.Yellow)
+                                if (button.BackColor == Color.White)   
                                 {
                                     selectedvezer.Add(vezerkartyak[i].Item1);
                                 }
@@ -754,7 +826,7 @@ namespace Duszaverseny_2025
                             .FirstOrDefault(b => b.Name == kartyak[i].Item1 + "konnyukazamataba");
                         if (button != null)
                         {
-                            if (button.BackColor == Color.Yellow)
+                            if (button.BackColor == Color.White)
                             {
                                 selectedkartyak.Add(kartyak[i].Item1);
                             }
@@ -770,7 +842,7 @@ namespace Duszaverseny_2025
                                 .FirstOrDefault(b => b.Name == vezerkartyak[i].Item1 + "konnyukazamataba");
                             if (button != null)
                             {
-                                if (button.BackColor == Color.Yellow)
+                                if (button.BackColor == Color.White)
                                 {
                                     selectedvezer.Add(vezerkartyak[i].Item1);
                                 }
@@ -829,7 +901,7 @@ namespace Duszaverseny_2025
                             .FirstOrDefault(b => b.Name == kartyak[i].Item1 + "nehezkazamataba");
                         if (button != null)
                         {
-                            if (button.BackColor == Color.Yellow)
+                            if (button.BackColor == Color.White)
                             {
                                 selectedkartyak.Add(kartyak[i].Item1);
                             }
@@ -845,7 +917,7 @@ namespace Duszaverseny_2025
                                 .FirstOrDefault(b => b.Name == vezerkartyak[i].Item1 + "nehezkazamataba");
                             if (button != null)
                             {
-                                if (button.BackColor == Color.Yellow)
+                                if (button.BackColor == Color.White)
                                 {
                                     selectedvezer.Add(vezerkartyak[i].Item1);
                                 }
@@ -897,7 +969,7 @@ namespace Duszaverseny_2025
                             .FirstOrDefault(b => b.Name == kartyak[i].Item1 + "megakazamataba");
                         if (button != null)
                         {
-                            if (button.BackColor == Color.Yellow)
+                            if (button.BackColor == Color.White)
                             {
                                 selectedkartyak.Add(kartyak[i].Item1);
                             }
@@ -913,7 +985,7 @@ namespace Duszaverseny_2025
                                 .FirstOrDefault(b => b.Name == vezerkartyak[i].Item1 + "megakazamataba");
                             if (button != null)
                             {
-                                if (button.BackColor == Color.Yellow)
+                                if (button.BackColor == Color.White)
                                 {
                                     selectedvezer.Add(vezerkartyak[i].Item1);
                                 }
@@ -976,12 +1048,127 @@ namespace Duszaverseny_2025
                       .FirstOrDefault(b => b.Name == tipus[i]);
                     if (btnn != null)
                     {
-                        btnn.BackColor = Color.White;
+                        btnn.BackColor = Color.DarkGray;
                     }
-                    btn.BackColor = Color.LightBlue;
+                    btn.BackColor = Color.White;
                     selected = btn.Name;
                 }
             }
+        }
+
+        private void VezerBuffok(object sender, EventArgs e)
+        {
+            string ujjvezernev = string.Empty;
+            System.Windows.Forms.Label label = sebzeseletero.Controls.OfType<System.Windows.Forms.Label>()
+                            .FirstOrDefault(t => t.Text == kartyak[vezerrefejlesztessorszam].Item1);
+            if (label != null)
+            {
+                TextBox doboz = sebzeseletero.Controls.OfType<TextBox>()
+                            .FirstOrDefault(t => t.Name == "ujvezernevepre");
+                if (doboz != null)
+                {
+                    TextBox doboz1 = sebzeseletero.Controls.OfType<TextBox>()
+                                .FirstOrDefault(t => t.Name == "ujvezernevesuf");
+                    if (doboz1 != null)
+                    {
+                        if (doboz.Text == "" && doboz1.Text == "")
+                        {
+                            doboz.Text = "Legalább az egyik";
+                            doboz1.Text = "mezőbe írj valamit!";
+                        }
+                        else
+                        {
+                            ujjvezernev = doboz.Text + label.Text + doboz1.Text;
+                            Button btn = sender as Button;
+                            string name = btn.Name;
+
+                            if (vezerkartyak.Count > 0)
+                            {
+                                bool vane = false;
+                                for (int i = 0; i < vezerkartyak.Count; i++)
+                                {
+                                    if (vezerkartyak[i].Item1 == ujjvezernev) { vane = true; }
+                                }
+                                if (vane == true)
+                                {
+                                    doboz.Text = "Van már ilyen";
+                                    doboz1.Text = "nevű vezér!";
+                                }
+                                else
+                                {
+                                    if (name == "dmg") //uj vezer sebzesduplazas
+                                    {
+                                        if (kartyak[vezerrefejlesztessorszam].Item2 > 50)
+                                        {
+                                            vezerkartyak.Add(ujvezersorszam, (ujjvezernev, 100, kartyak[vezerrefejlesztessorszam].Item3, kartyak[vezerrefejlesztessorszam].Item4, kartyak[vezerrefejlesztessorszam].Item1, "sebzes"));
+                                        }
+                                        else
+                                        {
+                                            vezerkartyak.Add(ujvezersorszam, (ujjvezernev, (kartyak[vezerrefejlesztessorszam].Item2) * 2, kartyak[vezerrefejlesztessorszam].Item3, kartyak[vezerrefejlesztessorszam].Item4, kartyak[vezerrefejlesztessorszam].Item1, "sebzes"));
+                                        }
+                                        ujvezersorszam++;
+                                    }
+                                    else if (name == "hp") //uj vezer eletduplazas
+                                    {
+                                        if (kartyak[vezerrefejlesztessorszam].Item3 > 50)
+                                        {
+                                            vezerkartyak.Add(ujvezersorszam, (ujjvezernev, kartyak[vezerrefejlesztessorszam].Item2, 100, kartyak[vezerrefejlesztessorszam].Item4, kartyak[vezerrefejlesztessorszam].Item1, "eletero"));
+                                        }
+                                        else
+                                        {
+                                            vezerkartyak.Add(ujvezersorszam, (ujjvezernev, kartyak[vezerrefejlesztessorszam].Item2, (kartyak[vezerrefejlesztessorszam].Item3) * 2, kartyak[vezerrefejlesztessorszam].Item4, kartyak[vezerrefejlesztessorszam].Item1, "eletero"));
+                                        }
+                                        ujvezersorszam++;
+                                    }
+                                    foreach (Control ctrl in this.Controls)
+                                    {
+                                        if (ctrl is Panel panel && panel.Visible)
+                                        {
+                                            panel.Hide();
+                                        }
+                                    }
+                                    mester.Show();
+                                }
+                            }
+                            else
+                            {
+                                if (name == "dmg") //uj vezer sebzesduplazas
+                                {
+                                    if (kartyak[vezerrefejlesztessorszam].Item2 > 50)
+                                    {
+                                        vezerkartyak.Add(ujvezersorszam, (ujjvezernev, 100, kartyak[vezerrefejlesztessorszam].Item3, kartyak[vezerrefejlesztessorszam].Item4, kartyak[vezerrefejlesztessorszam].Item1, "sebzes"));
+                                    }
+                                    else
+                                    {
+                                        vezerkartyak.Add(ujvezersorszam, (ujjvezernev, (kartyak[vezerrefejlesztessorszam].Item2) * 2, kartyak[vezerrefejlesztessorszam].Item3, kartyak[vezerrefejlesztessorszam].Item4, kartyak[vezerrefejlesztessorszam].Item1, "sebzes"));
+                                    }
+                                    ujvezersorszam++;
+                                }
+                                else if (name == "hp") //uj vezer eletduplazas
+                                {
+                                    if (kartyak[vezerrefejlesztessorszam].Item3 > 50)
+                                    {
+                                        vezerkartyak.Add(ujvezersorszam, (ujjvezernev, kartyak[vezerrefejlesztessorszam].Item2, 100, kartyak[vezerrefejlesztessorszam].Item4, kartyak[vezerrefejlesztessorszam].Item1, "eletero"));
+                                    }
+                                    else
+                                    {
+                                        vezerkartyak.Add(ujvezersorszam, (ujjvezernev, kartyak[vezerrefejlesztessorszam].Item2, (kartyak[vezerrefejlesztessorszam].Item3) * 2, kartyak[vezerrefejlesztessorszam].Item4, kartyak[vezerrefejlesztessorszam].Item1, "eletero"));
+                                    }
+                                    ujvezersorszam++;
+                                }
+                                foreach (Control ctrl in this.Controls)
+                                {
+                                    if (ctrl is Panel panel && panel.Visible)
+                                    {
+                                        panel.Hide();
+                                    }
+                                }
+                                mester.Show();
+                            }
+                        }
+                    }
+                }
+            }                        
         }
 
         private void button_Click(object sender, EventArgs e)
@@ -1017,6 +1204,17 @@ namespace Duszaverseny_2025
                         }
                     }
                     ujkazamata.Show();
+                }
+                else if (name == "visszavezer")
+                {
+                    foreach (Control ctrl in this.Controls)
+                    {
+                        if (ctrl is Panel panel && panel.Visible)
+                        {
+                            panel.Hide();
+                        }
+                    }
+                    ujvezer.Show();
                 }
                 else if (name == "jutalomse")
                 {
@@ -1064,13 +1262,19 @@ namespace Duszaverseny_2025
                             vezerrefejlesztessorszam = i;
 
                             sebzeseletero.Controls.Clear();
+                            sebzeseletero.BackColor = Color.DarkGray;
                             sebzeseletero.Show();
                             sebzeseletero.Dock = DockStyle.Fill;
                             this.Controls.Add(sebzeseletero);
                             sebzeseletero.BringToFront();
 
-                            button("Életerő", "hp", 200, 200, 350, 400, 20, sebzeseletero, VezerBuffok, Color.Black, Color.White, Color.Black);
-                            button("Sebzés", "dmg", 200, 200, 700, 400, 20, sebzeseletero, VezerBuffok, Color.Black, Color.White, Color.Black);
+                            label("Vezér neve:", "ujvezerneveinfo", 200, 50, 450, 50, 20, sebzeseletero, Color.Transparent, Color.Black);
+                            textbox("ujvezernevepre", 250, 35, 150, 150, sebzeseletero, Color.White, Color.Black, 20, "");
+                            label(kartyak[i].Item1, "ujvezerneve", 300, 50, 400, 140, 20, sebzeseletero, Color.Transparent, Color.Black);
+                            textbox("ujvezernevesuf", 250, 35, 700, 150, sebzeseletero, Color.White, Color.Black, 20, "");
+                            button("Életerő duplázása", "hp", 200, 200, 325, 400, 20, sebzeseletero, VezerBuffok, Color.DarkGray, Color.Black, Color.DarkRed);
+                            button("Sebzés duplázása", "dmg", 200, 200, 575, 400, 20, sebzeseletero, VezerBuffok, Color.DarkGray, Color.Black, Color.DarkRed);
+                            button("Vissza", "visszavezer", 150, 75, 35, 745, 20, sebzeseletero, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
                         }
 
                         if (name == kartyak[i].Item1 + "gyujtemenybee") //gyujtemenybe valasztott / kivett kartya
@@ -1079,11 +1283,11 @@ namespace Duszaverseny_2025
                           .FirstOrDefault(b => b.Name == kartyak[i].Item1 + "gyujtemenybee");
                             if (button != null)
                             {
-                                if (button.BackColor == Color.Yellow)
+                                if (button.BackColor == Color.White)
                                 {
-                                    button.BackColor = Color.White;
+                                    button.BackColor = Color.DarkGray;
                                 }
-                                else { button.BackColor = Color.Yellow; }
+                                else { button.BackColor = Color.White; }
                             }
                         }
 
@@ -1098,7 +1302,7 @@ namespace Duszaverseny_2025
                                     string alap = string.Empty;
                                     for (int j = 0; j < kartyak.Count; j++)
                                     {
-                                        if ("v " + kartyak[j].Item1 == vezerkartyak[i].Item1)
+                                        if (kartyak[j].Item1 == vezerkartyak[i].Item5)
                                         {
                                             alap = kartyak[j].Item1;
                                         }
@@ -1108,26 +1312,26 @@ namespace Duszaverseny_2025
                                         .FirstOrDefault(b => b.Name == alap + "egyszerukazamataba");
                                     if (butn != null)
                                     {
-                                        if (butn.BackColor == Color.Yellow)
+                                        if (butn.BackColor == Color.White)
                                         {
 
                                         }
                                         else
                                         {
-                                            if (button.BackColor == Color.Yellow)
+                                            if (button.BackColor == Color.White)
                                             {
-                                                button.BackColor = Color.White;
+                                                button.BackColor = Color.DarkGray;
                                             }
-                                            else { button.BackColor = Color.Yellow; }
+                                            else { button.BackColor = Color.White; }
                                         }
                                     }
                                     else
                                     {
-                                        if (button.BackColor == Color.Yellow)
+                                        if (button.BackColor == Color.White)
                                         {
-                                            button.BackColor = Color.White;
+                                            button.BackColor = Color.DarkGray;
                                         }
-                                        else { button.BackColor = Color.Yellow; }
+                                        else { button.BackColor = Color.White; }
                                     }
                                 }
                             }
@@ -1141,7 +1345,7 @@ namespace Duszaverseny_2025
                                     string alap = string.Empty;
                                     for (int j = 0; j < kartyak.Count; j++)
                                     {
-                                        if ("v " + kartyak[j].Item1 == vezerkartyak[i].Item1)
+                                        if (kartyak[j].Item1 == vezerkartyak[i].Item5)
                                         {
                                             alap = kartyak[j].Item1;
                                         }
@@ -1151,26 +1355,26 @@ namespace Duszaverseny_2025
                                         .FirstOrDefault(b => b.Name == alap + "konnyukazamataba");
                                     if (butn != null)
                                     {
-                                        if (butn.BackColor == Color.Yellow)
+                                        if (butn.BackColor == Color.White)
                                         {
 
                                         }
                                         else
                                         {
-                                            if (button.BackColor == Color.Yellow)
+                                            if (button.BackColor == Color.White)
                                             {
-                                                button.BackColor = Color.White;
+                                                button.BackColor = Color.DarkGray;
                                             }
-                                            else { button.BackColor = Color.Yellow; }
+                                            else { button.BackColor = Color.White; }
                                         }
                                     }
                                     else
                                     {
-                                        if (button.BackColor == Color.Yellow)
+                                        if (button.BackColor == Color.White)
                                         {
-                                            button.BackColor = Color.White;
+                                            button.BackColor = Color.DarkGray;
                                         }
-                                        else { button.BackColor = Color.Yellow; }
+                                        else { button.BackColor = Color.White; }
                                     }
                                 }
                             }
@@ -1184,7 +1388,7 @@ namespace Duszaverseny_2025
                                     string alap = string.Empty;
                                     for (int j = 0; j < kartyak.Count; j++)
                                     {
-                                        if ("v " + kartyak[j].Item1 == vezerkartyak[i].Item1)
+                                        if (kartyak[j].Item1 == vezerkartyak[i].Item5)
                                         {
                                             alap = kartyak[j].Item1;
                                         }
@@ -1194,26 +1398,26 @@ namespace Duszaverseny_2025
                                         .FirstOrDefault(b => b.Name == alap + "nehezkazamataba");
                                     if (butn != null)
                                     {
-                                        if (butn.BackColor == Color.Yellow)
+                                        if (butn.BackColor == Color.White)
                                         {
 
                                         }
                                         else
                                         {
-                                            if (button.BackColor == Color.Yellow)
+                                            if (button.BackColor == Color.White)
                                             {
-                                                button.BackColor = Color.White;
+                                                button.BackColor = Color.DarkGray;
                                             }
-                                            else { button.BackColor = Color.Yellow; }
+                                            else { button.BackColor = Color.White; }
                                         }
                                     }
                                     else
                                     {
-                                        if (button.BackColor == Color.Yellow)
+                                        if (button.BackColor == Color.White)
                                         {
-                                            button.BackColor = Color.White;
+                                            button.BackColor = Color.DarkGray;
                                         }
-                                        else { button.BackColor = Color.Yellow; }
+                                        else { button.BackColor = Color.White; }
                                     }
                                 }
                             }
@@ -1227,7 +1431,7 @@ namespace Duszaverseny_2025
                                     string alap = string.Empty;
                                     for (int j = 0; j < kartyak.Count; j++)
                                     {
-                                        if ("v " + kartyak[j].Item1 == vezerkartyak[i].Item1)
+                                        if (kartyak[j].Item1 == vezerkartyak[i].Item5)   
                                         {
                                             alap = kartyak[j].Item1;
                                         }
@@ -1237,26 +1441,26 @@ namespace Duszaverseny_2025
                                         .FirstOrDefault(b => b.Name == alap + "megakazamataba");
                                     if (butn != null)
                                     {
-                                        if (butn.BackColor == Color.Yellow)
+                                        if (butn.BackColor == Color.White)
                                         {
 
                                         }
                                         else
                                         {
-                                            if (button.BackColor == Color.Yellow)
+                                            if (button.BackColor == Color.White)
                                             {
-                                                button.BackColor = Color.White;
+                                                button.BackColor = Color.DarkGray;
                                             }
-                                            else { button.BackColor = Color.Yellow; }
+                                            else { button.BackColor = Color.White; }
                                         }
                                     }
                                     else
                                     {
-                                        if (button.BackColor == Color.Yellow)
+                                        if (button.BackColor == Color.White)
                                         {
-                                            button.BackColor = Color.White;
+                                            button.BackColor = Color.DarkGray;
                                         }
-                                        else { button.BackColor = Color.Yellow; }
+                                        else { button.BackColor = Color.White; }
                                     }
                                 }
                             }
@@ -1269,29 +1473,29 @@ namespace Duszaverseny_2025
                             if (button != null)
                             {
                                 Button butn = egyszeruk.Controls.OfType<Button>()
-                                        .FirstOrDefault(b => b.Name == "v " + kartyak[i].Item1 + "egyszerukazamataba");
+                                        .FirstOrDefault(b => b.Name == vezerkartyak[i].Item5 + "egyszerukazamataba");
                                 if (butn != null)
                                 {
-                                    if (butn.BackColor == Color.Yellow)
+                                    if (butn.BackColor == Color.White) 
                                     {
 
                                     }
                                     else
                                     {
-                                        if (button.BackColor == Color.Yellow)
+                                        if (button.BackColor == Color.White)
                                         {
-                                            button.BackColor = Color.White;
+                                            button.BackColor = Color.DarkGray;
                                         }
-                                        else { button.BackColor = Color.Yellow; }
+                                        else { button.BackColor = Color.White; }
                                     }
                                 }
                                 else
                                 {
-                                    if (button.BackColor == Color.Yellow)
+                                    if (button.BackColor == Color.White)
                                     {
-                                        button.BackColor = Color.White;
+                                        button.BackColor = Color.DarkGray;
                                     }
-                                    else { button.BackColor = Color.Yellow; }
+                                    else { button.BackColor = Color.White; }
                                 }
                             }
                         }
@@ -1303,29 +1507,29 @@ namespace Duszaverseny_2025
                             if (button != null)
                             {
                                 Button butn = konnyuk.Controls.OfType<Button>()
-                                        .FirstOrDefault(b => b.Name == "v " + kartyak[i].Item1 + "konnyukazamataba");
+                                        .FirstOrDefault(b => b.Name == vezerkartyak[i].Item5 + "konnyukazamataba");
                                 if (butn != null)
                                 {
-                                    if (butn.BackColor == Color.Yellow)
+                                    if (butn.BackColor == Color.White)
                                     {
 
                                     }
                                     else
                                     {
-                                        if (button.BackColor == Color.Yellow)
+                                        if (button.BackColor == Color.White)
                                         {
-                                            button.BackColor = Color.White;
+                                            button.BackColor = Color.DarkGray;
                                         }
-                                        else { button.BackColor = Color.Yellow; }
+                                        else { button.BackColor = Color.White; }
                                     }
                                 }
                                 else
                                 {
-                                    if (button.BackColor == Color.Yellow)
+                                    if (button.BackColor == Color.White)
                                     {
-                                        button.BackColor = Color.White;
+                                        button.BackColor = Color.DarkGray;
                                     }
-                                    else { button.BackColor = Color.Yellow; }
+                                    else { button.BackColor = Color.White; }
                                 }
                             }
                         }
@@ -1337,29 +1541,29 @@ namespace Duszaverseny_2025
                             if (button != null)
                             {
                                 Button butn = nehezk.Controls.OfType<Button>()
-                                        .FirstOrDefault(b => b.Name == "v " + kartyak[i].Item1 + "nehezkazamataba");
+                                        .FirstOrDefault(b => b.Name == vezerkartyak[i].Item5 + "nehezkazamataba");
                                 if (butn != null)
                                 {
-                                    if (butn.BackColor == Color.Yellow)
+                                    if (butn.BackColor == Color.White)
                                     {
 
                                     }
                                     else
                                     {
-                                        if (button.BackColor == Color.Yellow)
+                                        if (button.BackColor == Color.White)
                                         {
-                                            button.BackColor = Color.White;
+                                            button.BackColor = Color.DarkGray;
                                         }
-                                        else { button.BackColor = Color.Yellow; }
+                                        else { button.BackColor = Color.White; }
                                     }
                                 }
                                 else
                                 {
-                                    if (button.BackColor == Color.Yellow)
+                                    if (button.BackColor == Color.White)
                                     {
-                                        button.BackColor = Color.White;
+                                        button.BackColor = Color.DarkGray;
                                     }
-                                    else { button.BackColor = Color.Yellow; }
+                                    else { button.BackColor = Color.White; }
                                 }
                             }
                         }
@@ -1371,29 +1575,29 @@ namespace Duszaverseny_2025
                             if (button != null)
                             {
                                 Button butn = megak.Controls.OfType<Button>()
-                                        .FirstOrDefault(b => b.Name == "v " + kartyak[i].Item1 + "megakazamataba");
+                                        .FirstOrDefault(b => b.Name == vezerkartyak[i].Item5 + "megakazamataba");
                                 if (butn != null)
                                 {
-                                    if (butn.BackColor == Color.Yellow)
+                                    if (butn.BackColor == Color.White)
                                     {
 
                                     }
                                     else
                                     {
-                                        if (button.BackColor == Color.Yellow)
+                                        if (button.BackColor == Color.White)
                                         {
-                                            button.BackColor = Color.White;
+                                            button.BackColor = Color.DarkGray;
                                         }
-                                        else { button.BackColor = Color.Yellow; }
+                                        else { button.BackColor = Color.White; }
                                     }
                                 }
                                 else
                                 {
-                                    if (button.BackColor == Color.Yellow)
+                                    if (button.BackColor == Color.White)
                                     {
-                                        button.BackColor = Color.White;
+                                        button.BackColor = Color.DarkGray;
                                     }
-                                    else { button.BackColor = Color.Yellow; }
+                                    else { button.BackColor = Color.White; }
                                 }
                             }
                         }
@@ -1401,7 +1605,6 @@ namespace Duszaverseny_2025
                 }
             }
         }
-
         private void LoadFile(object sender, EventArgs e)
         {
             Button btn = sender as Button;
@@ -1476,160 +1679,113 @@ namespace Duszaverseny_2025
             string name = btn.Name;
             if (name == "done")
             {
-            start:
-                TextBox button = mester.Controls.OfType<TextBox>()
+                bool ujra = true;
+                while (ujra = true)
+                {
+                    TextBox button = mester.Controls.OfType<TextBox>()
                                     .FirstOrDefault(b => b.Name == "ujsavename");
-                if (button != null)
-                {
-                    savefilenameinput = button.Text;
-                }
-
-                //var txtFilePath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\savefiles\starting\"));
-                var fileName = savefilenameinput + ".gamedefaultsave";
-                FolderBrowserDialog dialog = new FolderBrowserDialog();
-                dialog.Description = "Válaszd ki a mentés helyét!\nFájl neve: " + fileName;
-                dialog.ShowNewFolderButton = true;
-                string txtFilePath = "";
-
-                if (dialog.ShowDialog() == DialogResult.OK)
-                {
-                    txtFilePath = dialog.SelectedPath;
-                }
-                if (txtFilePath != "")
-                {
-                    string fullPath = Path.Combine(txtFilePath, fileName);
-
-                    if (savefilenameinput != "" && savefilenameinput != null && kartyak.Count > 0 && playercards.Count > 0 && (kazamataegyszeru.Count + kazamatakicsi.Count + kazamatanagy.Count + kazamatamega.Count) > 0)
+                    if (button != null)
                     {
-                        //var txtFinalPath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\savefiles\starting\" + savefilenameinput + ".gamedefaultsave"));
-                        //StreamWriter sw = new StreamWriter(txtFinalPath);
-                        StringBuilder sb = new StringBuilder();
-                        for (int i = 0; i < kartyak.Count; i++)
-                        {
-                            sb.AppendLine("uj kartya;" + kartyak[i].Item1 + ";" + kartyak[i].Item2 + ";" + kartyak[i].Item3 + ";" + kartyak[i].Item4);
-                        }
-                        sb.AppendLine();
-                        if (vezerkartyak.Count > 0)
-                        {
-                            for (int i = 0; i < vezerkartyak.Count; i++)
-                            {
-                                for (int j = 0; j < kartyak.Count; j++)
-                                {
-                                    if ("v " + kartyak[j].Item1 == vezerkartyak[i].Item1)
-                                    {
-                                        string se = string.Empty;
-                                        if (vezerkartyak[i].Item2 == kartyak[j].Item2)
-                                        {
-                                            se = "sebzes";
-                                        }
-                                        else
-                                        {
-                                            se = "eletero";
-                                        }
+                        savefilenameinput = button.Text;
+                    }
 
-                                        sb.AppendLine("uj vezer;" + vezerkartyak[i].Item1 + ";" + kartyak[j].Item1 + ";" + se);
+                    //var txtFilePath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\savefiles\starting\"));
+                    var fileName = savefilenameinput + ".gamedefaultsave";
+                    FolderBrowserDialog dialog = new FolderBrowserDialog();
+                    dialog.Description = "Válaszd ki a mentés helyét!\nFájl neve: " + fileName;
+                    dialog.ShowNewFolderButton = true;
+                    string txtFilePath = "";
+
+                    if (dialog.ShowDialog() == DialogResult.OK)
+                    {
+                        txtFilePath = dialog.SelectedPath;
+                    }
+                    if (txtFilePath != "")
+                    {
+                        string fullPath = Path.Combine(txtFilePath, fileName);
+
+                        if (savefilenameinput != "" && savefilenameinput != null && kartyak.Count > 0 && playercards.Count > 0 && (kazamataegyszeru.Count + kazamatakicsi.Count + kazamatanagy.Count + kazamatamega.Count) > 0)
+                        {
+                            //var txtFinalPath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\savefiles\starting\" + savefilenameinput + ".gamedefaultsave"));
+                            //StreamWriter sw = new StreamWriter(txtFinalPath);
+                            StringBuilder sb = new StringBuilder();
+                            for (int i = 0; i < kartyak.Count; i++)
+                            {
+                                sb.AppendLine("uj kartya;" + kartyak[i].Item1 + ";" + kartyak[i].Item2 + ";" + kartyak[i].Item3 + ";" + kartyak[i].Item4);
+                            }
+                            sb.AppendLine();
+                            if (vezerkartyak.Count > 0)
+                            {
+                                for (int i = 0; i < vezerkartyak.Count; i++)
+                                {
+                                    for (int j = 0; j < kartyak.Count; j++)
+                                    {
+                                        if (kartyak[j].Item1 == vezerkartyak[i].Item5)
+                                        {
+                                            string se = string.Empty;
+                                            if (vezerkartyak[i].Item2 == kartyak[j].Item2)
+                                            {
+                                                se = "sebzes";
+                                            }
+                                            else
+                                            {
+                                                se = "eletero";
+                                            }
+
+                                            sb.AppendLine("uj vezer;" + vezerkartyak[i].Item1 + ";" + kartyak[j].Item1 + ";" + se);
+                                        }
                                     }
+                                }
+                                sb.AppendLine();
+                            }
+
+                            for (int i = 0; i < kazamataegyszeru.Count; i++)
+                            {
+                                sb.AppendLine("uj kazamata;egyszeru;" + kazamataegyszeru[i].Item1 + ";" + kazamataegyszeru[i].Item2 + ";" + kazamataegyszeru[i].Item3);
+                            }
+                            if (kazamatakicsi.Count > 0)
+                            {
+                                for (int i = 0; i < kazamatakicsi.Count; i++)
+                                {
+                                    sb.AppendLine("uj kazamata;kicsi;" + kazamatakicsi[i].Item1 + ";" + kazamatakicsi[i].Item2 + "," + kazamatakicsi[i].Item3 + "," + kazamatakicsi[i].Item4 + ";" + kazamatakicsi[i].Item5 + ";" + kazamatakicsi[i].Item6);
+                                }
+                            }
+                            if (kazamatanagy.Count > 0)
+                            {
+                                for (int i = 0; i < kazamatanagy.Count; i++)
+                                {
+                                    sb.AppendLine("uj kazamata;nagy;" + kazamatanagy[i].Item1 + ";" + kazamatanagy[i].Item2 + "," + kazamatanagy[i].Item3 + "," + kazamatanagy[i].Item4 + "," + kazamatanagy[i].Item5 + "," + kazamatanagy[i].Item6 + ";" + kazamatanagy[i].Item7);
+                                }
+                            }
+                            if (kazamatamega.Count > 0)
+                            {
+                                for (int i = 0; i < kazamatamega.Count; i++)
+                                {
+                                    sb.AppendLine("uj kazamata;mega;" + kazamatamega[i].Item1 + ";" + kazamatamega[i].Item2 + "," + kazamatamega[i].Item3 + "," + kazamatamega[i].Item4 + "," + kazamatamega[i].Item5 + "," + kazamatamega[i].Item6 + ";" + kazamatamega[i].Item7 + "," + kazamatamega[i].Item8 + "," + kazamatamega[i].Item9 + ";" + kazamatamega[i].Item10);
                                 }
                             }
                             sb.AppendLine();
-                        }
+                            sb.AppendLine("uj jatekos");
+                            sb.AppendLine();
+                            for (int i = 0; i < playercards.Count; i++)
+                            {
+                                sb.AppendLine("felvetel gyujtemenybe;" + playercards[i].Item1);
+                            }
+                            string SAVE = sb.ToString();
+                            File.WriteAllText(fullPath, SAVE);
 
-                        for (int i = 0; i < kazamataegyszeru.Count; i++)
-                        {
-                            sb.AppendLine("uj kazamata;egyszeru;" + kazamataegyszeru[i].Item1 + ";" + kazamataegyszeru[i].Item2 + ";" + kazamataegyszeru[i].Item3);
-                        }
-                        if (kazamatakicsi.Count > 0)
-                        {
-                            for (int i = 0; i < kazamatakicsi.Count; i++)
+                            foreach (Control ctrl in this.Controls)
                             {
-                                sb.AppendLine("uj kazamata;kicsi;" + kazamatakicsi[i].Item1 + ";" + kazamatakicsi[i].Item2 + "," + kazamatakicsi[i].Item3 + "," + kazamatakicsi[i].Item4 + ";" + kazamatakicsi[i].Item5 + ";" + kazamatakicsi[i].Item6);
+                                if (ctrl is Panel panel && panel.Visible)
+                                {
+                                    panel.Hide();
+                                }
                             }
+                            menu.Show();
                         }
-                        if (kazamatanagy.Count > 0)
-                        {
-                            for (int i = 0; i < kazamatanagy.Count; i++)
-                            {
-                                sb.AppendLine("uj kazamata;nagy;" + kazamatanagy[i].Item1 + ";" + kazamatanagy[i].Item2 + "," + kazamatanagy[i].Item3 + "," + kazamatanagy[i].Item4 + "," + kazamatanagy[i].Item5 + "," + kazamatanagy[i].Item6 + ";" + kazamatanagy[i].Item7);
-                            }
-                        }
-                        if (kazamatamega.Count > 0)
-                        {
-                            for (int i = 0; i < kazamatamega.Count; i++)
-                            {
-                                sb.AppendLine("uj kazamata;mega;" + kazamatamega[i].Item1 + ";" + kazamatamega[i].Item2 + "," + kazamatamega[i].Item3 + "," + kazamatamega[i].Item4 + "," + kazamatamega[i].Item5 + "," + kazamatamega[i].Item6 + ";" + kazamatamega[i].Item7 + "," + kazamatamega[i].Item8 + "," + kazamatamega[i].Item9 + ";" + kazamatamega[i].Item10);
-                            }
-                        }
-                        sb.AppendLine();
-                        sb.AppendLine("uj jatekos");
-                        sb.AppendLine();
-                        for (int i = 0; i < playercards.Count; i++)
-                        {
-                            sb.AppendLine("felvetel gyujtemenybe;" + playercards[i].Item1);
-                        }
-                        string SAVE = sb.ToString();
-                        File.WriteAllText(fullPath,SAVE);
-
-                        foreach (Control ctrl in this.Controls)
-                        {
-                            if (ctrl is Panel panel && panel.Visible)
-                            {
-                                panel.Hide();
-                            }
-                        }
-                        menu.Show();
+                        ujra = true;
                     }
-                
-                }
-                else
-                {
-                    goto start;
-                }
-            }
-        }
-
-        private void VezerBuffok(object sender, EventArgs e)
-        {
-            Button btn = sender as Button;
-            string name = btn.Name;
-            if (name == "dmg") //uj vezer sebzesduplazas
-            {
-                if (kartyak[vezerrefejlesztessorszam].Item2 > 50)
-                {
-                    vezerkartyak.Add(ujvezersorszam, ("v " + kartyak[vezerrefejlesztessorszam].Item1, 100, kartyak[vezerrefejlesztessorszam].Item3, kartyak[vezerrefejlesztessorszam].Item4, kartyak[vezerrefejlesztessorszam].Item1, "sebzes"));
-                }
-                else
-                {
-                    vezerkartyak.Add(ujvezersorszam, ("v " + kartyak[vezerrefejlesztessorszam].Item1, (kartyak[vezerrefejlesztessorszam].Item2) * 2, kartyak[vezerrefejlesztessorszam].Item3, kartyak[vezerrefejlesztessorszam].Item4, kartyak[vezerrefejlesztessorszam].Item1, "sebzes"));
-                }
-                ujvezersorszam++;
-                foreach (Control ctrl in this.Controls)
-                {
-                    if (ctrl is Panel panel && panel.Visible)
-                    {
-                        panel.Hide();
-                    }
-                }
-                mester.Show();
-            }
-            else if (name == "hp") //uj vezer eletduplazas
-            {
-                if (kartyak[vezerrefejlesztessorszam].Item3 > 50)
-                {
-                    vezerkartyak.Add(ujvezersorszam, ("v " + kartyak[vezerrefejlesztessorszam].Item1, kartyak[vezerrefejlesztessorszam].Item2, 100, kartyak[vezerrefejlesztessorszam].Item4, kartyak[vezerrefejlesztessorszam].Item1, "eletero"));
-                }
-                else
-                {
-                    vezerkartyak.Add(ujvezersorszam, ("v " + kartyak[vezerrefejlesztessorszam].Item1, kartyak[vezerrefejlesztessorszam].Item2, (kartyak[vezerrefejlesztessorszam].Item3) * 2, kartyak[vezerrefejlesztessorszam].Item4, kartyak[vezerrefejlesztessorszam].Item1, "eletero"));
-                }
-                ujvezersorszam++;
-                foreach (Control ctrl in this.Controls)
-                {
-                    if (ctrl is Panel panel && panel.Visible)
-                    {
-                        panel.Hide();
-                    }
-                }
-                mester.Show();
+                }                
             }
         }
 
