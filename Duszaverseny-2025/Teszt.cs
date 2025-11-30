@@ -25,9 +25,6 @@ namespace Duszaverseny_2025
         Dictionary<string, (string, string, string, string, string)> kazamatakicsi = new Dictionary<string, (string, string, string, string, string)>(); //név, ellenfél*3, vezér, jutalom
         Dictionary<string, (string, string, string, string, string, string)> kazamatanagy = new Dictionary<string, (string, string, string, string, string, string)>(); //név, ellenfél*5, vezér
 
-        Dictionary<int, (string, string, string)> egyszerumás = new Dictionary<int, (string, string, string)>(); //név, ellenfél, jutalom
-        Dictionary<int, (string, string, string, string, string, string)> kicsimás = new Dictionary<int, (string, string, string, string, string, string)>(); //név, ellenfél*3, vezér, jutalom
-        Dictionary<int, (string, string, string, string, string, string, string)> nagymás = new Dictionary<int, (string, string, string, string, string, string, string)>(); //név, ellenfél*5, vezér
         List<string> Pakli = new List<string>();
         string[] args = Environment.GetCommandLineArgs();
 
@@ -58,7 +55,6 @@ namespace Duszaverseny_2025
             ReadNextLine(sr, bemenet);
         }
 
-        Dictionary<int, (string, string, string, string, string, string, string, string, string, string)> kazamatamega = new Dictionary<int, (string, string, string, string, string, string, string, string, string, string)>(); //név, ellenfél*5, vezér*3, jutalom
         public void Világsoronként(StreamReader sr, string bemenet)
         {//kártya, vezér, kazamata, játékos, felvétel, pakli
             int kartyan = 0;
@@ -104,34 +100,16 @@ namespace Duszaverseny_2025
                         if (sorreszek[1] == "egyszeru")
                         {
                             kazamataegyszeru[sorreszek[2]] = (sorreszek[3], sorreszek[4]);
-                            if (bemenet == "con/con")
-                            {
-                                egyszerumás[egyszerumás.Count] = (sorreszek[2], sorreszek[3], sorreszek[4]);
-                            }
                         }
                         else if (sorreszek[1] == "kis")
                         {
                             string[] ellenfelek = sorreszek[3].Split(',');
                             kazamatakicsi[sorreszek[2]] = (ellenfelek[0], ellenfelek[1], ellenfelek[2], sorreszek[4], sorreszek[5]);
-                            if (bemenet == "con/con")
-                            {
-                                kicsimás[kicsimás.Count] = (sorreszek[2], ellenfelek[0], ellenfelek[1], ellenfelek[2], sorreszek[4], sorreszek[5]);
-                            }
                         }
                         else if (sorreszek[1] == "nagy")
                         {
                             string[] ellenfelek = sorreszek[3].Split(',');
                             kazamatanagy[sorreszek[2]] = (ellenfelek[0], ellenfelek[1], ellenfelek[2], ellenfelek[3], ellenfelek[4], sorreszek[4]);
-                            if (bemenet == "con/con")
-                            {
-                                nagymás[nagymás.Count] = (sorreszek[2], ellenfelek[0], ellenfelek[1], ellenfelek[2], ellenfelek[3], ellenfelek[4], sorreszek[4]);
-                            }
-                        }
-                        else if (bemenet == "con/con" && sorreszek[1] == "mega")
-                        {
-                            string[] ellenfelek = sorreszek[3].Split(',');
-                            string[] vezerellenfelek = sorreszek[4].Split(',');
-                            kazamatamega[kazamatamega.Count] = (sorreszek[2], ellenfelek[0], ellenfelek[1], ellenfelek[2], ellenfelek[3], ellenfelek[4], vezerellenfelek[0], vezerellenfelek[1], vezerellenfelek[2], sorreszek[4]);
                         }
                     }
                 }
@@ -337,6 +315,7 @@ namespace Duszaverseny_2025
                                 jsebzése = kartyak[i].Item2;
                                 jtípuse = kartyak[i].Item4;
                                 swharc.WriteLine(kör + ".kor;kazamata;kijatszik;" + jellenfél +";"+ jsebzése + ";" + jélete + ";" + jtípuse);
+                                break;
                             }
                         }
                     }
@@ -352,6 +331,7 @@ namespace Duszaverseny_2025
                                     jsebzése = kartyak[i].Item2;
                                     jtípuse = kartyak[i].Item4;
                                     swharc.WriteLine(kör + ".kor;kazamata;kijatszik;" + jellenfél + ";" + jsebzése + ";" + jélete + ";" + jtípuse);
+                                    break;
                                 }
                             } 
                         }
@@ -396,6 +376,7 @@ namespace Duszaverseny_2025
                                 jsebzésh = kartyak[i].Item2;
                                 jtípush = kartyak[i].Item4;
                                 swharc.WriteLine(kör + ".kor;jatekos;kijatszik;" + jharcos + ";" + jsebzésh + ";" + jéleth + ";" + jtípush);
+                                break;
                             }
                         }
                     }
@@ -447,11 +428,12 @@ namespace Duszaverseny_2025
                             if (playercards[j].Item1 == kartyak[i].Item1)
                             {
                                 van = true;
+                                break;
                             }
                         }
                         if (!van)
                         {
-                            playercards.Add(playercards.Count - 1, kartyak[i]);
+                            playercards.Add(playercards.Count-1, kartyak[i]);
                             swharc.WriteLine("jatekos nyert;" + kartyak[i].Item1);
                             break;
                         }
