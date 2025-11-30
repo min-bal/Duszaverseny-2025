@@ -222,6 +222,7 @@ namespace Duszaverseny_2025
 
                 button("Mentések", "loadsavefile", 200, 200, 150, 300, 20, savestart, LoadFile, Color.DarkGray, Color.Black, Color.DarkRed);
                 button("Alaphelyzetek", "loaddefault", 200, 200, 750, 300, 20, savestart, LoadFile, Color.DarkGray, Color.Black, Color.DarkRed);
+                button("Vissza", "visszamenu", 150, 75, 35, 745, 20, savestart, menuuu, Color.DarkGray, Color.Black, Color.DarkRed);
                 ComboBox comboBox = new ComboBox();
                 comboBox.Name = "difficulty";
                 for (int i = 0; i <= 10; i++)
@@ -1311,7 +1312,7 @@ namespace Duszaverseny_2025
 
                         if (name == kartyak[i].Item1 + "kartyakpanelen") //gyujtemenybe valasztott / kivett kartya
                         {
-                            Button button = gyujtemeny.Controls.OfType<Button>()
+                            Button button = kartyakscreen.Controls.OfType<Button>()
                           .FirstOrDefault(b => b.Name == kartyak[i].Item1 + "kartyakpanelen");
                             if (button != null)
                             {
@@ -1949,48 +1950,49 @@ namespace Duszaverseny_2025
             }
         }
 
-        private void paklimentes()
+        private void MainScreen(object sender, EventArgs e)
         {
-            if (name == "kartyakpanelen") //gyujtemeny kivalasztva
+            Button btn = sender as Button;
+            if (btn != null)
             {
-                foreach (Control ctrl in this.Controls)
+                string name = btn.Name;
+                for (int i = 0; i < playercards.Count; i++)
                 {
-                    if (ctrl is Panel panel && panel.Visible)
+                    if (name == playercards[i] + "kartyakpanelen") //gyujtemeny kivalasztva
                     {
-                        panel.Hide();
-                    }
-                }
-                mester.Show();
-
-                for (int i = 0; i < kartyak.Count; i++)
-                {
-                    Button button = gyujtemeny.Controls.OfType<Button>()
-                      .FirstOrDefault(b => b.Name == kartyak[i].Item1 + "kartyakpanelen");
-                    if (button != null)
-                    {
-                        if (button.BackColor == Color.White)
+                        Button button = gyujtemeny.Controls.OfType<Button>()
+                            .FirstOrDefault(b => b.Name == kartyak[i].Item1 + "kartyakpanelen");
+                        if (button != null)
                         {
-                            playercards.Add(gyujtemenysorszam, (kartyak[i].Item1, kartyak[i].Item2, kartyak[i].Item3, kartyak[i].Item4));
-                            gyujtemenysorszam++;
+                            if (button.BackColor == Color.White)
+                            {
+                                Pakli.Add(playercards[i].Item1);
+                            }
                         }
+
+                    }
+                    else
+                    {
+                        
                     }
                 }
             }
-        }
 
-        private void MainScreen(object sender, EventArgs e)
-        {
-            kazmatascreen.Hide();
-            kartyakscreen.Hide();
-            playerscreen.Show();
-            playerscreen.BringToFront();
-            playerscreen.BackColor = Color.DimGray;
+                kazmatascreen.Hide();
+                kartyakscreen.Hide();
+                playerscreen.Show();
+                playerscreen.BringToFront();
+                playerscreen.BackColor = Color.DimGray;
 
-            button("Kártyák kezelése", "kartyakmenugomb", 200, 200, 150, 450, 20, playerscreen, Kartyagombok, Color.DarkGray, Color.Black, Color.DarkRed);
-            button("Harc⚔️", "harcmenugomb", 200, 200, 750, 450, 20, playerscreen, KazmataGombok, Color.DarkGray, Color.Black, Color.DarkRed);
-            button("Játék mentése", "SaveGame", 500, 75, 50, 50, 20, playerscreen, Save, Color.DarkGray, Color.Black, Color.DarkRed);
-            button("Kilépés a főmenüre", "quitnosave", 500, 75, 50, 150, 20, playerscreen, Save, Color.DarkGray, Color.Black, Color.DarkRed);
-            button("Játék mentése és kilépés a főmenüre", "savenquit", 500, 75, 50, 250, 20, playerscreen, Save, Color.DarkGray, Color.Black, Color.DarkRed);
+                button("Kártyák kezelése", "kartyakmenugomb", 200, 200, 150, 450, 20, playerscreen, Kartyagombok, Color.DarkGray, Color.Black, Color.DarkRed);
+                button("Harc⚔️", "harcmenugomb", 200, 200, 750, 450, 20, playerscreen, KazmataGombok, Color.DarkGray, Color.Black, Color.DarkRed);
+                button("Játék mentése", "SaveGame", 500, 75, 50, 50, 20, playerscreen, Save, Color.DarkGray, Color.Black, Color.DarkRed);
+                button("Kilépés a főmenüre", "quitnosave", 500, 75, 50, 150, 20, playerscreen, Save, Color.DarkGray, Color.Black, Color.DarkRed);
+                button("Játék mentése és kilépés a főmenüre", "savenquit", 500, 75, 50, 250, 20, playerscreen, Save, Color.DarkGray, Color.Black, Color.DarkRed);
+            
+            
+            
+            
         }
 
         private void Kartyagombok(object sender, EventArgs e)
@@ -2002,7 +2004,7 @@ namespace Duszaverseny_2025
             kartyakscreen.BackColor = Color.DimGray;
 
 
-            button("Vissza", "backtomainscreen", 150, 75, 35, 745, 20, kartyakscreen, MainScreen, Color.DarkGray, Color.Black, Color.DarkRed);
+            button("Vissza", "backtomainscreenpakli", 150, 75, 35, 745, 20, kartyakscreen, MainScreen, Color.DarkGray, Color.Black, Color.DarkRed);
 
             Color border = new Color();
             string tipisekezettel = string.Empty;
