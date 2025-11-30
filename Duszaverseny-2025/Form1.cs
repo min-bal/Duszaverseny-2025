@@ -2135,14 +2135,14 @@ namespace Duszaverseny_2025
                 playerscreen.Hide();
                 buffselect.BringToFront();
 
-                label("Válaszd ki a kártyákat, amiket erősíteni szeretnél a körre\nPiros: sebzés duplázása, Kék: életerő duplázása\nErősítések száma: " + powerupcount, "info", 500,60,5,5,12,buffselect);
+                label("Válaszd ki a kártyákat, amiket erősíteni szeretnél a körre\nPiros: sebzés duplázása, Kék: életerő duplázása\nErősítések száma: " + powerupcount, "info", 500,60,5,5,12,buffselect,Color.White, Color.Black);
                 foreach (string s in Pakli)
                 {
                     foreach (int i in playercards.Keys)
                     {
                         if (s == playercards[i].Item1) {
                             string gyujtemenyText = playercards[i].Item1 + '\n' + playercards[i].Item2 + "/" + playercards[i].Item3 + '\n' + tipusok[playercards[i].Item4];
-                            button(gyujtemenyText, s, 85, 100, x, 100, 8, buffselect, SelectBuff);
+                            button(gyujtemenyText, s, 85, 100, x, 100, 8, buffselect, SelectBuff, Color.LightGray,Color.Black,Color.Black);
                             x = x + 99;
                             break;
                         }
@@ -2296,7 +2296,7 @@ namespace Duszaverseny_2025
                     jsebzése = kartyak[i].Item2;
                     jtípuse = kartyak[i].Item4;
                     string labelText = jellenfél + Environment.NewLine + jsebzése + "/" + jélete + Environment.NewLine + jtípuse;
-                    label(labelText,"jellenfél",70,50,Xe,Y,8,harctér);
+                    label(labelText,"jellenfél",70,50,Xe,Y,8,harctér,Color.LightGray,Color.Black);
                 }
             }
 
@@ -2326,7 +2326,7 @@ namespace Duszaverseny_2025
                     }
                     jtípush = playercards[i].Item4;
                     string labelText = jharcos + Environment.NewLine + jsebzésh + "/" + jéleth + Environment.NewLine + jtípush;
-                    label(labelText,"jharcos",70,50,Xh,Y,8,harctér);
+                    label(labelText,"jharcos",70,50,Xh,Y,8,harctér, Color.LightGray, Color.Black);
                     break;
                 }
             }
@@ -2353,10 +2353,10 @@ namespace Duszaverseny_2025
                                 jsebzése = kartyak[i].Item2;
                                 jtípuse = kartyak[i].Item4;
                                 string labelText = jellenfél + Environment.NewLine + jsebzése + "/" + jélete + Environment.NewLine + jtípuse;
-                                label(labelText, "jellenfél", 70, 50, Xe, Y, 8, harctér);
+                                label(labelText, "jellenfél", 70, 50, Xe, Y, 8, harctér, Color.LightGray, Color.Black);
 
                                 string label1Text = jharcos + Environment.NewLine + jsebzésh + "/" + jéleth + Environment.NewLine + jtípush;
-                                label(label1Text, "jharcos", 70, 50, Xh, Y, 8, harctér);
+                                label(label1Text, "jharcos", 70, 50, Xh, Y, 8, harctér, Color.LightGray, Color.Black);
 
                                 if (Y > this.Size.Height)
                                 {
@@ -2385,10 +2385,10 @@ namespace Duszaverseny_2025
                                     jtípuse = vezerkartyak[i].Item4;
 
                                     string labelText = jellenfél + Environment.NewLine + jsebzése + "/" + jélete + Environment.NewLine + jtípuse;
-                                    label(labelText, "jellenfél", 70, 50, Xe, Y, 8, harctér);
+                                    label(labelText, "jellenfél", 70, 50, Xe, Y, 8, harctér, Color.LightGray, Color.Black);
 
                                     string label1Text = jharcos + Environment.NewLine + jsebzésh + "/" + jéleth + Environment.NewLine + jtípush;
-                                    label(label1Text, "jharcos", 70, 50, Xh, Y, 8, harctér);
+                                    label(label1Text, "jharcos", 70, 50, Xh, Y, 8, harctér, Color.LightGray, Color.Black);
 
                                     if (Y > this.Size.Height)
                                     {
@@ -2427,10 +2427,10 @@ namespace Duszaverseny_2025
                     }
 
                     string labelText = jellenfél + Environment.NewLine + jsebzése + "/" + jélete + Environment.NewLine + jtípuse;
-                    label(labelText, "jellenfél", 70, 50, Xe, Y, 8, harctér);
+                    label(labelText, "jellenfél", 70, 50, Xe, Y, 8, harctér, Color.LightGray, Color.Black);
 
                     string label1Text = jharcos + Environment.NewLine + jsebzésh + "/" + jéleth + Environment.NewLine + jtípush;
-                    label(label1Text, "jharcos", 70, 50, Xh, Y, 8, harctér);
+                    label(label1Text, "jharcos", 70, 50, Xh, Y, 8, harctér, Color.LightGray, Color.Black);
 
                     if (Y > this.Size.Height)
                     {
@@ -2483,10 +2483,10 @@ namespace Duszaverseny_2025
                                 jtípush = playercards[i].Item4;
 
                                 string labelText = jharcos + Environment.NewLine + jsebzésh + "/" + jéleth + Environment.NewLine + jtípush;
-                                label(labelText, "jharcos", 70, 50, Xh, Y, 8, harctér);
+                                label(labelText, "jharcos", 70, 50, Xh, Y, 8, harctér, Color.LightGray, Color.Black);
 
                                 string label1Text = jellenfél + Environment.NewLine + jsebzése + "/" + jélete + Environment.NewLine + jtípuse;
-                                label(label1Text, "jellenfél", 70, 50, Xe, Y, 8, harctér);
+                                label(label1Text, "jellenfél", 70, 50, Xe, Y, 8, harctér, Color.LightGray, Color.Black);
 
 
                                 if (Y > this.Size.Height)
@@ -2529,11 +2529,11 @@ namespace Duszaverseny_2025
                     }
 
                     string labelText = jellenfél + Environment.NewLine + jsebzése + "/" + jélete + Environment.NewLine + jtípuse;
-                    label(labelText, "jellenfél", 70, 50, Xe, Y, 8, harctér);
+                    label(labelText, "jellenfél", 70, 50, Xe, Y, 8, harctér, Color.LightGray, Color.Black);
 
 
                     string label1Text = jharcos + Environment.NewLine + jsebzésh + "/" + jéleth + Environment.NewLine + jtípush;
-                    label(label1Text, "jharcos", 70, 50, Xh, Y, 8, harctér);
+                    label(label1Text, "jharcos", 70, 50, Xh, Y, 8, harctér, Color.LightGray, Color.Black);
 
 
                     if (Y > this.Size.Height)
