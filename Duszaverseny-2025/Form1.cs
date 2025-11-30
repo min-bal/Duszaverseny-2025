@@ -1323,13 +1323,31 @@ namespace Duszaverseny_2025
                         {
                             Button button = kartyakscreen.Controls.OfType<Button>()
                           .FirstOrDefault(b => b.Name == kartyak[i].Item1 + "kartyakpanelen");
+                            int n = 0;
                             if (button != null)
                             {
-                                if (button.BackColor == Color.White)
+                                for (int j = 0; j < playercards.Count; j++)
                                 {
-                                    button.BackColor = Color.DarkGray;
+                                    Button buttonn = kartyakscreen.Controls.OfType<Button>()
+                                    .FirstOrDefault(b => b.Name == kartyak[j].Item1 + "kartyakpanelen");
+                                    if (buttonn.BackColor == Color.White &&buttonn != null)
+                                    {
+                                        n++;
+                                    }
+                                    
+
                                 }
-                                else { button.BackColor = Color.White; }
+                                if (n <= playercards.Count/2)
+                                {
+                                    
+                                        if (button.BackColor == Color.White)
+                                        {
+                                            button.BackColor = Color.DarkGray;
+                                        }
+                                        else { button.BackColor = Color.White; }
+
+                                    
+                                }
                             }
                         }
 
