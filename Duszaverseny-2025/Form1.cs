@@ -1615,15 +1615,16 @@ namespace Duszaverseny_2025
         private int AppDiff(int damage, int diff, int type)
         {
             Random rnd = new Random();
-            double calculated = rnd.NextDouble();
+            double calculated;
+            calculated = rnd.NextDouble();
             if (type == 0) {//katakomba
-                calculated = 1 + calculated;
                 calculated = calculated * diff / 10;
+                calculated = 1 + calculated;
             }
             else //harcos
             {
-                calculated = 1 - calculated;
                 calculated = calculated * diff / 20;
+                calculated = 1 - calculated;
             }
             calculated = calculated * damage;
             return Convert.ToInt32(Math.Round(calculated, MidpointRounding.AwayFromZero));
@@ -1658,6 +1659,7 @@ namespace Duszaverseny_2025
                         if (sorreszek[0] == "difficulty")
                         {
                             currentdifficulty = Convert.ToInt32(sorreszek[1]);
+                            Console.WriteLine(currentdifficulty);
                         }
                         if (sorreszek[0] == "uj kartya")
                         {
@@ -1839,9 +1841,13 @@ namespace Duszaverseny_2025
                 {
                     nmb = int.Parse(clicked.Name.Last().ToString());
                 }
-                else
+                else if (clicked.Name.Length == 12)
                 {
                     nmb = int.Parse(clicked.Name.Substring(clicked.Name.Length - 2));
+                }
+                else
+                {
+                    nmb = int.Parse(clicked.Name.Substring(clicked.Name.Length - 3));
                 }
                 paklint.Add(nmb);
                 string buttonText = playercards[nmb].Item1.ToString() + "\r\n" + playercards[nmb].Item2.ToString() + "/" + playercards[nmb].Item3.ToString() + "\r\n" + tipusok[playercards[nmb].Item4.ToString()];
@@ -1936,9 +1942,8 @@ namespace Duszaverseny_2025
                 lbl.Size = new Size(85, 50);
                 lbl.Location = new Point(x, 580 + counter * 50);
                 lbl.Enabled = false;
-                //lbl.Click += (s, e) => Harc(i,kazamataegyszeru);
+                lbl.Click += (s, e) => Harc(i,"egyszeru");
                 playerscreen.Controls.Add(lbl);
-                //button(kazamataegyszeru[i].Item1, "kazmlabel" + i.ToString(), 85, 50, x, 630, 8, playerscreen, );
                 x = x + 99;
 
                 label(kazamataegyszeru[i].Item2, "kazmell", 85, 30, x, 580 + counter * 50, 8, playerscreen);
@@ -1959,7 +1964,7 @@ namespace Duszaverseny_2025
                 lbl.Size = new Size(85, 50);
                 lbl.Location = new Point(x, 580 + counter * 50);
                 lbl.Enabled = false;
-                //lbl.Click += (s, e) => Harc(kazamatakicsi[i]);
+                lbl.Click += (s, e) => Harc(i,"kicsi");
                 playerscreen.Controls.Add(lbl);
                 x = x + 99;
 
@@ -1987,7 +1992,7 @@ namespace Duszaverseny_2025
                 lbl.Size = new Size(85, 50);
                 lbl.Location = new Point(x, 580 + counter * 50);
                 lbl.Enabled = false;
-                //lbl.Click += (s, e) => Harc(kazamatanagy[i]);
+                lbl.Click += (s, e) => Harc(i,"nagy");
                 playerscreen.Controls.Add(lbl);
                 x = x + 99;
 
@@ -2016,7 +2021,7 @@ namespace Duszaverseny_2025
                 lbl.Size = new Size(85, 50);
                 lbl.Location = new Point(x, 580 + counter * 50);
                 lbl.Enabled = false;
-                //lbl.Click += (s, e) => Harc(kazamatamega[i]);
+                lbl.Click += (s, e) => Harc(i,"mega");
                 playerscreen.Controls.Add(lbl);
                 x = x + 99;
                 label(kazamatamega[i].Item2, "kazmell", 85, 44, x, 580 + counter * 50, 8, playerscreen);
@@ -2098,10 +2103,447 @@ namespace Duszaverseny_2025
             }
         }
 
-        private void Harc(int key, string type)
+        private void Harc(int key, string típus)
         {
-            
+            Panel harctér = new Panel();
+            harctér.BackColor = Color.LightGray;
+            harctér.Dock = DockStyle.Fill;
+            this.Controls.Add(harctér);
+            playerscreen.Hide();
+            harctér.BringToFront();
+
+            Queue<string> simaellenfelek = new Queue<string>();
+            string jutalom = "";
+            bool veszitett = false;
+
+            string jharcos = "";
+            int jéleth = 0;
+            int jsebzésh = 0;
+            string jtípush = "";
+
+            string jellenfél = "";
+            int jélete = 0;
+            int jsebzése = 0;
+            string jtípuse = "";
+            Queue<string> vezer = new Queue<string>();
+
+            int Xh = 0;
+            int Xe = 70;
+            int Y = 50;
+
+            if (típus == "egyszeru")
+            {
+                simaellenfelek.Enqueue(kazamataegyszeru[key].Item2);
+                jutalom = kazamataegyszeru[key].Item3;
+            }
+            else if (típus == "kicsi")
+            {
+                simaellenfelek.Enqueue(kazamatakicsi[key].Item2);
+                simaellenfelek.Enqueue(kazamatakicsi[key].Item3);
+                simaellenfelek.Enqueue(kazamatakicsi[key].Item4);
+                vezer.Enqueue(kazamatakicsi[key].Item5);
+                jutalom = kazamatakicsi[key].Item6;
+            }
+            else if (típus == "nagy")
+            {
+                simaellenfelek.Enqueue(kazamatanagy[key].Item2);
+                simaellenfelek.Enqueue(kazamatanagy[key].Item3);
+                simaellenfelek.Enqueue(kazamatanagy[key].Item4);
+                simaellenfelek.Enqueue(kazamatanagy[key].Item5);
+                simaellenfelek.Enqueue(kazamatanagy[key].Item6);
+                vezer.Enqueue(kazamatanagy[key].Item7);
+                jutalom = "kartya";
+            }
+            else if (típus == "mega")
+            {
+                simaellenfelek.Enqueue(kazamatamega[key].Item2);
+                simaellenfelek.Enqueue(kazamatamega[key].Item3);
+                simaellenfelek.Enqueue(kazamatamega[key].Item4);
+                simaellenfelek.Enqueue(kazamatamega[key].Item5);
+                simaellenfelek.Enqueue(kazamatamega[key].Item6);
+                vezer.Enqueue(kazamatamega[key].Item7);
+                vezer.Enqueue(kazamatamega[key].Item8);
+                vezer.Enqueue(kazamatamega[key].Item9);
+                jutalom = kazamatamega[key].Item10;
+
+            }
+
+            Queue<string> harcosok = new Queue<string>();
+            foreach (string k in Pakli)
+            {
+                harcosok.Enqueue(k);
+            }
+
+            jellenfél = simaellenfelek.Dequeue();
+            foreach (int i in kartyak.Keys)
+            {
+                if (kartyak[i].Item1 == jellenfél)
+                {
+                    jélete = kartyak[i].Item3;
+                    jsebzése = kartyak[i].Item2;
+                    jtípuse = kartyak[i].Item4;
+                    string labelText = jellenfél + Environment.NewLine + jsebzése + "/" + jélete + Environment.NewLine + jtípuse;
+                    label(labelText,"jellenfél",70,50,Xe,Y,8,harctér);
+                }
+            }
+
+            jharcos = harcosok.Dequeue();
+            foreach (int i in playercards.Keys)
+            {
+                if (playercards[i].Item1 == jharcos)
+                {
+                    jéleth = playercards[i].Item3;
+                    jsebzésh = playercards[i].Item2;
+                    jtípush = playercards[i].Item4;
+                    string labelText = jharcos + Environment.NewLine + jsebzésh + "/" + jéleth + Environment.NewLine + jtípush;
+                    label(labelText,"jharcos",70,50,Xh,Y,8,harctér);
+                }
+            }
+            Y += 70;
+
+            while (true)
+            {
+                if (harcosok.Count == 0 && jharcos == "")
+                {
+                    veszitett = true;
+                    break;
+                }
+                Console.WriteLine("katakomba jön");
+                Console.WriteLine(jellenfél);
+                Console.WriteLine(simaellenfelek.Count);
+                Console.WriteLine(vezer.Count);
+
+                if (jellenfél == "") //kazamata uj kartyat hoz be
+                {
+                    if (simaellenfelek.Count > 0)
+                    {
+                        jellenfél = simaellenfelek.Dequeue();
+                        foreach (int i in kartyak.Keys)
+                        {
+                            if (kartyak[i].Item1 == jellenfél)
+                            {
+                                jélete = kartyak[i].Item3;
+                                jsebzése = kartyak[i].Item2;
+                                jtípuse = kartyak[i].Item4;
+                                string labelText = jellenfél + Environment.NewLine + jsebzése + "/" + jélete + Environment.NewLine + jtípuse;
+                                label(labelText, "jellenfél", 70, 50, Xe, Y, 8, harctér);
+
+                                string label1Text = jharcos + Environment.NewLine + jsebzésh + "/" + jéleth + Environment.NewLine + jtípush;
+                                label(label1Text, "jharcos", 70, 50, Xh, Y, 8, harctér);
+
+                                if (Y > this.Size.Height)
+                                {
+                                    Y = 50;
+                                    Xe += 200;
+                                    Xh += 200;
+                                }
+                                else
+                                {
+                                    Y += 70;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (vezer.Count > 0)
+                        {
+                            jellenfél = vezer.Dequeue();
+                            foreach (int i in vezerkartyak.Keys)
+                            {
+                                if (vezerkartyak[i].Item1 == jellenfél)
+                                {
+                                    jélete = vezerkartyak[i].Item3;
+                                    jsebzése = vezerkartyak[i].Item2;
+                                    jtípuse = vezerkartyak[i].Item4;
+
+                                    string labelText = jellenfél + Environment.NewLine + jsebzése + "/" + jélete + Environment.NewLine + jtípuse;
+                                    label(labelText, "jellenfél", 70, 50, Xe, Y, 8, harctér);
+
+                                    string label1Text = jharcos + Environment.NewLine + jsebzésh + "/" + jéleth + Environment.NewLine + jtípush;
+                                    label(label1Text, "jharcos", 70, 50, Xh, Y, 8, harctér);
+
+                                    if (Y > this.Size.Height)
+                                    {
+                                        Y = 50;
+                                        Xe += 200;
+                                        Xh += 200;
+                                    }
+                                    else
+                                    {
+                                        Y += 70;
+                                    }
+                                }
+                            }
+                        }
+                        else break;
+                    }
+                }
+                else if (jellenfél != "" && jharcos != "") //kazamata támad, kivel, mennyi sebzés (típussal), kire, mennyi élet marad
+                {
+                    if (jtípuse == jtípush)
+                    {
+                        Console.WriteLine(jéleth);
+                        jéleth -= AppDiff(jsebzése,currentdifficulty,0);
+                        Console.WriteLine(jéleth);
+                    }
+                    else if ((tipusok[jtípuse] == "Tűz" && tipusok[jtípush] == "Levegő") || (tipusok[jtípuse] == "Levegő" && tipusok[jtípush] == "Tűz") || (tipusok[jtípuse] == "Föld" && tipusok[jtípush] == "Víz") || (tipusok[jtípuse] == "Víz" && tipusok[jtípush] == "Föld"))
+                    {
+                        Console.WriteLine(jéleth);
+                        jéleth -= AppDiff(jsebzése, currentdifficulty, 0) / 2;
+                        Console.WriteLine(jéleth);
+                    }
+                    else
+                    {
+                        Console.WriteLine(jéleth);
+                        jéleth -= AppDiff(jsebzése, currentdifficulty, 0) * 2;
+                        Console.WriteLine(jéleth);
+                    }
+
+                    if (jéleth < 0)
+                    {
+                        jéleth = 0;
+                    }
+
+                    string labelText = jellenfél + Environment.NewLine + jsebzése + "/" + jélete + Environment.NewLine + jtípuse;
+                    label(labelText, "jellenfél", 70, 50, Xe, Y, 8, harctér);
+
+                    string label1Text = jharcos + Environment.NewLine + jsebzésh + "/" + jéleth + Environment.NewLine + jtípush;
+                    label(label1Text, "jharcos", 70, 50, Xh, Y, 8, harctér);
+
+                    if (Y > this.Size.Height)
+                    {
+                        Y = 50;
+                        Xe += 200;
+                        Xh += 200;
+                    }
+                    else
+                    {
+                        Y += 70;
+                    }
+
+                    if (jéleth <= 0)
+                    {
+                        jharcos = "";
+                        jéleth = 0;
+                        jsebzésh = 0;
+                        jtípush = "";
+                    }
+                }
+
+                Console.WriteLine("játékos jön");
+                Console.WriteLine(jharcos);
+                Console.WriteLine(harcosok.Count);
+
+                if (jharcos == "") //játékos hoz elo kartyat
+                {
+                    if (harcosok.Count > 0)
+                    {
+                        jharcos = harcosok.Dequeue();
+                        foreach (int i in playercards.Keys)
+                        {
+                            if (playercards[i].Item1 == jharcos)
+                            {
+                                jéleth = playercards[i].Item3;
+                                jsebzésh = playercards[i].Item2;
+                                jtípush = playercards[i].Item4;
+
+                                string labelText = jharcos + Environment.NewLine + jsebzésh + "/" + jéleth + Environment.NewLine + jtípush;
+                                label(labelText, "jharcos", 70, 50, Xh, Y, 8, harctér);
+
+                                string label1Text = jellenfél + Environment.NewLine + jsebzése + "/" + jélete + Environment.NewLine + jtípuse;
+                                label(label1Text, "jellenfél", 70, 50, Xe, Y, 8, harctér);
+
+
+                                if (Y > this.Size.Height)
+                                {
+                                    Y = 50;
+                                    Xe += 200;
+                                    Xh += 200;
+                                }
+                                else
+                                {
+                                    Y += 70;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        veszitett = true;
+                        break;
+                    }
+                }
+                else if (jharcos != "" && jellenfél != "") //játékos támad, kivel, mennyi sebzés (típussal), kire, mennyi élet marad
+                {
+                    if (jtípuse == jtípush)
+                    {
+                        Console.WriteLine(jélete);
+                        jélete -= AppDiff(jsebzésh,currentdifficulty,1);
+                        Console.WriteLine(jélete);
+                    }
+                    else if ((tipusok[jtípuse] == "Tűz" && tipusok[jtípush] == "Levegő") || (tipusok[jtípuse] == "Levegő" && tipusok[jtípush] == "Tűz") || (tipusok[jtípuse] == "Föld" && tipusok[jtípush] == "Víz") || (tipusok[jtípuse] == "Víz" && tipusok[jtípush] == "Föld"))
+                    {
+                        Console.WriteLine(jélete);
+                        jélete -= AppDiff(jsebzésh, currentdifficulty, 1) / 2;
+                        Console.WriteLine(jélete);
+                    }
+                    else
+                    {
+                        Console.WriteLine(jélete);
+                        jélete -= AppDiff(jsebzésh, currentdifficulty, 1) * 2;
+                        Console.WriteLine(jélete);
+                    }
+
+                    if (jélete < 0)
+                    {
+                        jélete = 0;
+                    }
+
+                    string labelText = jellenfél + Environment.NewLine + jsebzése + "/" + jélete + Environment.NewLine + jtípuse;
+                    label(labelText, "jellenfél", 70, 50, Xe, Y, 8, harctér);
+
+
+                    string label1Text = jharcos + Environment.NewLine + jsebzésh + "/" + jéleth + Environment.NewLine + jtípush;
+                    label(label1Text, "jharcos", 70, 50, Xh, Y, 8, harctér);
+
+
+                    if (Y > this.Size.Height)
+                    {
+                        Y = 50;
+                        Xe += 200;
+                        Xh += 200;
+                    }
+                    else
+                    {
+                        Y += 70;
+                    }
+
+                    if (jélete <= 0)
+                    {
+                        jellenfél = "";
+                        jélete = 0;
+                        jsebzése = 0;
+                        jtípuse = "";
+                    }
+                }
+                Console.WriteLine("vége a körnek");
+                Console.WriteLine(jharcos);
+                Console.WriteLine(harcosok.Count);
+
+            }
+
+            Button back = new Button();
+            back.Size = new System.Drawing.Size(100, 100);
+            back.Location = new Point(900, 695);
+            back.Text = "Vissza a főmenüre";
+            back.Click += (s, e) => { this.Controls.Remove(harctér);playerscreen.Show(); };
+            harctér.Controls.Add(back);
+
+            System.Windows.Forms.Label nyeremeny = new System.Windows.Forms.Label();
+            nyeremeny.Size = new System.Drawing.Size(100, 100);
+            nyeremeny.Location = new Point(900, 495);
+            nyeremeny.Text = "";
+            nyeremeny.BorderStyle = BorderStyle.FixedSingle;
+            harctér.Controls.Add(nyeremeny);
+            if (veszitett)
+            {
+                nyeremeny.Text = "Játékos Veszített";
+            }
+            else
+            {
+                if (jutalom == "kartya" && kartyak.Count != playercards.Count)
+                {
+                    int j = 0;
+                    foreach (int k in kartyak.Keys)
+                    {
+                        foreach (int p in playercards.Keys)
+                        {
+                            if (playercards[p].Item1 == kartyak[k].Item1)
+                            {
+                                j++;
+                                break;
+                            }
+                        }
+                        if (j == 0)
+                        {
+                            playercards[playercards.Count] = (kartyak[k].Item1, kartyak[k].Item2, kartyak[k].Item3, kartyak[k].Item4);
+                            nyeremeny.Text = "Játékos nyert!\nNyeremény: " + kartyak[k].Item1;
+                            break;
+                        }
+                        else {
+                            j = 0;
+                        }
+                    }
+
+                    System.Windows.Forms.Button lbl = new System.Windows.Forms.Button();
+                    lbl.Name = "gyujtemeny" + (playercards.Count - 1).ToString();
+
+                    lbl.TextAlign = ContentAlignment.MiddleCenter;
+                    lbl.Text = playercards[playercards.Count - 1].Item1 + Environment.NewLine + playercards[playercards.Count - 1].Item2 + "/" + playercards[playercards.Count - 1].Item3 + Environment.NewLine + playercards[playercards.Count - 1].Item4;
+                    lbl.Size = new Size(85, 100);
+                    lbl.Location = new Point(5 + (playercards.Count - 1) * 99, 340);
+                    lbl.Click += Button_Click;
+                    this.Controls.Add(lbl);
+
+                    foreach (int i in playercards.Keys)
+                    {
+                        if (paklint.Contains(i))
+                        {
+
+                        }
+                        else
+                        {
+                            string buttonName = "gyujtemeny" + i;
+                            Control[] found = playerscreen.Controls.Find(buttonName, true);
+                            if (found.Length > 0 && found[0] is Button btn)
+                            {
+                                btn.Enabled = true;
+                            }
+                        }
+                    }
+
+
+                }
+                else if (jutalom.ToLower() == "sebzés" || jutalom.ToLower() == "életerő")
+                {
+                    foreach (int i in playercards.Keys)
+                    {
+                        if (playercards[i].Item1 == jharcos)
+                        {
+                            if (jutalom.ToLower() == "sebzés")
+                            {
+                                playercards[i] = (playercards[i].Item1, playercards[i].Item2 + 1, playercards[i].Item3, playercards[i].Item4);
+                                nyeremeny.Text = "Játékos nyert" + Environment.NewLine + "+1 sebzés: " + playercards[i].Item1;
+                            }
+                            else if (jutalom.ToLower() == "életerő")
+                            {
+                                playercards[i] = (playercards[i].Item1, playercards[i].Item2, playercards[i].Item3 + 2, playercards[i].Item4);
+                                nyeremeny.Text = "Játékos nyert" + Environment.NewLine + "+2 élet: " + playercards[i].Item1;
+                            }
+                            string buttonName = "gyujtemeny" + i;
+                            Control[] found = playerscreen.Controls.Find(buttonName, true);
+                            if (found.Length > 0 && found[0] is Button btn)
+                            {
+                                btn.Text = playercards[i].Item1 + Environment.NewLine + playercards[i].Item2 + "/" + playercards[i].Item3 + Environment.NewLine + playercards[i].Item4;
+                            }
+                            string buttonName1 = "paklibtn" + i;
+                            Control[] found1 = playerscreen.Controls.Find(buttonName1, true);
+                            if (found1.Length > 0 && found1[0] is Button btn1)
+                            {
+                                btn1.Text = playercards[i].Item1 + Environment.NewLine + playercards[i].Item2 + "/" + playercards[i].Item3 + Environment.NewLine + playercards[i].Item4;
+                            }
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+
+                }
+            }
         }
+
 
 
         /*elso fordulo*/
@@ -3006,4 +3448,4 @@ namespace Duszaverseny_2025
                 }
                 }*/
     }
-    }
+}
