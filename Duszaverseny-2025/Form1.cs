@@ -1680,7 +1680,7 @@ namespace Duszaverseny_2025
             if (name == "done")
             {
                 bool ujra = true;
-                while (ujra = true)
+                while (ujra == true)
                 {
                     TextBox button = mester.Controls.OfType<TextBox>()
                                     .FirstOrDefault(b => b.Name == "ujsavename");
@@ -1933,41 +1933,41 @@ namespace Duszaverseny_2025
         {
             playerscreen.Hide();
             if (!this.Controls.Contains(kartyakscreen)) this.Controls.Add(kartyakscreen);
-            label("Kártyák:", "info", 94, 30, 3, 5, 14, kartyakscreen, Color.DimGray, Color.DarkRed);
-            label("Paklid:", "info", 100, 30, 3, 450, 14, kartyakscreen, Color.DimGray, Color.DarkRed);
-            label("Kártyáid:", "info", 94, 30, 5, 300, 14, kartyakscreen, Color.DimGray, Color.DarkRed);
+            label("Kártyák:", "info", 94, 30, 10, 10, 14, kartyakscreen, Color.DimGray, Color.DarkRed);
 
-            button("Új pakli", "újpakli", 120, 40, 120, 443, 12, kartyakscreen, ÚjPakli_Click, Color.DimGray, Color.DarkRed, Color.Black);
 
             string infoText = "Kártyák adatai: név, sebzés/életerő, típus" + Environment.NewLine + "Pakli módosításához nyomd meg az alábbi kártyákat." + Environment.NewLine + "Pakli kiürétéséhez nyomd meg az új pakli gombot." + Environment.NewLine + "A pakliban gyűjteményednek legfeljebb fele szerepelhet.";
-            label(infoText, "info", 400, 70, 302, 270, 10, kartyakscreen, Color.DimGray, Color.DarkRed);
-            button("Játék mentése", "SaveGame", 100, 85, 750, 260, 14, kartyakscreen, Save, Color.DimGray, Color.DarkRed, Color.Black);
-            button("Vissza", "backtomainscreen", 100, 85, 900, 260, 14, kartyakscreen, MainScreen, Color.DimGray, Color.DarkRed, Color.Black);
+            label(infoText, "info", 400, 70, 10, 550, 10, kartyakscreen, Color.DimGray, Color.DarkRed);
+            button("Játék mentése", "SaveGame", 100, 85, 10, 630, 14, kartyakscreen, Save, Color.DimGray, Color.DarkRed, Color.Black);
+            button("Vissza", "backtomainscreen", 100, 85, 120, 630, 14, kartyakscreen, MainScreen, Color.DimGray, Color.DarkRed, Color.Black);
 
-            label("Vezérek:", "info", 100, 30, 2, 150, 14, kartyakscreen, Color.DimGray, Color.DarkRed);
 
-            int x = 5;
+            int x = 10;
             foreach (int i in kartyak.Keys)
             {
                 string kartyaText = kartyak[i].Item1 + Environment.NewLine + kartyak[i].Item2 + "/" + kartyak[i].Item3 + Environment.NewLine + tipusok[kartyak[i].Item4];
-                label(kartyaText, "kartya" + i.ToString(), 85, 100, x, 25, 10, kartyakscreen, Color.DimGray, Color.DarkRed);
-                x = x + 99;
+                label(kartyaText, "kartya" + i.ToString(), 100, 100, x, 40, 10, kartyakscreen, Color.DimGray, Color.DarkRed);
+                x = x + 100;
             }
-            x = 5;
+            x = 10;
+            label("Vezérek:", "info", 100, 30, 10, 140, 14, kartyakscreen, Color.DimGray, Color.DarkRed);
             foreach (int i in vezerkartyak.Keys)
             {
                 string vezérText = vezerkartyak[i].Item1 + Environment.NewLine + vezerkartyak[i].Item2 + "/" + vezerkartyak[i].Item3 + Environment.NewLine + tipusok[vezerkartyak[i].Item4];
-                label(vezérText, "vezerek" + i.ToString(), 85, 100, x, 180, 10, kartyakscreen, Color.DimGray, Color.DarkRed);
-                x = x + 99;
+                label(vezérText, "vezerek" + i.ToString(), 100, 100, x, 170, 10, kartyakscreen, Color.DimGray, Color.DarkRed);
+                x = x + 100;
             }
 
-            x = 5;
+            x = 10;
+            label("Kártyáid:", "info", 94, 30, 10, 270, 14, kartyakscreen, Color.DimGray, Color.DarkRed);
             foreach (int i in playercards.Keys)
             {
                 string gyujtemenyText = playercards[i].Item1 + Environment.NewLine + playercards[i].Item2 + "/" + playercards[i].Item3 + Environment.NewLine + tipusok[playercards[i].Item4];
-                button(gyujtemenyText, "gyujtemeny" + i.ToString(), 85, 100, x, 340, 8, kartyakscreen, Button_Click, Color.DimGray, Color.DarkRed, Color.Black);
-                x = x + 99;
+                button(gyujtemenyText, "gyujtemeny" + i.ToString(), 100, 100, x, 300, 10, kartyakscreen, Button_Click, Color.DimGray, Color.DarkRed, Color.Black);
+                x = x + 100;
             }
+            label("Paklid:", "info", 100, 30, 10, 400, 14, kartyakscreen, Color.DimGray, Color.DarkRed);
+            button("Új pakli", "újpakli", 120, 40, 120, 400, 12, kartyakscreen, ÚjPakli_Click, Color.DimGray, Color.DarkRed, Color.Black);
             kartyakscreen.Show();
             kartyakscreen.Dock = DockStyle.Fill;
             kartyakscreen.BringToFront();
@@ -2240,6 +2240,7 @@ namespace Duszaverseny_2025
                 kazmatascreen.Show();
                 kartyakscreen.Dock = DockStyle.Fill;
                 kazmatascreen.BringToFront();
+                kazmatascreen.BackColor = Color.DimGray;
             }
         }
 
