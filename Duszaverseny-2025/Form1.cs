@@ -2809,4 +2809,4 @@ namespace Duszaverseny_2025
             return ellélet;
         }*/
     }
-    }
+}
