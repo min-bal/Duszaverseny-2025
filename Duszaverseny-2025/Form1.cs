@@ -1455,6 +1455,7 @@ namespace Duszaverseny_2025
             string name = btn.Name;
             if (name == "done")
             {
+            start:
                 TextBox button = mester.Controls.OfType<TextBox>()
                                     .FirstOrDefault(b => b.Name == "ujsavename");
                 if (button != null)
@@ -1462,26 +1463,31 @@ namespace Duszaverseny_2025
                     savefilenameinput = button.Text;
                 }
 
-                var txtFilePath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\savefiles\starting\"));
+                //var txtFilePath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\savefiles\starting\"));
                 var fileName = savefilenameinput + ".gamedefaultsave";
+                FolderBrowserDialog dialog = new FolderBrowserDialog();
+                dialog.Description = "Válaszd ki a mentés helyét!\nFájl neve: " + fileName;
+                dialog.ShowNewFolderButton = true;
+                string txtFilePath = "";
 
-                string fullPath = Path.Combine(txtFilePath, fileName);
-
-                if (File.Exists(fullPath))
+                if (dialog.ShowDialog() == DialogResult.OK)
                 {
-
+                    txtFilePath = dialog.SelectedPath;
                 }
-                else
+                if (txtFilePath != "")
                 {
+                    string fullPath = Path.Combine(txtFilePath, fileName);
+
                     if (savefilenameinput != "" && savefilenameinput != null && kartyak.Count > 0 && playercards.Count > 0 && (kazamataegyszeru.Count + kazamatakicsi.Count + kazamatanagy.Count + kazamatamega.Count) > 0)
                     {
-                        var txtFinalPath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\savefiles\starting\" + savefilenameinput + ".gamedefaultsave"));
-                        StreamWriter sw = new StreamWriter(txtFinalPath);
+                        //var txtFinalPath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\savefiles\starting\" + savefilenameinput + ".gamedefaultsave"));
+                        //StreamWriter sw = new StreamWriter(txtFinalPath);
+                        StringBuilder sb = new StringBuilder();
                         for (int i = 0; i < kartyak.Count; i++)
                         {
-                            sw.WriteLine("uj kartya;" + kartyak[i].Item1 + ";" + kartyak[i].Item2 + ";" + kartyak[i].Item3 + ";" + kartyak[i].Item4);
+                            sb.AppendLine("uj kartya;" + kartyak[i].Item1 + ";" + kartyak[i].Item2 + ";" + kartyak[i].Item3 + ";" + kartyak[i].Item4);
                         }
-                        sw.WriteLine();
+                        sb.AppendLine();
                         if (vezerkartyak.Count > 0)
                         {
                             for (int i = 0; i < vezerkartyak.Count; i++)
@@ -1500,46 +1506,48 @@ namespace Duszaverseny_2025
                                             se = "eletero";
                                         }
 
-                                        sw.WriteLine("uj vezer;" + vezerkartyak[i].Item1 + ";" + kartyak[j].Item1 + ";" + se);
+                                        sb.AppendLine("uj vezer;" + vezerkartyak[i].Item1 + ";" + kartyak[j].Item1 + ";" + se);
                                     }
                                 }
                             }
-                            sw.WriteLine();
+                            sb.AppendLine();
                         }
 
                         for (int i = 0; i < kazamataegyszeru.Count; i++)
                         {
-                            sw.WriteLine("uj kazamata;egyszeru;" + kazamataegyszeru[i].Item1 + ";" + kazamataegyszeru[i].Item2 + ";" + kazamataegyszeru[i].Item3);
+                            sb.AppendLine("uj kazamata;egyszeru;" + kazamataegyszeru[i].Item1 + ";" + kazamataegyszeru[i].Item2 + ";" + kazamataegyszeru[i].Item3);
                         }
                         if (kazamatakicsi.Count > 0)
                         {
                             for (int i = 0; i < kazamatakicsi.Count; i++)
                             {
-                                sw.WriteLine("uj kazamata;kicsi;" + kazamatakicsi[i].Item1 + ";" + kazamatakicsi[i].Item2 + "," + kazamatakicsi[i].Item3 + "," + kazamatakicsi[i].Item4 + ";" + kazamatakicsi[i].Item5 + ";" + kazamatakicsi[i].Item6);
+                                sb.AppendLine("uj kazamata;kicsi;" + kazamatakicsi[i].Item1 + ";" + kazamatakicsi[i].Item2 + "," + kazamatakicsi[i].Item3 + "," + kazamatakicsi[i].Item4 + ";" + kazamatakicsi[i].Item5 + ";" + kazamatakicsi[i].Item6);
                             }
                         }
                         if (kazamatanagy.Count > 0)
                         {
                             for (int i = 0; i < kazamatanagy.Count; i++)
                             {
-                                sw.WriteLine("uj kazamata;nagy;" + kazamatanagy[i].Item1 + ";" + kazamatanagy[i].Item2 + "," + kazamatanagy[i].Item3 + "," + kazamatanagy[i].Item4 + "," + kazamatanagy[i].Item5 + "," + kazamatanagy[i].Item6 + ";" + kazamatanagy[i].Item7);
+                                sb.AppendLine("uj kazamata;nagy;" + kazamatanagy[i].Item1 + ";" + kazamatanagy[i].Item2 + "," + kazamatanagy[i].Item3 + "," + kazamatanagy[i].Item4 + "," + kazamatanagy[i].Item5 + "," + kazamatanagy[i].Item6 + ";" + kazamatanagy[i].Item7);
                             }
                         }
                         if (kazamatamega.Count > 0)
                         {
                             for (int i = 0; i < kazamatamega.Count; i++)
                             {
-                                sw.WriteLine("uj kazamata;mega;" + kazamatamega[i].Item1 + ";" + kazamatamega[i].Item2 + "," + kazamatamega[i].Item3 + "," + kazamatamega[i].Item4 + "," + kazamatamega[i].Item5 + "," + kazamatamega[i].Item6 + ";" + kazamatamega[i].Item7 + "," + kazamatamega[i].Item8 + "," + kazamatamega[i].Item9 + ";" + kazamatamega[i].Item10);
+                                sb.AppendLine("uj kazamata;mega;" + kazamatamega[i].Item1 + ";" + kazamatamega[i].Item2 + "," + kazamatamega[i].Item3 + "," + kazamatamega[i].Item4 + "," + kazamatamega[i].Item5 + "," + kazamatamega[i].Item6 + ";" + kazamatamega[i].Item7 + "," + kazamatamega[i].Item8 + "," + kazamatamega[i].Item9 + ";" + kazamatamega[i].Item10);
                             }
                         }
-                        sw.WriteLine();
-                        sw.WriteLine("uj jatekos");
-                        sw.WriteLine();
+                        sb.AppendLine();
+                        sb.AppendLine("uj jatekos");
+                        sb.AppendLine();
                         for (int i = 0; i < playercards.Count; i++)
                         {
-                            sw.WriteLine("felvetel gyujtemenybe;" + playercards[i].Item1);
+                            sb.AppendLine("felvetel gyujtemenybe;" + playercards[i].Item1);
                         }
-                        sw.Close();
+                        string SAVE = sb.ToString();
+                        File.WriteAllText(fullPath,SAVE);
+
                         foreach (Control ctrl in this.Controls)
                         {
                             if (ctrl is Panel panel && panel.Visible)
@@ -1549,6 +1557,11 @@ namespace Duszaverseny_2025
                         }
                         menu.Show();
                     }
+                
+                }
+                else
+                {
+                    goto start;
                 }
             }
         }
