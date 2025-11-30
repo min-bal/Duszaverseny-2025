@@ -76,6 +76,9 @@ namespace Duszaverseny_2025
         Panel nehezk = new Panel();
         Panel megak = new Panel();
         Panel buffselect = new Panel();
+        Panel kartyakscreen = new Panel();
+        Panel kazmatascreen = new Panel();
+
 
         public Form1()
         {
@@ -180,9 +183,10 @@ namespace Duszaverseny_2025
                 menu.Controls.Clear();
                 menu.SendToBack();
                 savestart.BringToFront();
+                savestart.BackColor = Color.Gray;
 
-                button("Mentések", "loadsavefile", 200, 200, 150, 300, 20, savestart, LoadFile, Color.Black, Color.White, Color.Black);
-                button("Alaphelyzetek", "loaddefault", 200, 200, 700, 300, 20, savestart, LoadFile, Color.Black, Color.White, Color.Black);
+                button("Mentések", "loadsavefile", 200, 200, 150, 300, 20, savestart, LoadFile, Color.DarkGray, Color.Black, Color.DarkRed);
+                button("Alaphelyzetek", "loaddefault", 200, 200, 700, 300, 20, savestart, LoadFile, Color.DarkGray, Color.Black, Color.DarkRed);
                 ComboBox comboBox = new ComboBox();
                 comboBox.Name = "difficulty";
                 for (int i = 0; i <= 10; i++)
@@ -194,7 +198,7 @@ namespace Duszaverseny_2025
                 comboBox.Size = new Size(150, 20);
                 comboBox.DropDownStyle = ComboBoxStyle.DropDownList;
                 savestart.Controls.Add(comboBox);
-                label("Nehézségi szint:", "info", 150, 30, 725, 520, 14, savestart, Color.Black, Color.White);
+                label("Nehézségi szint:", "info", 150, 30, 725, 520, 14, savestart, Color.Gray, Color.DarkRed);
 
             }
             else if (name == "jatekmestergomb") //jatekmester panelre belepes
@@ -1419,7 +1423,7 @@ namespace Duszaverseny_2025
                     
                     Világsoronként(sr, "con/con");
                     sr.Close();
-                    MainScreen();
+                    MainScreen(null,null);
 
                     savestart.Hide();
                     savestart.Controls.Clear();
@@ -1450,7 +1454,7 @@ namespace Duszaverseny_2025
 
                     Világsoronként(sr, "con/aux");
                     sr.Close();
-                    MainScreen();
+                    MainScreen(null, null);
 
                     savestart.Hide();
                     savestart.Controls.Clear();
@@ -1757,32 +1761,47 @@ namespace Duszaverseny_2025
             }
         }
 
-        private void MainScreen()
+        private void MainScreen(object sender, EventArgs e)
         {
-            label("Kártyák:", "info", 94, 30, 3, 5, 14, playerscreen, Color.Black, Color.White);
-            label("Paklid:", "info", 100, 30, 3, 450, 14, playerscreen, Color.Black, Color.White);
-            label("Kártyáid:", "info", 94, 30, 5, 300, 14, playerscreen, Color.Black, Color.White);
+            kazmatascreen.Hide();
+            kartyakscreen.Hide();
+            playerscreen.Show();
+            playerscreen.BringToFront();
+            playerscreen.BackColor = Color.DimGray;
 
-            button("Új pakli", "újpakli", 120, 40, 120, 443, 12, playerscreen, ÚjPakli_Click, Color.Black, Color.White, Color.Black);
+            button("Kártyák kezelése", "kartyakmenugomb", 200, 200, 150, 300, 20, playerscreen, Kartyagombok, Color.DarkGray, Color.Black, Color.DarkRed);
+            button("Harc⚔️", "harcmenugomb", 200, 200, 750, 300, 20, playerscreen, KazmataGombok, Color.DarkGray, Color.Black, Color.DarkRed);
+        }
 
-            string infoText = "Kártyák adatai: név, sebzés/életerő, típus"+Environment.NewLine+"Pakli módosításához nyomd meg az alábbi kártyákat." + Environment.NewLine + "Pakli kiürétéséhez nyomd meg az új pakli gombot." + Environment.NewLine + "A pakliban gyűjteményednek legfeljebb fele szerepelhet.";
-            label(infoText, "info", 400, 70, 302, 270, 10, playerscreen, Color.Black, Color.White);
-            button("Játék mentése","SaveGame",100,85,750,260,14,playerscreen,Save, Color.Black, Color.White, Color.Black);
+        private void Kartyagombok(object sender, EventArgs e)
+        {
+            playerscreen.Hide();
+            if (!this.Controls.Contains(kartyakscreen)) this.Controls.Add(kartyakscreen);
+            label("Kártyák:", "info", 94, 30, 3, 5, 14, kartyakscreen, Color.DimGray, Color.DarkRed);
+            label("Paklid:", "info", 100, 30, 3, 450, 14, kartyakscreen, Color.DimGray, Color.DarkRed);
+            label("Kártyáid:", "info", 94, 30, 5, 300, 14, kartyakscreen, Color.DimGray, Color.DarkRed);
 
-            label("Vezérek:", "info", 100, 30, 2, 150, 14, playerscreen, Color.Black, Color.White);
+            button("Új pakli", "újpakli", 120, 40, 120, 443, 12, kartyakscreen, ÚjPakli_Click, Color.DimGray, Color.DarkRed, Color.Black);
+
+            string infoText = "Kártyák adatai: név, sebzés/életerő, típus" + Environment.NewLine + "Pakli módosításához nyomd meg az alábbi kártyákat." + Environment.NewLine + "Pakli kiürétéséhez nyomd meg az új pakli gombot." + Environment.NewLine + "A pakliban gyűjteményednek legfeljebb fele szerepelhet.";
+            label(infoText, "info", 400, 70, 302, 270, 10, kartyakscreen, Color.DimGray, Color.DarkRed);
+            button("Játék mentése", "SaveGame", 100, 85, 750, 260, 14, kartyakscreen, Save, Color.DimGray, Color.DarkRed, Color.Black);
+            button("Vissza", "backtomainscreen", 100, 85, 900, 260, 14, kartyakscreen, MainScreen, Color.DimGray, Color.DarkRed, Color.Black);
+
+            label("Vezérek:", "info", 100, 30, 2, 150, 14, kartyakscreen, Color.DimGray, Color.DarkRed);
 
             int x = 5;
             foreach (int i in kartyak.Keys)
             {
                 string kartyaText = kartyak[i].Item1 + Environment.NewLine + kartyak[i].Item2 + "/" + kartyak[i].Item3 + Environment.NewLine + tipusok[kartyak[i].Item4];
-                label(kartyaText, "kartya" + i.ToString(), 85, 100, x, 25, 10, playerscreen, Color.Black, Color.White);
+                label(kartyaText, "kartya" + i.ToString(), 85, 100, x, 25, 10, kartyakscreen, Color.DimGray, Color.DarkRed);
                 x = x + 99;
             }
             x = 5;
             foreach (int i in vezerkartyak.Keys)
             {
                 string vezérText = vezerkartyak[i].Item1 + Environment.NewLine + vezerkartyak[i].Item2 + "/" + vezerkartyak[i].Item3 + Environment.NewLine + tipusok[vezerkartyak[i].Item4];
-                label(vezérText, "vezerek" + i.ToString(), 85, 100, x, 180, 10, playerscreen, Color.Black, Color.White);
+                label(vezérText, "vezerek" + i.ToString(), 85, 100, x, 180, 10, kartyakscreen, Color.DimGray, Color.DarkRed);
                 x = x + 99;
             }
 
@@ -1790,12 +1809,14 @@ namespace Duszaverseny_2025
             foreach (int i in playercards.Keys)
             {
                 string gyujtemenyText = playercards[i].Item1 + Environment.NewLine + playercards[i].Item2 + "/" + playercards[i].Item3 + Environment.NewLine + tipusok[playercards[i].Item4];
-                button(gyujtemenyText, "gyujtemeny" + i.ToString(), 85, 100, x, 340, 8, playerscreen, Button_Click, Color.Black, Color.White, Color.Black);
+                button(gyujtemenyText, "gyujtemeny" + i.ToString(), 85, 100, x, 340, 8, kartyakscreen, Button_Click, Color.DimGray, Color.DarkRed, Color.Black);
                 x = x + 99;
             }
-            KazmataGombok();
+            kartyakscreen.Show();
+            kartyakscreen.Dock = DockStyle.Fill;
+            kartyakscreen.BringToFront();
+            kartyakscreen.BackColor = Color.DimGray;
         }
-
 
         List<int> paklint = new List<int>();
         private void ÚjPakli_Click(object sender, EventArgs e)
@@ -1803,7 +1824,7 @@ namespace Duszaverseny_2025
             Pakli.Clear();
             paklint.Clear();
             paklix = 5;
-            foreach (Button btn in playerscreen.Controls.OfType<Button>())
+            foreach (Button btn in kartyakscreen.Controls.OfType<Button>())
             {
                 if (btn.Name.StartsWith("gyujtemeny"))
                 {
@@ -1814,12 +1835,12 @@ namespace Duszaverseny_2025
                     btn.Enabled = true;
                 }
             }
-            foreach (var btn in playerscreen.Controls.OfType<Button>().Where(b => b.Name.StartsWith("paklibtn")).ToList())
+            foreach (var btn in kartyakscreen.Controls.OfType<Button>().Where(b => b.Name.StartsWith("paklibtn")).ToList())
             {
-                playerscreen.Controls.Remove(btn);
+                kartyakscreen.Controls.Remove(btn);
                 btn.Dispose();
             }
-            foreach (var btn in playerscreen.Controls.OfType<Button>())
+            foreach (var btn in kartyakscreen.Controls.OfType<Button>())
             {
                 if (btn.Name.StartsWith("kazmgomb"))
                 {
@@ -1866,10 +1887,10 @@ namespace Duszaverseny_2025
                 }
                 paklint.Add(nmb);
                 string buttonText = playercards[nmb].Item1.ToString() + "\r\n" + playercards[nmb].Item2.ToString() + "/" + playercards[nmb].Item3.ToString() + "\r\n" + tipusok[playercards[nmb].Item4.ToString()];
-                button(buttonText, "paklibtn" + nmb, 85, 100, paklix, 490, 8, playerscreen, PakliClick, Color.Black, Color.White, Color.Black);
+                button(buttonText, "paklibtn" + nmb, 85, 100, paklix, 490, 8, kartyakscreen, PakliClick, Color.Black, Color.White, Color.Black);
                 paklix += 99;
                 Pakli.Add(playercards[nmb].Item1);
-                foreach (var btn in playerscreen.Controls.OfType<Button>())
+                foreach (var btn in kartyakscreen.Controls.OfType<Button>())
                 {
                     if (btn.Name.StartsWith("kazmgomb"))
                     {
@@ -1879,7 +1900,7 @@ namespace Duszaverseny_2025
             }
             if (Pakli.Count == felekerint)
             {
-                foreach (var btn in playerscreen.Controls.OfType<Button>().Where(b => b.Name.StartsWith("gyujtemeny")).ToList())
+                foreach (var btn in kartyakscreen.Controls.OfType<Button>().Where(b => b.Name.StartsWith("gyujtemeny")).ToList())
                 {
                     btn.Enabled = false;
                 }
@@ -1903,7 +1924,7 @@ namespace Duszaverseny_2025
             string asd = playercards[Convert.ToInt32(last)].Item1;
             Pakli.Remove(asd);
             paklint.Remove(nmb);
-            foreach (var btn in playerscreen.Controls.OfType<Button>())
+            foreach (var btn in kartyakscreen.Controls.OfType<Button>())
             {
                 if (btn.Location.Y == button.Location.Y && btn.Location.X > button.Location.X)
                 {
@@ -1932,7 +1953,7 @@ namespace Duszaverseny_2025
                 else
                 {
                     string buttonName = "gyujtemeny" + i;
-                    Control[] found = playerscreen.Controls.Find(buttonName, true);
+                    Control[] found = kartyakscreen.Controls.Find(buttonName, true);
                     if (found.Length > 0 && found[0] is Button btn)
                     {
                         btn.Enabled = true;
@@ -1941,11 +1962,11 @@ namespace Duszaverseny_2025
             }
         }
 
-        private void KazmataGombok()
+        private void KazmataGombok(object sender, EventArgs E)
         {
             int x = 5;
             int counter = 0;
-            label("Kazamaták:", "info", 110, 30, 2, 600, 14, playerscreen, Color.Black, Color.White);
+            label("Kazamaták:", "info", 110, 30, 2, 2, 14, kazmatascreen, Color.Black, Color.White);
 
             foreach (int i in kazamataegyszeru.Keys)
             {
@@ -1958,15 +1979,15 @@ namespace Duszaverseny_2025
                 lbl.Location = new Point(x, 580 + counter * 50);
                 lbl.Enabled = false;
                 lbl.Click += (s, e) => SelectBuffsScreen(i,"egyszeru");
-                playerscreen.Controls.Add(lbl);
+                kazmatascreen.Controls.Add(lbl);
                 x = x + 99;
 
-                label(kazamataegyszeru[i].Item2, "kazmell", 85, 30, x, 580 + counter * 50, 8, playerscreen, Color.Black, Color.White);
+                label(kazamataegyszeru[i].Item2, "kazmell", 85, 30, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
 
                 x += 99;
-                label("Jutalom: " + kazamataegyszeru[i].Item3, "kazmjut", 85, 30, x, 580 + counter * 50, 8, playerscreen, Color.Black, Color.White);
+                label("Jutalom: " + kazamataegyszeru[i].Item3, "kazmjut", 85, 30, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
                 x += 99;
-                label("Típus: egyszerű", "info", 85, 30, x, 580 + counter * 50, 8, playerscreen, Color.Black, Color.White);
+                label("Típus: egyszerű", "info", 85, 30, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
             }
             foreach (int i in kazamatakicsi.Keys)
             {
@@ -1980,21 +2001,21 @@ namespace Duszaverseny_2025
                 lbl.Location = new Point(x, 580 + counter * 50);
                 lbl.Enabled = false;
                 lbl.Click += (s, e) => SelectBuffsScreen(i,"kicsi");
-                playerscreen.Controls.Add(lbl);
+                kazmatascreen.Controls.Add(lbl);
                 x = x + 99;
 
                 System.Windows.Forms.Label ell1 = new System.Windows.Forms.Label();
-                label(kazamatakicsi[i].Item2, "kazmell", 85, 44, x, 580 + counter * 50, 8, playerscreen, Color.Black, Color.White);
+                label(kazamatakicsi[i].Item2, "kazmell", 85, 44, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
                 x += 99;
-                label(kazamatakicsi[i].Item3, "kazmell", 85, 44, x, 580 + counter * 50, 8, playerscreen, Color.Black, Color.White);
+                label(kazamatakicsi[i].Item3, "kazmell", 85, 44, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
                 x += 99;
-                label(kazamatakicsi[i].Item4, "kazmell", 85, 44, x, 580 + counter * 50, 8, playerscreen, Color.Black, Color.White);
+                label(kazamatakicsi[i].Item4, "kazmell", 85, 44, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
                 x += 99;
-                label("Vezér:\n" + kazamatakicsi[i].Item5, "kazmell", 85, 44, x, 580 + counter * 50, 8, playerscreen, Color.Black, Color.White);
+                label("Vezér:\n" + kazamatakicsi[i].Item5, "kazmell", 85, 44, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
                 x += 99;
-                label("Jutalom: " + kazamatakicsi[i].Item6, "kazmjut", 85, 44, x, 580 + counter * 50, 8, playerscreen, Color.Black, Color.White);
+                label("Jutalom: " + kazamatakicsi[i].Item6, "kazmjut", 85, 44, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
                 x += 99;
-                label("Típus: kicsi", "info", 85, 44, x, 580 + counter * 50, 8, playerscreen, Color.Black, Color.White);
+                label("Típus: kicsi", "info", 85, 44, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
             }
             foreach (int i in kazamatanagy.Keys)
             {
@@ -2008,22 +2029,22 @@ namespace Duszaverseny_2025
                 lbl.Location = new Point(x, 580 + counter * 50);
                 lbl.Enabled = false;
                 lbl.Click += (s, e) => SelectBuffsScreen(i,"nagy");
-                playerscreen.Controls.Add(lbl);
+                kazmatascreen.Controls.Add(lbl);
                 x = x + 99;
 
-                label(kazamatanagy[i].Item2, "kazmell", 85, 44, x, 580 + counter * 50, 8, playerscreen, Color.Black, Color.White);
+                label(kazamatanagy[i].Item2, "kazmell", 85, 44, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
                 x += 99;
-                label(kazamatanagy[i].Item3, "kazmell", 85, 44, x, 580 + counter * 50, 8, playerscreen, Color.Black, Color.White);
+                label(kazamatanagy[i].Item3, "kazmell", 85, 44, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
                 x += 99;
-                label(kazamatanagy[i].Item4, "kazmell", 85, 44, x, 580 + counter * 50, 8, playerscreen, Color.Black, Color.White);
+                label(kazamatanagy[i].Item4, "kazmell", 85, 44, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
                 x += 99;
-                label(kazamatanagy[i].Item5, "kazmell", 85, 44, x, 580 + counter * 50, 8, playerscreen, Color.Black, Color.White);
+                label(kazamatanagy[i].Item5, "kazmell", 85, 44, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
                 x += 99;
-                label(kazamatanagy[i].Item6, "kazmell", 85, 44, x, 580 + counter * 50, 8, playerscreen, Color.Black, Color.White);
+                label(kazamatanagy[i].Item6, "kazmell", 85, 44, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
                 x += 99;
-                label("Vezér:\n" + kazamatanagy[i].Item7, "kazmell", 85, 44, x, 580 + counter * 50, 8, playerscreen, Color.Black, Color.White);
+                label("Vezér:\n" + kazamatanagy[i].Item7, "kazmell", 85, 44, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
                 x += 99;
-                label("Típus: nagy", "kazminfo", 85, 44, x, 580 + counter * 50, 8, playerscreen, Color.Black, Color.White);
+                label("Típus: nagy", "kazminfo", 85, 44, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
             }
             foreach (int i in kazamatamega.Keys)
             {
@@ -2037,27 +2058,32 @@ namespace Duszaverseny_2025
                 lbl.Location = new Point(x, 580 + counter * 50);
                 lbl.Enabled = false;
                 lbl.Click += (s, e) => SelectBuffsScreen(i,"mega");
-                playerscreen.Controls.Add(lbl);
+                kazmatascreen.Controls.Add(lbl);
                 x = x + 99;
-                label(kazamatamega[i].Item2, "kazmell", 85, 44, x, 580 + counter * 50, 8, playerscreen, Color.Black, Color.White);
+                label(kazamatamega[i].Item2, "kazmell", 85, 44, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
                 x += 99;
-                label(kazamatamega[i].Item3, "kazmell", 85, 44, x, 580 + counter * 50, 8, playerscreen, Color.Black, Color.White);
+                label(kazamatamega[i].Item3, "kazmell", 85, 44, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
                 x += 99;
-                label(kazamatamega[i].Item4, "kazmell", 85, 44, x, 580 + counter * 50, 8, playerscreen, Color.Black, Color.White);
+                label(kazamatamega[i].Item4, "kazmell", 85, 44, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
                 x += 99;
-                label(kazamatamega[i].Item5, "kazmell", 85, 44, x, 580 + counter * 50, 8, playerscreen, Color.Black, Color.White);
+                label(kazamatamega[i].Item5, "kazmell", 85, 44, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
                 x += 99;
-                label(kazamatamega[i].Item6, "kazmell", 85, 44, x, 580 + counter * 50, 8, playerscreen, Color.Black, Color.White);
+                label(kazamatamega[i].Item6, "kazmell", 85, 44, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
                 x += 99;
-                label("Vezér:\n" + kazamatamega[i].Item7, "kazmell", 85, 44, x, 580 + counter * 50, 8, playerscreen, Color.Black, Color.White);
+                label("Vezér:\n" + kazamatamega[i].Item7, "kazmell", 85, 44, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
                 x += 99;
-                label("Vezér:\n" + kazamatamega[i].Item8, "kazmell", 85, 44, x, 580 + counter * 50, 8, playerscreen, Color.Black, Color.White);
+                label("Vezér:\n" + kazamatamega[i].Item8, "kazmell", 85, 44, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
                 x += 99;
-                label("Vezér:\n" + kazamatamega[i].Item9, "kazmell", 85, 44, x, 580 + counter * 50, 8, playerscreen, Color.Black, Color.White);
+                label("Vezér:\n" + kazamatamega[i].Item9, "kazmell", 85, 44, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
                 x += 99;
-                label("Jutalom: " + kazamatamega[i].Item10, "kazmjut", 85, 44, x, 580 + counter * 50, 8, playerscreen, Color.Black, Color.White);
+                label("Jutalom: " + kazamatamega[i].Item10, "kazmjut", 85, 44, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
                 x += 99;
-                label("Típus: mega", "kazminfo", 85, 44, x, 580 + counter * 50, 8, playerscreen, Color.Black, Color.White);
+                label("Típus: mega", "kazminfo", 85, 44, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
+                playerscreen.Hide();
+                if (!this.Controls.Contains(kazmatascreen)) this.Controls.Add(kazmatascreen);
+                kazmatascreen.Show();
+                kartyakscreen.Dock = DockStyle.Fill;
+                kazmatascreen.BringToFront();
             }
         }
 
@@ -2132,7 +2158,7 @@ namespace Duszaverseny_2025
                 buffselect.BackColor = Color.LightGray;
                 buffselect.Dock = DockStyle.Fill;
                 this.Controls.Add(buffselect);
-                playerscreen.Hide();
+                kazmatascreen.Hide();
                 buffselect.BringToFront();
 
                 label("Válaszd ki a kártyákat, amiket erősíteni szeretnél a körre\nPiros: sebzés duplázása, Kék: életerő duplázása\nErősítések száma: " + powerupcount, "info", 500,60,5,5,12,buffselect,Color.White, Color.Black);
@@ -2619,7 +2645,7 @@ namespace Duszaverseny_2025
                         else
                         {
                             string buttonName = "gyujtemeny" + i;
-                            Control[] found = playerscreen.Controls.Find(buttonName, true);
+                            Control[] found = kartyakscreen.Controls.Find(buttonName, true);
                             if (found.Length > 0 && found[0] is Button btn)
                             {
                                 btn.Enabled = true;
@@ -2646,13 +2672,13 @@ namespace Duszaverseny_2025
                                 nyeremeny.Text = "Játékos nyert" + Environment.NewLine + "+2 élet: " + playercards[i].Item1;
                             }
                             string buttonName = "gyujtemeny" + i;
-                            Control[] found = playerscreen.Controls.Find(buttonName, true);
+                            Control[] found = kartyakscreen.Controls.Find(buttonName, true);
                             if (found.Length > 0 && found[0] is Button btn)
                             {
                                 btn.Text = playercards[i].Item1 + Environment.NewLine + playercards[i].Item2 + "/" + playercards[i].Item3 + Environment.NewLine + playercards[i].Item4;
                             }
                             string buttonName1 = "paklibtn" + i;
-                            Control[] found1 = playerscreen.Controls.Find(buttonName1, true);
+                            Control[] found1 = kartyakscreen.Controls.Find(buttonName1, true);
                             if (found1.Length > 0 && found1[0] is Button btn1)
                             {
                                 btn1.Text = playercards[i].Item1 + Environment.NewLine + playercards[i].Item2 + "/" + playercards[i].Item3 + Environment.NewLine + playercards[i].Item4;
