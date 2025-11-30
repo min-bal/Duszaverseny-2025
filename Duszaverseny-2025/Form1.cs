@@ -218,7 +218,7 @@ namespace Duszaverseny_2025
                 menu.Controls.Clear();
                 menu.SendToBack();
                 savestart.BringToFront();
-                savestart.BackColor = Color.Gray;
+                savestart.BackColor = Color.DimGray;
 
                 button("Mentések", "loadsavefile", 200, 200, 150, 300, 20, savestart, LoadFile, Color.DarkGray, Color.Black, Color.DarkRed);
                 button("Alaphelyzetek", "loaddefault", 200, 200, 700, 300, 20, savestart, LoadFile, Color.DarkGray, Color.Black, Color.DarkRed);
@@ -233,7 +233,7 @@ namespace Duszaverseny_2025
                 comboBox.Size = new Size(150, 20);
                 comboBox.DropDownStyle = ComboBoxStyle.DropDownList;
                 savestart.Controls.Add(comboBox);
-                label("Nehézségi szint:", "info", 150, 30, 725, 520, 14, savestart, Color.Gray, Color.DarkRed);
+                label("Nehézségi szint:", "info", 150, 30, 725, 520, 14, savestart, Color.Transparent, Color.Black);
 
             }
             else if (name == "jatekmestergomb") //jatekmester panelre belepes
@@ -337,13 +337,14 @@ namespace Duszaverseny_2025
                     this.Controls.Add(ujvezer);
                     ujvezer.BringToFront();
 
+                    label("Kártya vezérré fejlesztése", "vezerinfo", 600, 75, 0, 25, 35, ujvezer, Color.Transparent, Color.Black);
                     button("Vissza", "visszamester", 150, 75, 35, 745, 20, ujvezer, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
 
                     Color border = new Color();
                     string tipisekezettel = string.Empty;
 
                     int x = 10;
-                    int y = 10;
+                    int y = 125;
                     bool vanev = false;
                     for (int i = 0; i < kartyak.Count; i++)
                     {
@@ -401,11 +402,12 @@ namespace Duszaverseny_2025
                     this.Controls.Add(ujkazamata);
                     ujkazamata.BringToFront();
 
-                    button("Vissza", "visszamester", 100, 100, 400, 400, 20, ujkazamata, button_Click, Color.Black, Color.White, Color.Black);
                     button("Egyszerű", "egyszeruk", 200, 200, 0, 0, 20, ujkazamata, kazamaták, Color.Black, Color.White, Color.Black);
                     button("Könnyű", "konnyuk", 200, 200, 200, 0, 20, ujkazamata, kazamaták, Color.Black, Color.White, Color.Black);
                     button("Nehéz", "nehezk", 200, 200, 0, 200, 20, ujkazamata, kazamaták, Color.Black, Color.White, Color.Black);
                     button("Mega", "megak", 200, 200, 200, 200, 20, ujkazamata, kazamaták, Color.Black, Color.White, Color.Black);
+
+                    button("Vissza", "visszamester", 150, 75, 35, 745, 20, ujkazamata, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
                 }
             }
             else if (name == "gyujtemeny") //gyujtemeny kivalasztasa
@@ -428,12 +430,13 @@ namespace Duszaverseny_2025
                     this.Controls.Add(gyujtemeny);
                     gyujtemeny.BringToFront();
 
+                    label("Gyűjtemény kiválasztása", "gyujtemenyinfo", 600, 75, 0, 25, 35, gyujtemeny, Color.Transparent, Color.Black);
                     button("Kész", "gyujtemenydone", 150, 75, 35, 745, 20, gyujtemeny, Újdolgok, Color.DarkGray, Color.Black, Color.DarkRed);
 
                     Color border = new Color();
                     string tipisekezettel = string.Empty;
                     int x = 10;
-                    int y = 10;
+                    int y = 125;
                     for (int i = 0; i < kartyak.Count; i++)
                     {
                         if (kartyak[i].Item4 == "tuz") { border = Color.Orange; tipisekezettel = "Tűz"; }
@@ -1262,7 +1265,7 @@ namespace Duszaverseny_2025
                             vezerrefejlesztessorszam = i;
 
                             sebzeseletero.Controls.Clear();
-                            sebzeseletero.BackColor = Color.DarkGray;
+                            sebzeseletero.BackColor = Color.DimGray;
                             sebzeseletero.Show();
                             sebzeseletero.Dock = DockStyle.Fill;
                             this.Controls.Add(sebzeseletero);
