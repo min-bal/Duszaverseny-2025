@@ -1964,26 +1964,29 @@ namespace Duszaverseny_2025
             if (btn != null)
             {
                 string name = btn.Name;
-                for (int i = 0; i < playercards.Count; i++)
+                if (name == "backtomainscreenpakli")
                 {
-                    if (name == playercards[i] + "kartyakpanelen") //gyujtemeny kivalasztva
+                    for (int i = 0; i < playercards.Count; i++)
                     {
-                        Button button = gyujtemeny.Controls.OfType<Button>()
-                            .FirstOrDefault(b => b.Name == kartyak[i].Item1 + "kartyakpanelen");
+
+                        Button button = kartyakscreen.Controls.OfType<Button>()
+                            .FirstOrDefault(b => b.Name == playercards[i].Item1 + "kartyakpanelen");
                         if (button != null)
                         {
                             if (button.BackColor == Color.White)
                             {
                                 Pakli.Add(playercards[i].Item1);
+
+
                             }
                         }
 
+
+
                     }
-                    else
-                    {
-                        
-                    }
+                    int a = Pakli.Count;
                 }
+                
             }
 
                 kazmatascreen.Hide();
@@ -2005,6 +2008,7 @@ namespace Duszaverseny_2025
 
         private void Kartyagombok(object sender, EventArgs e)
         {
+            Pakli.Clear();
             playerscreen.Hide();
             if (!this.Controls.Contains(kartyakscreen)) this.Controls.Add(kartyakscreen);
             kartyakscreen.Show();
