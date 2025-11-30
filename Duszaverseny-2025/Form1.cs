@@ -398,14 +398,15 @@ namespace Duszaverseny_2025
                     ujkazamata.Controls.Clear();
                     ujkazamata.Show();
                     ujkazamata.Dock = DockStyle.Fill;
+                    ujkazamata.BackColor = Color.DimGray;
                     this.Controls.Add(ujkazamata);
                     ujkazamata.BringToFront();
 
-                    button("Vissza", "visszamester", 100, 100, 400, 400, 20, ujkazamata, button_Click, Color.Black, Color.White, Color.Black);
-                    button("Egyszerű", "egyszeruk", 200, 200, 0, 0, 20, ujkazamata, kazamaták, Color.Black, Color.White, Color.Black);
-                    button("Könnyű", "konnyuk", 200, 200, 200, 0, 20, ujkazamata, kazamaták, Color.Black, Color.White, Color.Black);
-                    button("Nehéz", "nehezk", 200, 200, 0, 200, 20, ujkazamata, kazamaták, Color.Black, Color.White, Color.Black);
-                    button("Mega", "megak", 200, 200, 200, 200, 20, ujkazamata, kazamaták, Color.Black, Color.White, Color.Black);
+                    button("Vissza", "visszamester", 100, 100, 400, 400, 20, ujkazamata, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
+                    button("Egyszerű", "egyszeruk", 200, 200, 0, 0, 20, ujkazamata, kazamaták, Color.DarkGray, Color.Black, Color.DarkRed);
+                    button("Könnyű", "konnyuk", 200, 200, 200, 0, 20, ujkazamata, kazamaták, Color.DarkGray, Color.Black, Color.DarkRed);
+                    button("Nehéz", "nehezk", 200, 200, 0, 200, 20, ujkazamata, kazamaták, Color.DarkGray, Color.Black, Color.DarkRed);
+                    button("Mega", "megak", 200, 200, 200, 200, 20, ujkazamata, kazamaták, Color.DarkGray, Color.Black, Color.DarkRed);
                 }
             }
             else if (name == "gyujtemeny") //gyujtemeny kivalasztasa
@@ -579,18 +580,20 @@ namespace Duszaverseny_2025
                 egyszeruk.Show();
                 egyszeruk.Dock = DockStyle.Fill;
                 this.Controls.Add(egyszeruk);
+                egyszeruk.BackColor = Color.DimGray;
                 egyszeruk.BringToFront();
 
-                button("Vissza", "visszakazamata", 150, 100, 0, 0, 20, egyszeruk, button_Click, Color.Black, Color.White, Color.Black);
-                button("Kész", "kazamatadone", 150, 100, 150, 0, 20, egyszeruk, kazamaták, Color.Black, Color.White, Color.Black);
-                textbox("egyszeruknameinput", 300, 100, 300, 0, egyszeruk, Color.Black, Color.White, 20, "asd");
-                button("Sebzés", "jutalomse", 150, 100, 600, 0, 20, egyszeruk, button_Click, Color.Black, Color.White, Color.Black);
+                button("Vissza", "visszakazamata", 150, 100, 0, 0, 20, egyszeruk, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
+                button("Kész", "kazamatadone", 150, 100, 150, 0, 20, egyszeruk, kazamaták, Color.DarkGray, Color.Black, Color.DarkRed);
+                textbox("egyszeruknameinput", 300, 100, 300, 0, egyszeruk, Color.White, Color.Black, 20, "asd");
+                button("Sebzés", "jutalomse", 150, 100, 600, 0, 20, egyszeruk, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
+                label("nevezd el a kazamatát, válaszd ki a jutalmat, válaszd ki a kártyákat","info",300,50,2,700,12,egyszeruk,Color.DarkGray,Color.Black);
 
                 int x = 750;
                 int y = 0;
                 for (int i = 0; i < kartyak.Count; i++)
                 {
-                    button(kartyak[i].Item1, kartyak[i].Item1 + "egyszerukazamataba", 75, 100, x, y, 10, egyszeruk, button_Click, Color.Black, Color.White, Color.Black);
+                    button(kartyak[i].Item1, kartyak[i].Item1 + "egyszerukazamataba", 75, 100, x, y, 10, egyszeruk, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
                     x += 75;
                     if (x > 975)
                     {
@@ -600,7 +603,7 @@ namespace Duszaverseny_2025
                 }
                 for (int i = 0; i < vezerkartyak.Count; i++)
                 {
-                    button(vezerkartyak[i].Item1, vezerkartyak[i].Item1 + "egyszerukazamataba", 75, 100, x, y, 10, egyszeruk, button_Click, Color.Black, Color.White, Color.Black);
+                    button(vezerkartyak[i].Item1, vezerkartyak[i].Item1 + "egyszerukazamataba", 75, 100, x, y, 10, egyszeruk, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
                     x += 75;
                     if (x > 975)
                     {
@@ -624,17 +627,19 @@ namespace Duszaverseny_2025
                 konnyuk.Dock = DockStyle.Fill;
                 this.Controls.Add(konnyuk);
                 konnyuk.BringToFront();
+                konnyuk.BackColor = Color.DimGray;
 
-                button("Vissza", "visszakazamata", 150, 100, 0, 0, 20, konnyuk, button_Click, Color.Black, Color.White, Color.Black);
-                button("Kész", "kazamatadone", 150, 100, 150, 0, 20, konnyuk, kazamaták, Color.Black, Color.White, Color.Black);
-                textbox("konnyuknameinput", 300, 100, 300, 0, konnyuk, Color.Black, Color.White, 20, "asd");
-                button("Sebzés", "jutalomse", 150, 100, 600, 0, 20, konnyuk, button_Click, Color.Black, Color.White, Color.Black);
+                button("Vissza", "visszakazamata", 150, 100, 0, 0, 20, konnyuk, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
+                button("Kész", "kazamatadone", 150, 100, 150, 0, 20, konnyuk, kazamaták, Color.DarkGray, Color.Black, Color.DarkRed);
+                textbox("konnyuknameinput", 300, 100, 300, 0, konnyuk, Color.White, Color.Black, 20, "asd");
+                button("Sebzés", "jutalomse", 150, 100, 600, 0, 20, konnyuk, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
+                label("nevezd el a kazamatát, válaszd ki a jutalmat, válaszd ki a kártyákat","info",300,50,2,700,12,konnyuk,Color.DarkGray,Color.Black);
 
                 int x = 750;
                 int y = 0;
                 for (int i = 0; i < kartyak.Count; i++)
                 {
-                    button(kartyak[i].Item1, kartyak[i].Item1 + "konnyukazamataba", 75, 100, x, y, 10, konnyuk, button_Click, Color.Black, Color.White, Color.Black);
+                    button(kartyak[i].Item1, kartyak[i].Item1 + "konnyukazamataba", 75, 100, x, y, 10, konnyuk, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
                     x += 75;
                     if (x > 975)
                     {
@@ -644,7 +649,7 @@ namespace Duszaverseny_2025
                 }
                 for (int i = 0; i < vezerkartyak.Count; i++)
                 {
-                    button(vezerkartyak[i].Item1, vezerkartyak[i].Item1 + "konnyukazamataba", 75, 100, x, y, 10, konnyuk, button_Click, Color.Black, Color.White, Color.Black);
+                    button(vezerkartyak[i].Item1, vezerkartyak[i].Item1 + "konnyukazamataba", 75, 100, x, y, 10, konnyuk, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
                     x += 75;
                     if (x > 975)
                     {
@@ -668,16 +673,18 @@ namespace Duszaverseny_2025
                 nehezk.Dock = DockStyle.Fill;
                 this.Controls.Add(nehezk);
                 nehezk.BringToFront();
+                nehezk.BackColor = Color.DimGray;
+                label("nevezd el a kazamatát, válaszd ki a jutalmat, válaszd ki a kártyákat","info",300,50,2,700,12,nehezk,Color.DarkGray,Color.Black);
 
-                button("Vissza", "visszakazamata", 150, 100, 0, 0, 20, nehezk, button_Click, Color.Black, Color.White, Color.Black);
-                button("Kész", "kazamatadone", 150, 100, 150, 0, 20, nehezk, button_Click, Color.Black, Color.White, Color.Black);
-                textbox("nehezknameinput", 300, 100, 300, 0, nehezk, Color.Black, Color.White, 20, "asd");
+                button("Vissza", "visszakazamata", 150, 100, 0, 0, 20, nehezk, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
+                button("Kész", "kazamatadone", 150, 100, 150, 0, 20, nehezk, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
+                textbox("nehezknameinput", 300, 100, 300, 0, nehezk, Color.White, Color.Black, 20, "asd");
 
                 int x = 600;
                 int y = 0;
                 for (int i = 0; i < kartyak.Count; i++)
                 {
-                    button(kartyak[i].Item1, kartyak[i].Item1 + "nehezkazamataba", 75, 100, x, y, 10, nehezk, button_Click, Color.Black, Color.White, Color.Black);
+                    button(kartyak[i].Item1, kartyak[i].Item1 + "nehezkazamataba", 75, 100, x, y, 10, nehezk, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
                     x += 75;
                     if (x > 975)
                     {
@@ -687,7 +694,7 @@ namespace Duszaverseny_2025
                 }
                 for (int i = 0; i < vezerkartyak.Count; i++)
                 {
-                    button(vezerkartyak[i].Item1, vezerkartyak[i].Item1 + "nehezkazamataba", 75, 100, x, y, 10, nehezk, button_Click, Color.Black, Color.White, Color.Black);
+                    button(vezerkartyak[i].Item1, vezerkartyak[i].Item1 + "nehezkazamataba", 75, 100, x, y, 10, nehezk, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
                     x += 75;
                     if (x > 975)
                     {
@@ -711,16 +718,18 @@ namespace Duszaverseny_2025
                 megak.Dock = DockStyle.Fill;
                 this.Controls.Add(megak);
                 megak.BringToFront();
+                megak.BackColor = Color.DimGray;
+                label("nevezd el a kazamatát, válaszd ki a jutalmat, válaszd ki a kártyákat","info",300,50,2,700,12,megak,Color.DarkGray,Color.Black);
 
-                button("Vissza", "visszakazamata", 150, 100, 0, 0, 20, megak, button_Click, Color.Black, Color.White, Color.Black);
-                button("Kész", "kazamatadone", 150, 100, 150, 0, 20, megak, kazamaták, Color.Black, Color.White, Color.Black);
-                textbox("megaknameinput", 300, 100, 300, 0, megak, Color.Black, Color.White, 20, "asd");
+                button("Vissza", "visszakazamata", 150, 100, 0, 0, 20, megak, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
+                button("Kész", "kazamatadone", 150, 100, 150, 0, 20, megak, kazamaták, Color.DarkGray, Color.Black, Color.DarkRed);
+                textbox("megaknameinput", 300, 100, 300, 0, megak, Color.White, Color.Black, 20, "asd");
 
                 int x = 600;
                 int y = 0;
                 for (int i = 0; i < kartyak.Count; i++)
                 {
-                    button(kartyak[i].Item1, kartyak[i].Item1 + "megakazamataba", 75, 100, x, y, 10, megak, button_Click, Color.Black, Color.White, Color.Black);
+                    button(kartyak[i].Item1, kartyak[i].Item1 + "megakazamataba", 75, 100, x, y, 10, megak, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
                     x += 75;
                     if (x > 975)
                     {
@@ -730,7 +739,7 @@ namespace Duszaverseny_2025
                 }
                 for (int i = 0; i < vezerkartyak.Count; i++)
                 {
-                    button(vezerkartyak[i].Item1, vezerkartyak[i].Item1 + "megakazamataba", 75, 100, x, y, 10, megak, button_Click, Color.Black, Color.White, Color.Black);
+                    button(vezerkartyak[i].Item1, vezerkartyak[i].Item1 + "megakazamataba", 75, 100, x, y, 10, megak, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
                     x += 75;
                     if (x > 975)
                     {
@@ -2120,9 +2129,17 @@ namespace Duszaverseny_2025
 
         private void KazmataGombok(object sender, EventArgs E)
         {
-            int x = 5;
+            if (!this.Controls.Contains(kazmatascreen)) this.Controls.Add(kazmatascreen);
+            kazmatascreen.Show();
+            kazmatascreen.Dock = DockStyle.Fill;
+            kazmatascreen.BringToFront();
+            kazmatascreen.BackColor = Color.DimGray;
+            playerscreen.Hide();
+            int x = 10;
+            int y = 30;
             int counter = 0;
-            label("Kazamaták:", "info", 110, 30, 2, 2, 14, kazmatascreen, Color.Black, Color.White);
+            label("Kazamaták:", "info", 110, 30, 10, 2, 14, kazmatascreen, Color.DimGray, Color.Black);
+            button("Vissza","back",100,30,150,2,11,kazmatascreen,MainScreen,Color.DarkGray,Color.Black,Color.DarkRed);
 
             foreach (int i in kazamataegyszeru.Keys)
             {
@@ -2132,115 +2149,128 @@ namespace Duszaverseny_2025
                 lbl.TextAlign = ContentAlignment.MiddleCenter;
                 lbl.Text = kazamataegyszeru[i].Item1;
                 lbl.Size = new Size(85, 50);
-                lbl.Location = new Point(x, 580 + counter * 50);
-                lbl.Enabled = false;
+                lbl.Location = new Point(x, y);
+                if (paklint.Count == 0) lbl.Enabled = false;
+                lbl.BackColor = Color.DarkGray;
+                lbl.ForeColor = Color.Black;
+                lbl.FlatAppearance.BorderSize = 1;
+                lbl.FlatAppearance.BorderColor = Color.DarkRed;
                 lbl.Click += (s, e) => SelectBuffsScreen(i,"egyszeru");
                 kazmatascreen.Controls.Add(lbl);
-                x = x + 99;
+                x = x + 100;
 
-                label(kazamataegyszeru[i].Item2, "kazmell", 85, 30, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
+                label(kazamataegyszeru[i].Item2, "kazmell", 85, 50, x, y, 10, kazmatascreen, Color.DimGray, Color.Black);
 
-                x += 99;
-                label("Jutalom: " + kazamataegyszeru[i].Item3, "kazmjut", 85, 30, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
-                x += 99;
-                label("Típus: egyszerű", "info", 85, 30, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
+                x += 100;
+                label("Jutalom: " + kazamataegyszeru[i].Item3, "kazmjut", 85, 50, x, y, 10, kazmatascreen, Color.DimGray, Color.Black);
+                x += 100;
+                label("Típus: egyszerű", "info", 85, 50, x, y, 10, kazmatascreen, Color.DimGray, Color.Black);
             }
+            y += 80;
             foreach (int i in kazamatakicsi.Keys)
             {
                 counter++;
-                x = 5;
+                x = 10;
                 System.Windows.Forms.Button lbl = new System.Windows.Forms.Button();
                 lbl.Name = "kazmgomb2";
                 lbl.TextAlign = ContentAlignment.MiddleCenter;
                 lbl.Text = kazamatakicsi[i].Item1;
                 lbl.Size = new Size(85, 50);
-                lbl.Location = new Point(x, 580 + counter * 50);
-                lbl.Enabled = false;
+                lbl.Location = new Point(x, y);
+                if (paklint.Count == 0) lbl.Enabled = false;
+                lbl.BackColor = Color.DarkGray;
+                lbl.ForeColor = Color.Black;
+                lbl.FlatAppearance.BorderSize = 1;
+                lbl.FlatAppearance.BorderColor = Color.DarkRed;
                 lbl.Click += (s, e) => SelectBuffsScreen(i,"kicsi");
                 kazmatascreen.Controls.Add(lbl);
                 x = x + 99;
 
                 System.Windows.Forms.Label ell1 = new System.Windows.Forms.Label();
-                label(kazamatakicsi[i].Item2, "kazmell", 85, 44, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
+                label(kazamatakicsi[i].Item2, "kazmell", 85, 50, x, y, 10, kazmatascreen, Color.DimGray, Color.Black);
                 x += 99;
-                label(kazamatakicsi[i].Item3, "kazmell", 85, 44, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
+                label(kazamatakicsi[i].Item3, "kazmell", 85, 50, x, y, 10, kazmatascreen, Color.DimGray, Color.Black);
                 x += 99;
-                label(kazamatakicsi[i].Item4, "kazmell", 85, 44, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
+                label(kazamatakicsi[i].Item4, "kazmell", 85, 50, x, y, 10, kazmatascreen, Color.DimGray, Color.Black);
                 x += 99;
-                label("Vezér:\n" + kazamatakicsi[i].Item5, "kazmell", 85, 44, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
+                label("Vezér:\n" + kazamatakicsi[i].Item5, "kazmell", 85, 50, x, y, 10, kazmatascreen, Color.DimGray, Color.Black);
                 x += 99;
-                label("Jutalom: " + kazamatakicsi[i].Item6, "kazmjut", 85, 44, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
+                label("Jutalom: " + kazamatakicsi[i].Item6, "kazmjut", 85, 50, x, y, 10, kazmatascreen, Color.DimGray, Color.Black);
                 x += 99;
-                label("Típus: kicsi", "info", 85, 44, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
+                label("Típus: kicsi", "info", 85, 50, x, y, 10, kazmatascreen, Color.DimGray, Color.Black);
             }
+            y += 80;
             foreach (int i in kazamatanagy.Keys)
             {
                 counter++;
-                x = 5;
+                x = 10;
                 System.Windows.Forms.Button lbl = new System.Windows.Forms.Button();
                 lbl.Name = "kazmgomb3";
                 lbl.TextAlign = ContentAlignment.MiddleCenter;
                 lbl.Text = kazamatanagy[i].Item1;
                 lbl.Size = new Size(85, 50);
-                lbl.Location = new Point(x, 580 + counter * 50);
-                lbl.Enabled = false;
+                lbl.Location = new Point(x, y);
+                if (paklint.Count == 0) lbl.Enabled = false;
+                lbl.BackColor = Color.DarkGray;
+                lbl.ForeColor = Color.Black;
+                lbl.FlatAppearance.BorderSize = 1;
+                lbl.FlatAppearance.BorderColor = Color.DarkRed;
                 lbl.Click += (s, e) => SelectBuffsScreen(i,"nagy");
                 kazmatascreen.Controls.Add(lbl);
-                x = x + 99;
+                x = x + 100;
 
-                label(kazamatanagy[i].Item2, "kazmell", 85, 44, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
-                x += 99;
-                label(kazamatanagy[i].Item3, "kazmell", 85, 44, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
-                x += 99;
-                label(kazamatanagy[i].Item4, "kazmell", 85, 44, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
-                x += 99;
-                label(kazamatanagy[i].Item5, "kazmell", 85, 44, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
-                x += 99;
-                label(kazamatanagy[i].Item6, "kazmell", 85, 44, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
-                x += 99;
-                label("Vezér:\n" + kazamatanagy[i].Item7, "kazmell", 85, 44, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
-                x += 99;
-                label("Típus: nagy", "kazminfo", 85, 44, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
+                label(kazamatanagy[i].Item2, "kazmell", 85, 50, x, y, 10, kazmatascreen, Color.DimGray, Color.Black);
+                x += 100;
+                label(kazamatanagy[i].Item3, "kazmell", 85, 50, x, y, 10, kazmatascreen, Color.DimGray, Color.  Black);
+                x += 100;
+                label(kazamatanagy[i].Item4, "kazmell", 85, 50, x, y, 10, kazmatascreen, Color.DimGray, Color.Black);
+                x += 100;
+                label(kazamatanagy[i].Item5, "kazmell", 85, 50, x, y,10, kazmatascreen, Color.DimGray, Color.Black);
+                x += 100;
+                label(kazamatanagy[i].Item6, "kazmell", 85, 50, x, y, 10, kazmatascreen, Color.DimGray, Color.Black);
+                x += 100;
+                label("Vezér:\n" + kazamatanagy[i].Item7, "kazmell", 85, 50, x, y, 10, kazmatascreen, Color.DimGray, Color.Black);
+                x += 100;
+                label("Típus: nagy", "kazminfo", 85, 50, x, y, 10, kazmatascreen, Color.DimGray, Color.Black);
             }
+            y += 80;
             foreach (int i in kazamatamega.Keys)
             {
                 counter++;
-                x = 5;
+                x = 10;
                 System.Windows.Forms.Button lbl = new System.Windows.Forms.Button();
                 lbl.Name = "kazmgomb4";
                 lbl.TextAlign = ContentAlignment.MiddleCenter;
                 lbl.Text = kazamatamega[i].Item1;
                 lbl.Size = new Size(85, 50);
-                lbl.Location = new Point(x, 580 + counter * 50);
-                lbl.Enabled = false;
+                lbl.Location = new Point(x, y);
+                if (paklint.Count == 0) lbl.Enabled = false;
+                lbl.BackColor = Color.DarkGray;
+                lbl.ForeColor = Color.Black;
+                lbl.FlatAppearance.BorderSize = 3;
+                lbl.FlatAppearance.BorderColor = Color.DarkRed;
                 lbl.Click += (s, e) => SelectBuffsScreen(i,"mega");
                 kazmatascreen.Controls.Add(lbl);
-                x = x + 99;
-                label(kazamatamega[i].Item2, "kazmell", 85, 44, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
-                x += 99;
-                label(kazamatamega[i].Item3, "kazmell", 85, 44, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
-                x += 99;
-                label(kazamatamega[i].Item4, "kazmell", 85, 44, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
-                x += 99;
-                label(kazamatamega[i].Item5, "kazmell", 85, 44, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
-                x += 99;
-                label(kazamatamega[i].Item6, "kazmell", 85, 44, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
-                x += 99;
-                label("Vezér:\n" + kazamatamega[i].Item7, "kazmell", 85, 44, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
-                x += 99;
-                label("Vezér:\n" + kazamatamega[i].Item8, "kazmell", 85, 44, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
-                x += 99;
-                label("Vezér:\n" + kazamatamega[i].Item9, "kazmell", 85, 44, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
-                x += 99;
-                label("Jutalom: " + kazamatamega[i].Item10, "kazmjut", 85, 44, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
-                x += 99;
-                label("Típus: mega", "kazminfo", 85, 44, x, 580 + counter * 50, 8, kazmatascreen, Color.Black, Color.White);
-                playerscreen.Hide();
-                if (!this.Controls.Contains(kazmatascreen)) this.Controls.Add(kazmatascreen);
-                kazmatascreen.Show();
-                kartyakscreen.Dock = DockStyle.Fill;
-                kazmatascreen.BringToFront();
-                kazmatascreen.BackColor = Color.DimGray;
+                x = x + 100;
+                label(kazamatamega[i].Item2, "kazmell", 85, 50, x, y, 10, kazmatascreen, Color.DimGray, Color.Black);
+                x += 100;
+                label(kazamatamega[i].Item3, "kazmell", 85, 50, x, y, 10, kazmatascreen, Color.DimGray, Color.Black);
+                x += 100;
+                label(kazamatamega[i].Item4, "kazmell", 85, 50, x, y, 10, kazmatascreen, Color.DimGray, Color.Black);
+                x += 100;
+                label(kazamatamega[i].Item5, "kazmell", 85, 50, x, y, 10, kazmatascreen, Color.DimGray, Color.Black);
+                x += 100;
+                label(kazamatamega[i].Item6, "kazmell", 85, 50, x, y, 10, kazmatascreen, Color.DimGray, Color.Black);
+                x += 100;
+                label("Vezér:\n" + kazamatamega[i].Item7, "kazmell", 85, 50, x, y, 10, kazmatascreen, Color.DimGray, Color.Black);
+                x += 100;
+                label("Vezér:\n" + kazamatamega[i].Item8, "kazmell", 85, 50, x, y, 10, kazmatascreen, Color.DimGray, Color.Black);
+                x += 100;
+                label("Vezér:\n" + kazamatamega[i].Item9, "kazmell", 85, 50, x, y, 10, kazmatascreen, Color.DimGray, Color.Black);
+                x += 100;
+                label("Jutalom: " + kazamatamega[i].Item10, "kazmjut", 85, 50, x, y, 10, kazmatascreen, Color.DimGray, Color.Black);
+                x += 100;
+                label("Típus: mega", "kazminfo", 85, 50, x, y, 10, kazmatascreen, Color.DimGray, Color.Black);
             }
         }
 
