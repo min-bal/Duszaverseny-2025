@@ -2299,7 +2299,7 @@ namespace Duszaverseny_2025
                 lbl.Text = kazamataegyszeru[i].Item1;
                 lbl.Size = new Size(85, 50);
                 lbl.Location = new Point(x, y);
-                if (paklint.Count == 0) lbl.Enabled = false;
+                if (Pakli.Count == 0) lbl.Enabled = false;
                 lbl.BackColor = Color.DarkGray;
                 lbl.ForeColor = Color.Black;
                 lbl.FlatAppearance.BorderSize = 1;
@@ -2326,7 +2326,7 @@ namespace Duszaverseny_2025
                 lbl.Text = kazamatakicsi[i].Item1;
                 lbl.Size = new Size(85, 50);
                 lbl.Location = new Point(x, y);
-                if (paklint.Count == 0) lbl.Enabled = false;
+                if (Pakli.Count == 0) lbl.Enabled = false;
                 lbl.BackColor = Color.DarkGray;
                 lbl.ForeColor = Color.Black;
                 lbl.FlatAppearance.BorderSize = 1;
@@ -2359,7 +2359,7 @@ namespace Duszaverseny_2025
                 lbl.Text = kazamatanagy[i].Item1;
                 lbl.Size = new Size(85, 50);
                 lbl.Location = new Point(x, y);
-                if (paklint.Count == 0) lbl.Enabled = false;
+                if (Pakli.Count == 0) lbl.Enabled = false;
                 lbl.BackColor = Color.DarkGray;
                 lbl.ForeColor = Color.Black;
                 lbl.FlatAppearance.BorderSize = 1;
@@ -2393,7 +2393,7 @@ namespace Duszaverseny_2025
                 lbl.Text = kazamatamega[i].Item1;
                 lbl.Size = new Size(85, 50);
                 lbl.Location = new Point(x, y);
-                if (paklint.Count == 0) lbl.Enabled = false;
+                if (Pakli.Count == 0) lbl.Enabled = false;
                 lbl.BackColor = Color.DarkGray;
                 lbl.ForeColor = Color.Black;
                 lbl.FlatAppearance.BorderSize = 3;
