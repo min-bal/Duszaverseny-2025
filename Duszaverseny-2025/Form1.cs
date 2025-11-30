@@ -221,7 +221,8 @@ namespace Duszaverseny_2025
                 savestart.BackColor = Color.DimGray;
 
                 button("Mentések", "loadsavefile", 200, 200, 150, 300, 20, savestart, LoadFile, Color.DarkGray, Color.Black, Color.DarkRed);
-                button("Alaphelyzetek", "loaddefault", 200, 200, 700, 300, 20, savestart, LoadFile, Color.DarkGray, Color.Black, Color.DarkRed);
+                button("Alaphelyzetek", "loaddefault", 200, 200, 750, 300, 20, savestart, LoadFile, Color.DarkGray, Color.Black, Color.DarkRed);
+                button("Vissza", "visszamenu", 150, 75, 35, 745, 20, savestart, menuuu, Color.DarkGray, Color.Black, Color.DarkRed);
                 ComboBox comboBox = new ComboBox();
                 comboBox.Name = "difficulty";
                 for (int i = 0; i <= 10; i++)
@@ -229,12 +230,11 @@ namespace Duszaverseny_2025
                     comboBox.Items.Add(i);
                 }
                 comboBox.SelectedIndex = 0;
-                comboBox.Location = new Point(725, 570);
+                comboBox.Location = new Point(775, 570);
                 comboBox.Size = new Size(150, 20);
                 comboBox.DropDownStyle = ComboBoxStyle.DropDownList;
                 savestart.Controls.Add(comboBox);
-                label("Nehézségi szint:", "info", 150, 30, 725, 520, 14, savestart, Color.Transparent, Color.Black);
-
+                label("Nehézségi szint:", "info", 150, 30, 775, 520, 14, savestart, Color.Transparent, Color.Black);
             }
             else if (name == "jatekmestergomb") //jatekmester panelre belepes
             {
@@ -525,7 +525,7 @@ namespace Duszaverseny_2025
                     }
                 }
 
-                if (ujkname != string.Empty && ujkdmg != 0 && ujkhp != 0 && ujkname.Length <= 16 && ujkdmg >= 2 && ujkdmg <= 100 && ujkhp >= 1 && ujkhp <= 100) //csak akkor engedi letrehozni ha van megadva nev, ami max 14 karakter vezerre fejlesztes miatt, mert igy a vezer neve max 16 karakter lesz, tipus, dmg-és hp <= 100
+                if (ujkname != string.Empty && ujkdmg != 0 && ujkhp != 0 && selected != string.Empty && ujkname.Length <= 16 && ujkdmg >= 2 && ujkdmg <= 100 && ujkhp >= 1 && ujkhp <= 100) //csak akkor engedi letrehozni ha van megadva nev, ami max 14 karakter vezerre fejlesztes miatt, mert igy a vezer neve max 16 karakter lesz, tipus, dmg-és hp <= 100
                 {
                     if (kartyak.Count > 0)
                     {
@@ -603,16 +603,20 @@ namespace Duszaverseny_2025
                         x = 0;
                     }
                 }
-                for (int i = 0; i < vezerkartyak.Count; i++)
+                if (vezerkartyak.Count>0)
                 {
-                    button(vezerkartyak[i].Item1, vezerkartyak[i].Item1 + "egyszerukazamataba", 75, 100, x, y, 10, egyszeruk, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
-                    x += 75;
-                    if (x > 975)
+                    for (int i = 0; i < vezerkartyak.Count; i++)
                     {
-                        y += 100;
-                        x = 0;
+                        button(vezerkartyak[i].Item1, vezerkartyak[i].Item1 + "egyszerukazamataba", 75, 100, x, y, 10, egyszeruk, button_Click, Color.Black, Color.White, Color.Black);
+                        x += 75;
+                        if (x > 975)
+                        {
+                            y += 100;
+                            x = 0;
+                        }
                     }
                 }
+                
             }
             else if (name == "konnyuk" && kartyak.Count > 3 && vezerkartyak.Count > 0)
             {
@@ -649,16 +653,20 @@ namespace Duszaverseny_2025
                         x = 0;
                     }
                 }
-                for (int i = 0; i < vezerkartyak.Count; i++)
+                if (vezerkartyak.Count>0)
                 {
-                    button(vezerkartyak[i].Item1, vezerkartyak[i].Item1 + "konnyukazamataba", 75, 100, x, y, 10, konnyuk, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
-                    x += 75;
-                    if (x > 975)
+                    for (int i = 0; i < vezerkartyak.Count; i++)
                     {
-                        y += 100;
-                        x = 0;
+                        button(vezerkartyak[i].Item1, vezerkartyak[i].Item1 + "konnyukazamataba", 75, 100, x, y, 10, konnyuk, button_Click, Color.Black, Color.White, Color.Black);
+                        x += 75;
+                        if (x > 975)
+                        {
+                            y += 100;
+                            x = 0;
+                        }
                     }
                 }
+                
             }
             else if (name == "nehezk" && kartyak.Count > 5 && vezerkartyak.Count > 0)
             {
@@ -694,16 +702,20 @@ namespace Duszaverseny_2025
                         x = 0;
                     }
                 }
-                for (int i = 0; i < vezerkartyak.Count; i++)
+                if (vezerkartyak.Count>0)
                 {
-                    button(vezerkartyak[i].Item1, vezerkartyak[i].Item1 + "nehezkazamataba", 75, 100, x, y, 10, nehezk, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
-                    x += 75;
-                    if (x > 975)
+                    for (int i = 0; i < vezerkartyak.Count; i++)
                     {
-                        y += 100;
-                        x = 0;
+                        button(vezerkartyak[i].Item1, vezerkartyak[i].Item1 + "nehezkazamataba", 75, 100, x, y, 10, nehezk, button_Click, Color.Black, Color.White, Color.Black);
+                        x += 75;
+                        if (x > 975)
+                        {
+                            y += 100;
+                            x = 0;
+                        }
                     }
                 }
+                
             }
             else if (name == "megak" && kartyak.Count > 7 && vezerkartyak.Count > 2)
             {
@@ -739,16 +751,20 @@ namespace Duszaverseny_2025
                         x = 0;
                     }
                 }
-                for (int i = 0; i < vezerkartyak.Count; i++)
+                if (vezerkartyak.Count > 0)
                 {
-                    button(vezerkartyak[i].Item1, vezerkartyak[i].Item1 + "megakazamataba", 75, 100, x, y, 10, megak, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
-                    x += 75;
-                    if (x > 975)
+                    for (int i = 0; i < vezerkartyak.Count; i++)
                     {
-                        y += 100;
-                        x = 0;
+                        button(vezerkartyak[i].Item1, vezerkartyak[i].Item1 + "megakazamataba", 75, 100, x, y, 10, megak, button_Click, Color.Black, Color.White, Color.Black);
+                        x += 75;
+                        if (x > 975)
+                        {
+                            y += 100;
+                            x = 0;
+                        }
                     }
                 }
+                
             }
             else if (name == "kazamatadone")
             {
@@ -1302,6 +1318,20 @@ namespace Duszaverseny_2025
                             }
                         }
 
+                        if (name == kartyak[i].Item1 + "kartyakpanelen") //gyujtemenybe valasztott / kivett kartya
+                        {
+                            Button button = kartyakscreen.Controls.OfType<Button>()
+                          .FirstOrDefault(b => b.Name == kartyak[i].Item1 + "kartyakpanelen");
+                            if (button != null)
+                            {
+                                if (button.BackColor == Color.White)
+                                {
+                                    button.BackColor = Color.DarkGray;
+                                }
+                                else { button.BackColor = Color.White; }
+                            }
+                        }
+
                         if (vezerkartyak.Count > i)
                         {
                             if (name == vezerkartyak[i].Item1 + "egyszerukazamataba")
@@ -1794,7 +1824,7 @@ namespace Duszaverseny_2025
                             }
                             menu.Show();
                         }
-                        ujra = true;
+                        ujra = false;
                     }
                 }                
             }
@@ -1930,28 +1960,142 @@ namespace Duszaverseny_2025
 
         private void MainScreen(object sender, EventArgs e)
         {
-            kazmatascreen.Hide();
-            kartyakscreen.Hide();
-            playerscreen.Show();
-            playerscreen.BringToFront();
-            playerscreen.BackColor = Color.DimGray;
+            Button btn = sender as Button;
+            if (btn != null)
+            {
+                string name = btn.Name;
+                for (int i = 0; i < playercards.Count; i++)
+                {
+                    if (name == playercards[i] + "kartyakpanelen") //gyujtemeny kivalasztva
+                    {
+                        Button button = gyujtemeny.Controls.OfType<Button>()
+                            .FirstOrDefault(b => b.Name == kartyak[i].Item1 + "kartyakpanelen");
+                        if (button != null)
+                        {
+                            if (button.BackColor == Color.White)
+                            {
+                                Pakli.Add(playercards[i].Item1);
+                            }
+                        }
 
-            button("Kártyák kezelése", "kartyakmenugomb", 200, 200, 150, 300, 20, playerscreen, Kartyagombok, Color.DarkGray, Color.Black, Color.DarkRed);
-            button("Harc⚔️", "harcmenugomb", 200, 200, 750, 300, 20, playerscreen, KazmataGombok, Color.DarkGray, Color.Black, Color.DarkRed);
+                    }
+                    else
+                    {
+                        
+                    }
+                }
+            }
+
+                kazmatascreen.Hide();
+                kartyakscreen.Hide();
+                playerscreen.Show();
+                playerscreen.BringToFront();
+                playerscreen.BackColor = Color.DimGray;
+
+                button("Kártyák kezelése", "kartyakmenugomb", 200, 200, 150, 450, 20, playerscreen, Kartyagombok, Color.DarkGray, Color.Black, Color.DarkRed);
+                button("Harc⚔️", "harcmenugomb", 200, 200, 750, 450, 20, playerscreen, KazmataGombok, Color.DarkGray, Color.Black, Color.DarkRed);
+                button("Játék mentése", "SaveGame", 500, 75, 50, 50, 20, playerscreen, Save, Color.DarkGray, Color.Black, Color.DarkRed);
+                button("Kilépés a főmenüre", "quitnosave", 500, 75, 50, 150, 20, playerscreen, Save, Color.DarkGray, Color.Black, Color.DarkRed);
+                button("Játék mentése és kilépés a főmenüre", "savenquit", 500, 75, 50, 250, 20, playerscreen, Save, Color.DarkGray, Color.Black, Color.DarkRed);
+            
+            
+            
+            
         }
 
         private void Kartyagombok(object sender, EventArgs e)
         {
             playerscreen.Hide();
             if (!this.Controls.Contains(kartyakscreen)) this.Controls.Add(kartyakscreen);
-            label("Kártyák:", "info", 94, 30, 10, 10, 14, kartyakscreen, Color.DimGray, Color.DarkRed);
+            kartyakscreen.Show();
+            kartyakscreen.BringToFront();
+            kartyakscreen.BackColor = Color.DimGray;
+
+
+            button("Vissza", "backtomainscreenpakli", 150, 75, 35, 745, 20, kartyakscreen, MainScreen, Color.DarkGray, Color.Black, Color.DarkRed);
+
+            Color border = new Color();
+            string tipisekezettel = string.Empty;
+
+
+            int x = 10;
+            int y = 40;
+            label("Vezérek:", "info", 100, 30, 2, 7, 14, kartyakscreen, Color.Transparent, Color.Black);
+            if (vezerkartyak.Count > 0)
+            {
+
+                for (int i = 0; i < vezerkartyak.Count; i++)
+                {
+                    if (vezerkartyak[i].Item4 == "tuz") { border = Color.Orange; tipisekezettel = "Tűz"; }
+                    else if (vezerkartyak[i].Item4 == "viz") { border = Color.Blue; tipisekezettel = "VÍz"; }
+                    else if (vezerkartyak[i].Item4 == "levego") { border = Color.LightBlue; tipisekezettel = "Levegő"; }
+                    else if (vezerkartyak[i].Item4 == "fold") { border = Color.SaddleBrown; tipisekezettel = "Föld"; }
+                    button(vezerkartyak[i].Item1 + Environment.NewLine + "⚔️" + vezerkartyak[i].Item2 + "/" + vezerkartyak[i].Item3 + "❤️" + Environment.NewLine + tipisekezettel, vezerkartyak[i].Item1 + "kartyakpanelen", 100, 130, x, y, 10, kartyakscreen, button_Click, Color.DarkGray, Color.Black, border);
+                    x += 110;
+                    if (x > 1000) { x = 10; y += 140; }
+
+                    Button butn = kartyakscreen.Controls.OfType<Button>()
+                                        .FirstOrDefault(b => b.Name == vezerkartyak[i].Item1 + "kartyakpanelen");
+                    if (butn != null)
+                    {
+                        butn.Enabled = false;
+                    }
+                }
+            }
+            if (x <= 1000)
+            {
+                x = 10;
+                y += 137;
+            }
+
+            label("Kártyák:", "info", 94, 30, 3, y, 14, kartyakscreen, Color.Transparent, Color.Black);
+            y += 37;
+            for (int i = 0; i < kartyak.Count; i++)
+            {
+                if (kartyak[i].Item4 == "tuz") { border = Color.Orange; tipisekezettel = "Tűz"; }
+                else if (kartyak[i].Item4 == "viz") { border = Color.Blue; tipisekezettel = "VÍz"; }
+                else if (kartyak[i].Item4 == "levego") { border = Color.LightBlue; tipisekezettel = "Levegő"; }
+                else if (kartyak[i].Item4 == "fold") { border = Color.SaddleBrown; tipisekezettel = "Föld"; }
+                button(kartyak[i].Item1 + Environment.NewLine + "⚔️" + kartyak[i].Item2 + "/" + kartyak[i].Item3 + "❤️" + Environment.NewLine + tipisekezettel, kartyak[i].Item1 + "kartyakpanelen", 100, 130, x, y, 10, kartyakscreen, button_Click, Color.DarkGray, Color.Black, border);
+                x += 110;
+                if (x > 1000) { x = 10; y += 140; }
+
+                Button butnn = kartyakscreen.Controls.OfType<Button>()
+                                        .FirstOrDefault(b => b.Name == kartyak[i].Item1 + "kartyakpanelen");
+                if (butnn != null)
+                {
+                    butnn.Enabled = false;
+                }
+                for (int j=0; j < playercards.Count; j++)
+                {
+                    Button butn = kartyakscreen.Controls.OfType<Button>()
+                                        .FirstOrDefault(b => b.Name == playercards[j].Item1 + "kartyakpanelen");
+                    if (butn != null && playercards[j].Item1 == kartyak[i].Item1)
+                    {
+                        butn.Enabled = true;
+                    }
+                    
+                }
+                
+            }
+
+
+
+
+
+
+
+            
+            /*label("Paklid:", "info", 100, 30, 3, 450, 14, kartyakscreen, Color.DimGray, Color.DarkRed);
+            label("Kártyáid:", "info", 94, 30, 5, 300, 14, kartyakscreen, Color.DimGray, Color.DarkRed);
 
 
             string infoText = "Kártyák adatai: név, sebzés/életerő, típus" + Environment.NewLine + "Pakli módosításához nyomd meg az alábbi kártyákat." + Environment.NewLine + "Pakli kiürétéséhez nyomd meg az új pakli gombot." + Environment.NewLine + "A pakliban gyűjteményednek legfeljebb fele szerepelhet.";
-            label(infoText, "info", 400, 70, 10, 550, 10, kartyakscreen, Color.DimGray, Color.DarkRed);
-            button("Játék mentése", "SaveGame", 100, 85, 10, 630, 14, kartyakscreen, Save, Color.DimGray, Color.DarkRed, Color.Black);
-            button("Vissza", "backtomainscreen", 100, 85, 120, 630, 14, kartyakscreen, MainScreen, Color.DimGray, Color.DarkRed, Color.Black);
+            label(infoText, "info", 400, 70, 302, 270, 10, kartyakscreen, Color.DimGray, Color.DarkRed);
+           
+            button("Vissza", "backtomainscreen", 100, 85, 900, 260, 14, kartyakscreen, MainScreen, Color.DimGray, Color.DarkRed, Color.Black);
 
+            
 
             int x = 10;
             foreach (int i in kartyak.Keys)
@@ -1974,11 +2118,9 @@ namespace Duszaverseny_2025
             foreach (int i in playercards.Keys)
             {
                 string gyujtemenyText = playercards[i].Item1 + Environment.NewLine + playercards[i].Item2 + "/" + playercards[i].Item3 + Environment.NewLine + tipusok[playercards[i].Item4];
-                button(gyujtemenyText, "gyujtemeny" + i.ToString(), 100, 100, x, 300, 10, kartyakscreen, Button_Click, Color.DimGray, Color.DarkRed, Color.Black);
-                x = x + 100;
-            }
-            label("Paklid:", "info", 100, 30, 10, 400, 14, kartyakscreen, Color.DimGray, Color.DarkRed);
-            button("Új pakli", "újpakli", 120, 40, 120, 400, 12, kartyakscreen, ÚjPakli_Click, Color.DimGray, Color.DarkRed, Color.Black);
+                button(gyujtemenyText, "gyujtemeny" + i.ToString(), 85, 100, x, 340, 8, kartyakscreen, Button_Click, Color.DimGray, Color.DarkRed, Color.Black);
+                x = x + 99;
+            }*/
             kartyakscreen.Show();
             kartyakscreen.Dock = DockStyle.Fill;
             kartyakscreen.BringToFront();
@@ -1986,7 +2128,7 @@ namespace Duszaverseny_2025
         }
 
         List<int> paklint = new List<int>();
-        private void ÚjPakli_Click(object sender, EventArgs e)
+        /*private void ÚjPakli_Click(object sender, EventArgs e)
         {
             Pakli.Clear();
             paklint.Clear();
@@ -2014,7 +2156,7 @@ namespace Duszaverseny_2025
                     btn.Enabled = false;
                 }
             }
-        }
+        }*/
 
         private void Button_Click(object sender, EventArgs e)
         {
@@ -2276,60 +2418,74 @@ namespace Duszaverseny_2025
             }
         }
 
+        private void mentes()
+        {            
+            //default env + stats for player cards+difficulty number
+            StringBuilder sb = new StringBuilder();
+            foreach (int i in kartyak.Keys)
+            {
+                sb.Append("uj kartya;").Append(kartyak[i].Item1 + ";" + kartyak[i].Item2.ToString() + ";" + kartyak[i].Item3.ToString() + ";" + kartyak[i].Item4).Append(Environment.NewLine);
+            }
+            foreach (int i in vezerkartyak.Keys)
+            {
+                sb.Append("uj vezer;").Append(vezerkartyak[i].Item1 + ";" + vezerkartyak[i].Item5 + ";" + vezerkartyak[i].Item6).Append(Environment.NewLine);
+            }
+            foreach (int i in kazamataegyszeru.Keys)
+            {
+                sb.Append("uj kazamata;egyszeru;").Append(kazamataegyszeru[i].Item1 + ";" + kazamataegyszeru[i].Item2 + ";" + kazamataegyszeru[i].Item3).Append(Environment.NewLine);
+            }
+            foreach (int i in kazamatakicsi.Keys)
+            {
+                sb.Append("uj kazamata;kicsi;").Append(kazamatakicsi[i].Item1 + ";" + kazamatakicsi[i].Item2 + "," + kazamatakicsi[i].Item3 + "," + kazamatakicsi[i].Item4 + ";" + kazamatakicsi[i].Item5 + ";" + kazamatakicsi[i].Item6).Append(Environment.NewLine);
+            }
+            foreach (int i in kazamatanagy.Keys)
+            {
+                sb.Append("uj kazamata;nagy;").Append(kazamatanagy[i].Item1 + ";" + kazamatanagy[i].Item2 + "," + kazamatanagy[i].Item3 + "," + kazamatanagy[i].Item4 + "," + kazamatanagy[i].Item5 + "," + kazamatanagy[i].Item6 + ";" + kazamatanagy[i].Item7).Append(Environment.NewLine);
+            }
+            foreach (int i in kazamatamega.Keys)
+            {
+                sb.Append("uj kazamata;mega;").Append(kazamatamega[i].Item1 + ";" + kazamatamega[i].Item2 + "," + kazamatamega[i].Item3 + "," + kazamatamega[i].Item4 + "," + kazamatamega[i].Item5 + "," + kazamatamega[i].Item6 + ";" + kazamatamega[i].Item7 + "," + kazamatamega[i].Item8 + "," + kazamatamega[i].Item9 + ";" + kazamatamega[i].Item10).Append(Environment.NewLine);
+            }
+            sb.Append("uj jatekos").Append(Environment.NewLine);
+            foreach (int i in playercards.Keys)
+            {
+                sb.Append("felvetel gyujtemenybe;").Append(playercards[i].Item1 + ";" + playercards[i].Item2.ToString() + ";" + playercards[i].Item3.ToString() + ";" + playercards[i].Item4).Append(Environment.NewLine);
+            }
+            string SAVE = "difficulty;" + currentdifficulty.ToString() + Environment.NewLine + sb.ToString();
+
+            if (loadedPath.EndsWith(".gamedefaultsave"))
+            {
+                FolderBrowserDialog dialog = new FolderBrowserDialog();
+                dialog.Description = "Válszad ki a mentés helyét! \nFájl neve: " + savename + ".gamesave";
+                dialog.ShowNewFolderButton = true;
+
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    string filePath = Path.Combine(dialog.SelectedPath, savename + ".gamesave");
+                    File.WriteAllText(filePath, SAVE);
+                }
+            }
+            else
+            {
+                File.WriteAllText(loadedPath, SAVE);
+            }            
+        }
+
         private void Save(object sender, EventArgs e)
         {
             Button btn = sender as Button;
             if (btn != null && btn.Name == "SaveGame")
             {
-                //default env + stats for player cards+difficulty number
-                StringBuilder sb = new StringBuilder();
-                foreach (int i in kartyak.Keys)
-                {
-                    sb.Append("uj kartya;").Append(kartyak[i].Item1 + ";" + kartyak[i].Item2.ToString() + ";" + kartyak[i].Item3.ToString() + ";" + kartyak[i].Item4).Append(Environment.NewLine);
-                }
-                foreach (int i in vezerkartyak.Keys)
-                {
-                    sb.Append("uj vezer;").Append(vezerkartyak[i].Item1 + ";" + vezerkartyak[i].Item5 + ";" + vezerkartyak[i].Item6).Append(Environment.NewLine);
-                }
-                foreach (int i in kazamataegyszeru.Keys)
-                {
-                    sb.Append("uj kazamata;egyszeru;").Append(kazamataegyszeru[i].Item1 + ";" + kazamataegyszeru[i].Item2 + ";" + kazamataegyszeru[i].Item3).Append(Environment.NewLine);
-                }
-                foreach (int i in kazamatakicsi.Keys)
-                {
-                    sb.Append("uj kazamata;kicsi;").Append(kazamatakicsi[i].Item1 + ";" + kazamatakicsi[i].Item2 + "," + kazamatakicsi[i].Item3 + "," + kazamatakicsi[i].Item4 + ";" + kazamatakicsi[i].Item5 + ";" + kazamatakicsi[i].Item6).Append(Environment.NewLine);
-                }
-                foreach (int i in kazamatanagy.Keys)
-                {
-                    sb.Append("uj kazamata;nagy;").Append(kazamatanagy[i].Item1 + ";" + kazamatanagy[i].Item2 + "," + kazamatanagy[i].Item3 + "," + kazamatanagy[i].Item4 + "," + kazamatanagy[i].Item5 + "," + kazamatanagy[i].Item6 + ";" + kazamatanagy[i].Item7).Append(Environment.NewLine);
-                }
-                foreach (int i in kazamatamega.Keys)
-                {
-                    sb.Append("uj kazamata;mega;").Append(kazamatamega[i].Item1 + ";" + kazamatamega[i].Item2 + "," + kazamatamega[i].Item3 + "," + kazamatamega[i].Item4 + "," + kazamatamega[i].Item5 + "," + kazamatamega[i].Item6 + ";" + kazamatamega[i].Item7 + "," + kazamatamega[i].Item8 + "," + kazamatamega[i].Item9 + ";" + kazamatamega[i].Item10).Append(Environment.NewLine);
-                }
-                sb.Append("uj jatekos").Append(Environment.NewLine);
-                foreach (int i in playercards.Keys)
-                {
-                    sb.Append("felvetel gyujtemenybe;").Append(playercards[i].Item1 + ";" + playercards[i].Item2.ToString() + ";" + playercards[i].Item3.ToString() + ";" + playercards[i].Item4).Append(Environment.NewLine);
-                }
-                string SAVE = "difficulty;" + currentdifficulty.ToString() + Environment.NewLine + sb.ToString();
-
-                if (loadedPath.EndsWith(".gamedefaultsave"))
-                {
-                    FolderBrowserDialog dialog = new FolderBrowserDialog();
-                    dialog.Description = "Válszad ki a mentés helyét! \nFájl neve: " + savename+".gamesave";
-                    dialog.ShowNewFolderButton = true;
-
-                    if (dialog.ShowDialog() == DialogResult.OK)
-                    {
-                        string filePath = Path.Combine(dialog.SelectedPath, savename + ".gamesave");
-                        File.WriteAllText(filePath, SAVE);
-                    }
-                }
-                else
-                {
-                    File.WriteAllText(loadedPath, SAVE);
-                }
+                mentes();
+            }
+            else if (btn != null && btn.Name == "savenquit")
+            {
+                mentes();
+                menuu();
+            }
+            else if (btn != null && btn.Name == "quitnosave")
+            {
+                menuu();
             }
         }
 
