@@ -182,6 +182,7 @@ namespace Duszaverseny_2025
             label("Damareen", "title", 400, 200, 350, 100, 50, menu, Color.Transparent, Color.White);
             button("Játékos", "jatekosgomb", 200, 200, 150, 300, 20, menu, MainScreenGombok, Color.DarkGray, Color.Black, Color.DarkRed);
             button("Játékmester", "jatekmestergomb", 200, 200, 750, 300, 20, menu, MainScreenGombok, Color.DarkGray, Color.Black, Color.DarkRed);
+            label("Újdonságok:\nMega kazamaták: 5 ellenség és 3 vezér, ebből lehet új kártyát kapni\n\nErősítések: nagy kazamatából kapható,\negy körre megduplázza egy választott kártya egyik adatát", "info", 400, 200, 350, 500, 14, menu, Color.Transparent, Color.White);
         }
 
         private void MainScreenGombok(object sender, EventArgs e)
