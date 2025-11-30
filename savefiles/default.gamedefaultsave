@@ -14,8 +14,8 @@ uj vezer;Lord Torak;Torak;sebzes
 uj vezer;Priestess Selia;Selia;eletero
 
 uj kazamata;egyszeru;Barlangi Portya;Nerun;sebzes
-uj kazamata;kicsi;Ősi Szentély;Arin;Emera;Selia;Lord Torak;eletero
-uj kazamata;nagy;A Mélység Királynője;Liora;Arin;Selia;Nerun;Torak;Priestess Selia
+uj kazamata;kicsi;Ősi Szentély;Arin,Emera,Selia;Lord Torak;eletero
+uj kazamata;nagy;A Mélység Királynője;Liora,Arin,Selia,Nerun,Torak;Priestess Selia
 
 uj jatekos
 
