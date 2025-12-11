@@ -16,10 +16,9 @@ using System.Xml.Linq;
 
 namespace Duszaverseny_2025
 {
-    //dmg: 2-100, hp: 1-100, kartya neve: max 14 karakter --> vezerkartya neve max 16 karakter
-    /*TODO
-    Alaphelyzetet tovabb vinni jatekmesterkent --> jatekmester is valaszthat alaphelyzetekbol (beolvasas kell hozza)
-    Kartya kitorolhetove tehetese --> a belole szarmaztatott vezer, a kazamatak ahol ellenfelkent szerepelt szinten torlodnek*/
+    //jatekmester kazamata cooked af
+    //kazamata jutalmak es azok kiirasa kartyak kezelese screenen
+    //kazamataban a pakliban levo kartyakat nem pakliba valasztas sorrendje alapjan pakolja
 
     public partial class Form1 : Form
     {
@@ -1540,7 +1539,7 @@ namespace Duszaverseny_2025
                             if (button != null)
                             {
                                 Button butn = egyszeruk.Controls.OfType<Button>()
-                                        .FirstOrDefault(b => b.Name == vezerkartyak[i].Item5 + "egyszerukazamataba");
+                                        .FirstOrDefault(b => b.Name == kartyak[i].Item1 + "egyszerukazamataba");
                                 if (butn != null)
                                 {
                                     if (butn.BackColor == Color.White) 
@@ -1574,7 +1573,7 @@ namespace Duszaverseny_2025
                             if (button != null)
                             {
                                 Button butn = konnyuk.Controls.OfType<Button>()
-                                        .FirstOrDefault(b => b.Name == vezerkartyak[i].Item5 + "konnyukazamataba");
+                                        .FirstOrDefault(b => b.Name == kartyak[i].Item1 + "konnyukazamataba");
                                 if (butn != null)
                                 {
                                     if (butn.BackColor == Color.White)
@@ -1608,7 +1607,7 @@ namespace Duszaverseny_2025
                             if (button != null)
                             {
                                 Button butn = nehezk.Controls.OfType<Button>()
-                                        .FirstOrDefault(b => b.Name == vezerkartyak[i].Item5 + "nehezkazamataba");
+                                        .FirstOrDefault(b => b.Name == kartyak[i].Item1 + "nehezkazamataba");
                                 if (butn != null)
                                 {
                                     if (butn.BackColor == Color.White)
@@ -1642,7 +1641,7 @@ namespace Duszaverseny_2025
                             if (button != null)
                             {
                                 Button butn = megak.Controls.OfType<Button>()
-                                        .FirstOrDefault(b => b.Name == vezerkartyak[i].Item5 + "megakazamataba");
+                                        .FirstOrDefault(b => b.Name == kartyak[i].Item1 + "megakazamataba");
                                 if (butn != null)
                                 {
                                     if (butn.BackColor == Color.White)
@@ -3068,6 +3067,11 @@ namespace Duszaverseny_2025
                     nyeremeny.Text = "Játékos nyert "+Environment.NewLine+"Választható erősítés";
                 }
             }
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
         }
 
 
