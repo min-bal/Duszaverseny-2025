@@ -1321,34 +1321,41 @@ namespace Duszaverseny_2025
 
                         if (name == kartyak[i].Item1 + "kartyakpanelen") //gyujtemenybe valasztott / kivett kartya
                         {
-                            Button button = kartyakscreen.Controls.OfType<Button>()
-                          .FirstOrDefault(b => b.Name == kartyak[i].Item1 + "kartyakpanelen");
                             int n = 0;
-                            if (button != null)
+                                if (btn.BackColor == Color.White)
+                                {
+                                    btn.BackColor = Color.DarkGray;
+                                }
+                                else
                             {
                                 for (int j = 0; j < playercards.Count; j++)
                                 {
                                     Button buttonn = kartyakscreen.Controls.OfType<Button>()
                                     .FirstOrDefault(b => b.Name == kartyak[j].Item1 + "kartyakpanelen");
-                                    if (buttonn.BackColor == Color.White &&buttonn != null)
+                                    if (buttonn.BackColor == Color.White && buttonn != null)
                                     {
                                         n++;
                                     }
-                                    
+
 
                                 }
-                                if (n <= playercards.Count/2)
-                                {
-                                    
-                                        if (button.BackColor == Color.White)
-                                        {
-                                            button.BackColor = Color.DarkGray;
-                                        }
-                                        else { button.BackColor = Color.White; }
 
-                                    
+                                if (n < playercards.Count / 2)
+                                {
+
+                                    if (btn.BackColor == Color.DarkGray)
+                                    {
+                                        btn.BackColor = Color.White;
+                                    }
+
+
                                 }
                             }
+
+
+                               
+                                
+                            
                         }
 
                         if (vezerkartyak.Count > i)
