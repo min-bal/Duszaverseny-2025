@@ -1578,6 +1578,14 @@ namespace Duszaverseny_2025
                                                 else { btn.BackColor = Color.White; }
                                             }
                                         }
+                                        else
+                                        {
+                                            if (btn.BackColor == Color.White)
+                                            {
+                                                btn.BackColor = Color.DarkGray;
+                                            }
+                                            else { btn.BackColor = Color.White; }
+                                        }
 
 
 
@@ -1631,6 +1639,14 @@ namespace Duszaverseny_2025
                                                 else { btn.BackColor = Color.White; }
                                             }
                                         }
+                                        else
+                                        {
+                                            if (btn.BackColor == Color.White)
+                                            {
+                                                btn.BackColor = Color.DarkGray;
+                                            }
+                                            else { btn.BackColor = Color.White; }
+                                        }
 
 
 
@@ -1678,6 +1694,14 @@ namespace Duszaverseny_2025
                                                 else { btn.BackColor = Color.White; }
                                             }
                                         }
+                                        else
+                                        {
+                                            if (btn.BackColor == Color.White)
+                                            {
+                                                btn.BackColor = Color.DarkGray;
+                                            }
+                                            else { btn.BackColor = Color.White; }
+                                        }
 
 
 
@@ -1724,6 +1748,14 @@ namespace Duszaverseny_2025
                                                 }
                                                 else { btn.BackColor = Color.White; }
                                             }
+                                        }
+                                        else
+                                        {
+                                            if (btn.BackColor == Color.White)
+                                            {
+                                                btn.BackColor = Color.DarkGray;
+                                            }
+                                            else { btn.BackColor = Color.White; }
                                         }
 
 
@@ -2721,6 +2753,18 @@ namespace Duszaverseny_2025
 
         private void Harc(int key, string típus, Dictionary<string,string> buffs)
         {
+            for (int i = 0; i < playercards.Count; i++)
+            {
+                for (int j = 0; j< kartyak.Count; j++)
+                {
+                    if (kartyak[j].Item1 == playercards[i].Item1)
+                    {
+                        playercards[i] = kartyak[j];
+                    }
+                }
+            }
+
+
             foreach (string s in buffs.Keys) {
                 Console.WriteLine(s+ " " + buffs[s]);
             }
