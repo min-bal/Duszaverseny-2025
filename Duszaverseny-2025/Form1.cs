@@ -3029,18 +3029,18 @@ namespace Duszaverseny_2025
 
 
                 }
-                else if (jutalom.ToLower() == "sebzés" || jutalom.ToLower() == "életerő")
+                else if (jutalom.ToLower() == "sebzés" || jutalom.ToLower() == "életerő" || jutalom.ToLower() == "sebzes" || jutalom.ToLower() == "eletero")
                 {
                     foreach (int i in playercards.Keys)
                     {
                         if (playercards[i].Item1 == jharcos)
                         {
-                            if (jutalom.ToLower() == "sebzés")
+                            if (jutalom.ToLower() == "sebzés" || jutalom.ToLower() == "sebzes")
                             {
                                 playercards[i] = (playercards[i].Item1, playercards[i].Item2 + 1, playercards[i].Item3, playercards[i].Item4);
                                 nyeremeny.Text = "Játékos nyert" + Environment.NewLine + "+1 sebzés: " + playercards[i].Item1;
                             }
-                            else if (jutalom.ToLower() == "életerő")
+                            else if (jutalom.ToLower() == "életerő" || jutalom.ToLower() == "eletero")
                             {
                                 playercards[i] = (playercards[i].Item1, playercards[i].Item2, playercards[i].Item3 + 2, playercards[i].Item4);
                                 nyeremeny.Text = "Játékos nyert" + Environment.NewLine + "+2 élet: " + playercards[i].Item1;
