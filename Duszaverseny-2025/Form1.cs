@@ -587,7 +587,7 @@ namespace Duszaverseny_2025
 
                 button("Vissza", "visszakazamata", 150, 100, 0, 0, 20, egyszeruk, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
                 button("Kész", "kazamatadone", 150, 100, 150, 0, 20, egyszeruk, kazamaták, Color.DarkGray, Color.Black, Color.DarkRed);
-                textbox("egyszeruknameinput", 300, 100, 300, 0, egyszeruk, Color.White, Color.Black, 20, "asd");
+                textbox("egyszeruknameinput", 300, 100, 300, 0, egyszeruk, Color.White, Color.Black, 20, "Kazamata neve");
                 button("Sebzés", "jutalomse", 150, 100, 600, 0, 20, egyszeruk, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
                 label("nevezd el a kazamatát, válaszd ki a jutalmat, válaszd ki a kártyákat","info",300,50,2,700,12,egyszeruk,Color.DarkGray,Color.Black);
 
@@ -637,7 +637,7 @@ namespace Duszaverseny_2025
 
                 button("Vissza", "visszakazamata", 150, 100, 0, 0, 20, konnyuk, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
                 button("Kész", "kazamatadone", 150, 100, 150, 0, 20, konnyuk, kazamaták, Color.DarkGray, Color.Black, Color.DarkRed);
-                textbox("konnyuknameinput", 300, 100, 300, 0, konnyuk, Color.White, Color.Black, 20, "asd");
+                textbox("konnyuknameinput", 300, 100, 300, 0, konnyuk, Color.White, Color.Black, 20, "Kazamata neve");
                 button("Sebzés", "jutalomse", 150, 100, 600, 0, 20, konnyuk, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
                 label("nevezd el a kazamatát, válaszd ki a jutalmat, válaszd ki a kártyákat","info",300,50,2,700,12,konnyuk,Color.DarkGray,Color.Black);
 
@@ -688,7 +688,7 @@ namespace Duszaverseny_2025
 
                 button("Vissza", "visszakazamata", 150, 100, 0, 0, 20, nehezk, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
                 button("Kész", "kazamatadone", 150, 100, 150, 0, 20, nehezk, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
-                textbox("nehezknameinput", 300, 100, 300, 0, nehezk, Color.White, Color.Black, 20, "asd");
+                textbox("nehezknameinput", 300, 100, 300, 0, nehezk, Color.White, Color.Black, 20, "Kazamata neve");
 
                 int x = 600;
                 int y = 0;
@@ -737,7 +737,7 @@ namespace Duszaverseny_2025
 
                 button("Vissza", "visszakazamata", 150, 100, 0, 0, 20, megak, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
                 button("Kész", "kazamatadone", 150, 100, 150, 0, 20, megak, kazamaták, Color.DarkGray, Color.Black, Color.DarkRed);
-                textbox("megaknameinput", 300, 100, 300, 0, megak, Color.White, Color.Black, 20, "asd");
+                textbox("megaknameinput", 300, 100, 300, 0, megak, Color.White, Color.Black, 20, "Kazamata neve");
 
                 int x = 600;
                 int y = 0;
