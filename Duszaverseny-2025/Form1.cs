@@ -405,9 +405,13 @@ namespace Duszaverseny_2025
 
                     button("Vissza", "visszamester", 150, 75, 35, 745, 20, ujkazamata, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
                     button("Egyszerű", "egyszeruk", 400, 100, 50, 200, 20, ujkazamata, kazamaták, Color.DarkGray, Color.Black, Color.DarkRed);
+                    label("Egy ellenfél", "egyszeruinfo", 400, 50, 50, 300, 20, ujkazamata, Color.Transparent, Color.Black);
                     button("Könnyű", "konnyuk", 400, 100, 650, 200, 20, ujkazamata, kazamaták, Color.DarkGray, Color.Black, Color.DarkRed);
+                    label("Három ellenfél, egy vezér", "konnyuinfo", 400, 50, 650, 300, 20, ujkazamata, Color.Transparent, Color.Black);
                     button("Nehéz", "nehezk", 400, 100, 50, 500, 20, ujkazamata, kazamaták, Color.DarkGray, Color.Black, Color.DarkRed);
+                    label("Öt ellenfél, egy vezér", "nehezinfo", 400, 50, 50, 600, 20, ujkazamata, Color.Transparent, Color.Black);
                     button("Mega", "megak", 400, 100, 650, 500, 20, ujkazamata, kazamaták, Color.DarkGray, Color.Black, Color.DarkRed);
+                    label("Öt ellenfél, három vezér", "megainfo", 400, 50, 650, 600, 20, ujkazamata, Color.Transparent, Color.Black);
                 }
             }
             else if (name == "gyujtemeny") //gyujtemeny kivalasztasa
@@ -585,37 +589,54 @@ namespace Duszaverseny_2025
                 egyszeruk.BackColor = Color.DimGray;
                 egyszeruk.BringToFront();
 
-                button("Vissza", "visszakazamata", 150, 100, 0, 0, 20, egyszeruk, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
-                button("Kész", "kazamatadone", 150, 100, 150, 0, 20, egyszeruk, kazamaták, Color.DarkGray, Color.Black, Color.DarkRed);
-                textbox("egyszeruknameinput", 300, 100, 300, 0, egyszeruk, Color.White, Color.Black, 20, "Kazamata neve");
-                button("Sebzés", "jutalomse", 150, 100, 600, 0, 20, egyszeruk, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
-                label("nevezd el a kazamatát, válaszd ki a jutalmat, válaszd ki a kártyákat","info",300,50,2,700,12,egyszeruk,Color.DarkGray,Color.Black);
+                button("Vissza", "visszakazamata", 150, 75, 35, 745, 20, egyszeruk, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
+                button("Kész", "kazamatadone", 200, 75, 825, 745, 20, egyszeruk, kazamaták, Color.DarkGray, Color.Black, Color.DarkRed);
+                textbox("egyszeruknameinput", 350, 35, 300, 60, egyszeruk, Color.White, Color.Black, 20, "Kazamata neve");
+                button("Jutalom:\nSebzés", "jutalomse", 135, 135, 700, 10, 20, egyszeruk, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
 
-                int x = 750;
-                int y = 0;
-                for (int i = 0; i < kartyak.Count; i++)
+                Color border = new Color();
+                string tipisekezettel = string.Empty;
+
+
+                int x = 10;
+                int y = 150;
+                
+                if (vezerkartyak.Count > 0)
                 {
-                    button(kartyak[i].Item1, kartyak[i].Item1 + "egyszerukazamataba", 75, 100, x, y, 10, egyszeruk, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
-                    x += 75;
-                    if (x > 975)
-                    {
-                        y += 100;
-                        x = 0;
-                    }
-                }
-                if (vezerkartyak.Count>0)
-                {
+
                     for (int i = 0; i < vezerkartyak.Count; i++)
                     {
-                        button(vezerkartyak[i].Item1, vezerkartyak[i].Item1 + "egyszerukazamataba", 75, 100, x, y, 10, egyszeruk, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
-                        x += 75;
-                        if (x > 975)
-                        {
-                            y += 100;
-                            x = 0;
-                        }
+                        if (vezerkartyak[i].Item4 == "tuz") { border = Color.Orange; tipisekezettel = "Tűz"; }
+                        else if (vezerkartyak[i].Item4 == "viz") { border = Color.Blue; tipisekezettel = "VÍz"; }
+                        else if (vezerkartyak[i].Item4 == "levego") { border = Color.LightBlue; tipisekezettel = "Levegő"; }
+                        else if (vezerkartyak[i].Item4 == "fold") { border = Color.SaddleBrown; tipisekezettel = "Föld"; }
+                        button(vezerkartyak[i].Item1 + Environment.NewLine + "⚔️" + vezerkartyak[i].Item2 + "/" + vezerkartyak[i].Item3 + "❤️" + Environment.NewLine + tipisekezettel, vezerkartyak[i].Item1 + "egyszerukazamataba", 100, 130, x, y, 10, egyszeruk, button_Click, Color.DarkGray, Color.Black, border);
+                        x += 110;
+                        if (x > 1000) { x = 10; y += 140; }
                     }
                 }
+                if (x != 10)
+                {
+                    x = 10;
+                    y += 140;
+                }
+
+                for (int i = 0; i < kartyak.Count; i++)
+                {
+                    if (kartyak[i].Item4 == "tuz") { border = Color.Orange; tipisekezettel = "Tűz"; }
+                    else if (kartyak[i].Item4 == "viz") { border = Color.Blue; tipisekezettel = "VÍz"; }
+                    else if (kartyak[i].Item4 == "levego") { border = Color.LightBlue; tipisekezettel = "Levegő"; }
+                    else if (kartyak[i].Item4 == "fold") { border = Color.SaddleBrown; tipisekezettel = "Föld"; }
+                    button(kartyak[i].Item1 + Environment.NewLine + "⚔️" + kartyak[i].Item2 + "/" + kartyak[i].Item3 + "❤️" + Environment.NewLine + tipisekezettel, kartyak[i].Item1 + "egyszerukazamataba", 100, 130, x, y, 10, egyszeruk, button_Click, Color.DarkGray, Color.Black, border);
+                    x += 110;
+                    if (x > 1000) { x = 10; y += 140; }
+
+
+
+
+
+                }
+                
                 
             }
             else if (name == "konnyuk" && kartyak.Count > 3 && vezerkartyak.Count > 0)
@@ -635,38 +656,54 @@ namespace Duszaverseny_2025
                 konnyuk.BringToFront();
                 konnyuk.BackColor = Color.DimGray;
 
-                button("Vissza", "visszakazamata", 150, 100, 0, 0, 20, konnyuk, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
-                button("Kész", "kazamatadone", 150, 100, 150, 0, 20, konnyuk, kazamaták, Color.DarkGray, Color.Black, Color.DarkRed);
-                textbox("konnyuknameinput", 300, 100, 300, 0, konnyuk, Color.White, Color.Black, 20, "Kazamata neve");
-                button("Sebzés", "jutalomse", 150, 100, 600, 0, 20, konnyuk, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
-                label("nevezd el a kazamatát, válaszd ki a jutalmat, válaszd ki a kártyákat","info",300,50,2,700,12,konnyuk,Color.DarkGray,Color.Black);
+                button("Vissza", "visszakazamata", 150, 75, 35, 745, 20, konnyuk, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
+                button("Kész", "kazamatadone", 200, 75, 825, 745, 20, konnyuk, kazamaták, Color.DarkGray, Color.Black, Color.DarkRed);
+                textbox("konnyuknameinput", 350, 35, 300, 60, konnyuk, Color.White, Color.Black, 20, "Kazamata neve");
+                button("Jutalom:\nSebzés", "jutalomse", 135, 135, 700, 10, 20, konnyuk, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
 
-                int x = 750;
-                int y = 0;
-                for (int i = 0; i < kartyak.Count; i++)
+                Color border = new Color();
+                string tipisekezettel = string.Empty;
+
+
+                int x = 10;
+                int y = 150;
+
+                if (vezerkartyak.Count > 0)
                 {
-                    button(kartyak[i].Item1, kartyak[i].Item1 + "konnyukazamataba", 75, 100, x, y, 10, konnyuk, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
-                    x += 75;
-                    if (x > 975)
-                    {
-                        y += 100;
-                        x = 0;
-                    }
-                }
-                if (vezerkartyak.Count>0)
-                {
+
                     for (int i = 0; i < vezerkartyak.Count; i++)
                     {
-                        button(vezerkartyak[i].Item1, vezerkartyak[i].Item1 + "konnyukazamataba", 75, 100, x, y, 10, konnyuk, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
-                        x += 75;
-                        if (x > 975)
-                        {
-                            y += 100;
-                            x = 0;
-                        }
+                        if (vezerkartyak[i].Item4 == "tuz") { border = Color.Orange; tipisekezettel = "Tűz"; }
+                        else if (vezerkartyak[i].Item4 == "viz") { border = Color.Blue; tipisekezettel = "VÍz"; }
+                        else if (vezerkartyak[i].Item4 == "levego") { border = Color.LightBlue; tipisekezettel = "Levegő"; }
+                        else if (vezerkartyak[i].Item4 == "fold") { border = Color.SaddleBrown; tipisekezettel = "Föld"; }
+                        button(vezerkartyak[i].Item1 + Environment.NewLine + "⚔️" + vezerkartyak[i].Item2 + "/" + vezerkartyak[i].Item3 + "❤️" + Environment.NewLine + tipisekezettel, vezerkartyak[i].Item1 + "konnyukazamataba", 100, 130, x, y, 10, konnyuk, button_Click, Color.DarkGray, Color.Black, border);
+                        x += 110;
+                        if (x > 1000) { x = 10; y += 140; }
                     }
                 }
-                
+                if (x != 10)
+                {
+                    x = 10;
+                    y += 140;
+                }
+
+                for (int i = 0; i < kartyak.Count; i++)
+                {
+                    if (kartyak[i].Item4 == "tuz") { border = Color.Orange; tipisekezettel = "Tűz"; }
+                    else if (kartyak[i].Item4 == "viz") { border = Color.Blue; tipisekezettel = "VÍz"; }
+                    else if (kartyak[i].Item4 == "levego") { border = Color.LightBlue; tipisekezettel = "Levegő"; }
+                    else if (kartyak[i].Item4 == "fold") { border = Color.SaddleBrown; tipisekezettel = "Föld"; }
+                    button(kartyak[i].Item1 + Environment.NewLine + "⚔️" + kartyak[i].Item2 + "/" + kartyak[i].Item3 + "❤️" + Environment.NewLine + tipisekezettel, kartyak[i].Item1 + "konnyukazamataba", 100, 130, x, y, 10, konnyuk, button_Click, Color.DarkGray, Color.Black, border);
+                    x += 110;
+                    if (x > 1000) { x = 10; y += 140; }
+
+
+
+
+
+                }
+
             }
             else if (name == "nehezk" && kartyak.Count > 5 && vezerkartyak.Count > 0)
             {
@@ -684,38 +721,55 @@ namespace Duszaverseny_2025
                 this.Controls.Add(nehezk);
                 nehezk.BringToFront();
                 nehezk.BackColor = Color.DimGray;
-                label("nevezd el a kazamatát, válaszd ki a jutalmat, válaszd ki a kártyákat","info",300,50,2,700,12,nehezk,Color.DarkGray,Color.Black);
 
-                button("Vissza", "visszakazamata", 150, 100, 0, 0, 20, nehezk, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
-                button("Kész", "kazamatadone", 150, 100, 150, 0, 20, nehezk, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
-                textbox("nehezknameinput", 300, 100, 300, 0, nehezk, Color.White, Color.Black, 20, "Kazamata neve");
 
-                int x = 600;
-                int y = 0;
-                for (int i = 0; i < kartyak.Count; i++)
+                button("Vissza", "visszakazamata", 150, 75, 35, 745, 20, nehezk, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
+                button("Kész", "kazamatadone", 200, 75, 825, 745, 20, nehezk, kazamaták, Color.DarkGray, Color.Black, Color.DarkRed);
+                textbox("nehezknameinput", 350, 35, 300, 60, nehezk, Color.White, Color.Black, 20, "Kazamata neve");
+                button("Jutalom:\nSebzés", "jutalomse", 135, 135, 700, 10, 20, nehezk, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
+
+                Color border = new Color();
+                string tipisekezettel = string.Empty;
+
+
+                int x = 10;
+                int y = 150;
+
+                if (vezerkartyak.Count > 0)
                 {
-                    button(kartyak[i].Item1, kartyak[i].Item1 + "nehezkazamataba", 75, 100, x, y, 10, nehezk, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
-                    x += 75;
-                    if (x > 975)
-                    {
-                        y += 100;
-                        x = 0;
-                    }
-                }
-                if (vezerkartyak.Count>0)
-                {
+
                     for (int i = 0; i < vezerkartyak.Count; i++)
                     {
-                        button(vezerkartyak[i].Item1, vezerkartyak[i].Item1 + "nehezkazamataba", 75, 100, x, y, 10, nehezk, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
-                        x += 75;
-                        if (x > 975)
-                        {
-                            y += 100;
-                            x = 0;
-                        }
+                        if (vezerkartyak[i].Item4 == "tuz") { border = Color.Orange; tipisekezettel = "Tűz"; }
+                        else if (vezerkartyak[i].Item4 == "viz") { border = Color.Blue; tipisekezettel = "VÍz"; }
+                        else if (vezerkartyak[i].Item4 == "levego") { border = Color.LightBlue; tipisekezettel = "Levegő"; }
+                        else if (vezerkartyak[i].Item4 == "fold") { border = Color.SaddleBrown; tipisekezettel = "Föld"; }
+                        button(vezerkartyak[i].Item1 + Environment.NewLine + "⚔️" + vezerkartyak[i].Item2 + "/" + vezerkartyak[i].Item3 + "❤️" + Environment.NewLine + tipisekezettel, vezerkartyak[i].Item1 + "nehezkazamataba", 100, 130, x, y, 10, nehezk, button_Click, Color.DarkGray, Color.Black, border);
+                        x += 110;
+                        if (x > 1000) { x = 10; y += 140; }
                     }
                 }
-                
+                if (x != 10)
+                {
+                    x = 10;
+                    y += 140;
+                }
+
+                for (int i = 0; i < kartyak.Count; i++)
+                {
+                    if (kartyak[i].Item4 == "tuz") { border = Color.Orange; tipisekezettel = "Tűz"; }
+                    else if (kartyak[i].Item4 == "viz") { border = Color.Blue; tipisekezettel = "VÍz"; }
+                    else if (kartyak[i].Item4 == "levego") { border = Color.LightBlue; tipisekezettel = "Levegő"; }
+                    else if (kartyak[i].Item4 == "fold") { border = Color.SaddleBrown; tipisekezettel = "Föld"; }
+                    button(kartyak[i].Item1 + Environment.NewLine + "⚔️" + kartyak[i].Item2 + "/" + kartyak[i].Item3 + "❤️" + Environment.NewLine + tipisekezettel, kartyak[i].Item1 + "nehezkazamataba", 100, 130, x, y, 10, nehezk, button_Click, Color.DarkGray, Color.Black, border);
+                    x += 110;
+                    if (x > 1000) { x = 10; y += 140; }
+
+
+
+
+
+                }
             }
             else if (name == "megak" && kartyak.Count > 7 && vezerkartyak.Count > 2)
             {
@@ -733,38 +787,55 @@ namespace Duszaverseny_2025
                 this.Controls.Add(megak);
                 megak.BringToFront();
                 megak.BackColor = Color.DimGray;
-                label("nevezd el a kazamatát, válaszd ki a jutalmat, válaszd ki a kártyákat","info",300,50,2,700,12,megak,Color.DarkGray,Color.Black);
 
-                button("Vissza", "visszakazamata", 150, 100, 0, 0, 20, megak, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
-                button("Kész", "kazamatadone", 150, 100, 150, 0, 20, megak, kazamaták, Color.DarkGray, Color.Black, Color.DarkRed);
-                textbox("megaknameinput", 300, 100, 300, 0, megak, Color.White, Color.Black, 20, "Kazamata neve");
+                button("Vissza", "visszakazamata", 150, 75, 35, 745, 20, megak, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
+                button("Kész", "kazamatadone", 200, 75, 825, 745, 20, megak, kazamaták, Color.DarkGray, Color.Black, Color.DarkRed);
+                textbox("megaknameinput", 350, 35, 300, 60, megak, Color.White, Color.Black, 20, "Kazamata neve");
+                button("Jutalom:\nSebzés", "jutalomse", 135, 135, 700, 10, 20, megak, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
 
-                int x = 600;
-                int y = 0;
-                for (int i = 0; i < kartyak.Count; i++)
-                {
-                    button(kartyak[i].Item1, kartyak[i].Item1 + "megakazamataba", 75, 100, x, y, 10, megak, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
-                    x += 75;
-                    if (x > 975)
-                    {
-                        y += 100;
-                        x = 0;
-                    }
-                }
+                Color border = new Color();
+                string tipisekezettel = string.Empty;
+
+
+                int x = 10;
+                int y = 150;
+
                 if (vezerkartyak.Count > 0)
                 {
+
                     for (int i = 0; i < vezerkartyak.Count; i++)
                     {
-                        button(vezerkartyak[i].Item1, vezerkartyak[i].Item1 + "megakazamataba", 75, 100, x, y, 10, megak, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
-                        x += 75;
-                        if (x > 975)
-                        {
-                            y += 100;
-                            x = 0;
-                        }
+                        if (vezerkartyak[i].Item4 == "tuz") { border = Color.Orange; tipisekezettel = "Tűz"; }
+                        else if (vezerkartyak[i].Item4 == "viz") { border = Color.Blue; tipisekezettel = "VÍz"; }
+                        else if (vezerkartyak[i].Item4 == "levego") { border = Color.LightBlue; tipisekezettel = "Levegő"; }
+                        else if (vezerkartyak[i].Item4 == "fold") { border = Color.SaddleBrown; tipisekezettel = "Föld"; }
+                        button(vezerkartyak[i].Item1 + Environment.NewLine + "⚔️" + vezerkartyak[i].Item2 + "/" + vezerkartyak[i].Item3 + "❤️" + Environment.NewLine + tipisekezettel, vezerkartyak[i].Item1 + "megakazamataba", 100, 130, x, y, 10, megak, button_Click, Color.DarkGray, Color.Black, border);
+                        x += 110;
+                        if (x > 1000) { x = 10; y += 140; }
                     }
                 }
-                
+                if (x != 10)
+                {
+                    x = 10;
+                    y += 140;
+                }
+
+                for (int i = 0; i < kartyak.Count; i++)
+                {
+                    if (kartyak[i].Item4 == "tuz") { border = Color.Orange; tipisekezettel = "Tűz"; }
+                    else if (kartyak[i].Item4 == "viz") { border = Color.Blue; tipisekezettel = "VÍz"; }
+                    else if (kartyak[i].Item4 == "levego") { border = Color.LightBlue; tipisekezettel = "Levegő"; }
+                    else if (kartyak[i].Item4 == "fold") { border = Color.SaddleBrown; tipisekezettel = "Föld"; }
+                    button(kartyak[i].Item1 + Environment.NewLine + "⚔️" + kartyak[i].Item2 + "/" + kartyak[i].Item3 + "❤️" + Environment.NewLine + tipisekezettel, kartyak[i].Item1 + "megakazamataba", 100, 130, x, y, 10, megak, button_Click, Color.DarkGray, Color.Black, border);
+                    x += 110;
+                    if (x > 1000) { x = 10; y += 140; }
+
+
+
+
+
+                }
+
             }
             else if (name == "kazamatadone")
             {
@@ -1249,26 +1320,26 @@ namespace Duszaverseny_2025
                             .FirstOrDefault(b => b.Name == "jutalomse");
                     if (button != null)
                     {
-                        if (button.Text == "Sebzés")
+                        if (button.Text == "Jutalom:\nSebzés")
                         {
-                            button.Text = "Életerő";
+                            button.Text = "Jutalom:\nÉleterő";
                         }
                         else
                         {
-                            button.Text = "Sebzés";
+                            button.Text = "Jutalom:\nSebzés";
                         }
                     }
                     Button buttonn = konnyuk.Controls.OfType<Button>()
                             .FirstOrDefault(b => b.Name == "jutalomse");
                     if (buttonn != null)
                     {
-                        if (buttonn.Text == "Sebzés")
+                        if (buttonn.Text == "Jutalom:\nSebzés")
                         {
-                            buttonn.Text = "Életerő";
+                            buttonn.Text = "Jutalom:\nÉleterő";
                         }
                         else
                         {
-                            buttonn.Text = "Sebzés";
+                            buttonn.Text = "Jutalom:\nSebzés";
                         }
                     }
                 }
@@ -1496,14 +1567,18 @@ namespace Duszaverseny_2025
                                     .FirstOrDefault(b => b.Name == vezerkartyak[j].Item1 + "egyszerukazamataba");
                                     if (btnn != null)
                                     {
-                                        if (btnn.BackColor != Color.White)
+                                        if (kartyak[i].Item1 == vezerkartyak[j].Item5)
                                         {
-                                            if (button.BackColor == Color.White)
+                                            if (btnn.BackColor != Color.White)
                                             {
-                                                button.BackColor = Color.DarkGray;
+                                                if (button.BackColor == Color.White)
+                                                {
+                                                    button.BackColor = Color.DarkGray;
+                                                }
+                                                else { button.BackColor = Color.White; }
                                             }
-                                            else { button.BackColor = Color.White; }
                                         }
+                                        
 
 
                                     }
@@ -1535,16 +1610,19 @@ namespace Duszaverseny_2025
                                     .FirstOrDefault(b => b.Name == vezerkartyak[j].Item1 + "konnyukazamataba");
                                     if (btnn != null)
                                     {
-                                        if (btnn.BackColor != Color.White)
+                                        if (kartyak[i].Item1 == vezerkartyak[j].Item5)
                                         {
-                                            if (button.BackColor == Color.White)
+                                            if (btnn.BackColor != Color.White)
                                             {
-                                                button.BackColor = Color.DarkGray;
+                                                if (button.BackColor == Color.White)
+                                                {
+                                                    button.BackColor = Color.DarkGray;
+                                                }
+                                                else { button.BackColor = Color.White; }
                                             }
-                                            else { button.BackColor = Color.White; }
                                         }
-                                            
-                                        
+
+
                                     }
                                     else {
                                         if (button.BackColor == Color.White)
@@ -1573,13 +1651,16 @@ namespace Duszaverseny_2025
                                     .FirstOrDefault(b => b.Name == vezerkartyak[j].Item1 + "nehezkazamataba");
                                     if (btnn != null)
                                     {
-                                        if (btnn.BackColor != Color.White)
+                                        if (kartyak[i].Item1 == vezerkartyak[j].Item5)
                                         {
-                                            if (button.BackColor == Color.White)
+                                            if (btnn.BackColor != Color.White)
                                             {
-                                                button.BackColor = Color.DarkGray;
+                                                if (button.BackColor == Color.White)
+                                                {
+                                                    button.BackColor = Color.DarkGray;
+                                                }
+                                                else { button.BackColor = Color.White; }
                                             }
-                                            else { button.BackColor = Color.White; }
                                         }
 
 
@@ -1612,13 +1693,16 @@ namespace Duszaverseny_2025
                                     .FirstOrDefault(b => b.Name == vezerkartyak[j].Item1 + "megakazamataba");
                                     if (btnn != null)
                                     {
-                                        if (btnn.BackColor != Color.White)
+                                        if (kartyak[i].Item1 == vezerkartyak[j].Item5)
                                         {
-                                            if (button.BackColor == Color.White)
+                                            if (btnn.BackColor != Color.White)
                                             {
-                                                button.BackColor = Color.DarkGray;
+                                                if (button.BackColor == Color.White)
+                                                {
+                                                    button.BackColor = Color.DarkGray;
+                                                }
+                                                else { button.BackColor = Color.White; }
                                             }
-                                            else { button.BackColor = Color.White; }
                                         }
 
 
@@ -2044,7 +2128,7 @@ namespace Duszaverseny_2025
                     }
                 }
             }
-            if (x <= 1000)
+            if (x != 10)
             {
                 x = 10;
                 y += 137;
