@@ -17,7 +17,7 @@ using System.Xml.Linq;
 namespace Duszaverseny_2025
 {
     //jatekmester kazamata cooked af
-    //kazamata jutalmak es azok kiirasa kartyak kezelese screenen
+    //kazamata szepites
     //kazamataban a pakliban levo kartyakat nem pakliba valasztas sorrendje alapjan pakolja
 
     public partial class Form1 : Form
@@ -403,11 +403,11 @@ namespace Duszaverseny_2025
                     this.Controls.Add(ujkazamata);
                     ujkazamata.BringToFront();
 
-                    button("Vissza", "visszamester", 100, 100, 400, 400, 20, ujkazamata, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
-                    button("Egyszerű", "egyszeruk", 200, 200, 0, 0, 20, ujkazamata, kazamaták, Color.DarkGray, Color.Black, Color.DarkRed);
-                    button("Könnyű", "konnyuk", 200, 200, 200, 0, 20, ujkazamata, kazamaták, Color.DarkGray, Color.Black, Color.DarkRed);
-                    button("Nehéz", "nehezk", 200, 200, 0, 200, 20, ujkazamata, kazamaták, Color.DarkGray, Color.Black, Color.DarkRed);
-                    button("Mega", "megak", 200, 200, 200, 200, 20, ujkazamata, kazamaták, Color.DarkGray, Color.Black, Color.DarkRed);
+                    button("Vissza", "visszamester", 150, 75, 35, 745, 20, ujkazamata, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
+                    button("Egyszerű", "egyszeruk", 400, 100, 50, 200, 20, ujkazamata, kazamaták, Color.DarkGray, Color.Black, Color.DarkRed);
+                    button("Könnyű", "konnyuk", 400, 100, 650, 200, 20, ujkazamata, kazamaták, Color.DarkGray, Color.Black, Color.DarkRed);
+                    button("Nehéz", "nehezk", 400, 100, 50, 500, 20, ujkazamata, kazamaták, Color.DarkGray, Color.Black, Color.DarkRed);
+                    button("Mega", "megak", 400, 100, 650, 500, 20, ujkazamata, kazamaták, Color.DarkGray, Color.Black, Color.DarkRed);
                 }
             }
             else if (name == "gyujtemeny") //gyujtemeny kivalasztasa
@@ -607,7 +607,7 @@ namespace Duszaverseny_2025
                 {
                     for (int i = 0; i < vezerkartyak.Count; i++)
                     {
-                        button(vezerkartyak[i].Item1, vezerkartyak[i].Item1 + "egyszerukazamataba", 75, 100, x, y, 10, egyszeruk, button_Click, Color.Black, Color.White, Color.Black);
+                        button(vezerkartyak[i].Item1, vezerkartyak[i].Item1 + "egyszerukazamataba", 75, 100, x, y, 10, egyszeruk, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
                         x += 75;
                         if (x > 975)
                         {
@@ -657,7 +657,7 @@ namespace Duszaverseny_2025
                 {
                     for (int i = 0; i < vezerkartyak.Count; i++)
                     {
-                        button(vezerkartyak[i].Item1, vezerkartyak[i].Item1 + "konnyukazamataba", 75, 100, x, y, 10, konnyuk, button_Click, Color.Black, Color.White, Color.Black);
+                        button(vezerkartyak[i].Item1, vezerkartyak[i].Item1 + "konnyukazamataba", 75, 100, x, y, 10, konnyuk, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
                         x += 75;
                         if (x > 975)
                         {
@@ -706,7 +706,7 @@ namespace Duszaverseny_2025
                 {
                     for (int i = 0; i < vezerkartyak.Count; i++)
                     {
-                        button(vezerkartyak[i].Item1, vezerkartyak[i].Item1 + "nehezkazamataba", 75, 100, x, y, 10, nehezk, button_Click, Color.Black, Color.White, Color.Black);
+                        button(vezerkartyak[i].Item1, vezerkartyak[i].Item1 + "nehezkazamataba", 75, 100, x, y, 10, nehezk, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
                         x += 75;
                         if (x > 975)
                         {
@@ -755,7 +755,7 @@ namespace Duszaverseny_2025
                 {
                     for (int i = 0; i < vezerkartyak.Count; i++)
                     {
-                        button(vezerkartyak[i].Item1, vezerkartyak[i].Item1 + "megakazamataba", 75, 100, x, y, 10, megak, button_Click, Color.Black, Color.White, Color.Black);
+                        button(vezerkartyak[i].Item1, vezerkartyak[i].Item1 + "megakazamataba", 75, 100, x, y, 10, megak, button_Click, Color.DarkGray, Color.Black, Color.DarkRed);
                         x += 75;
                         if (x > 975)
                         {
@@ -1365,24 +1365,12 @@ namespace Duszaverseny_2025
                               .FirstOrDefault(b => b.Name == vezerkartyak[i].Item1 + "egyszerukazamataba");
                                 if (button != null)
                                 {
-                                    string alap = string.Empty;
-                                    for (int j = 0; j < kartyak.Count; j++)
-                                    {
-                                        if (kartyak[j].Item1 == vezerkartyak[i].Item5)
-                                        {
-                                            alap = kartyak[j].Item1;
-                                        }
-                                    }
 
                                     Button butn = egyszeruk.Controls.OfType<Button>()
-                                        .FirstOrDefault(b => b.Name == alap + "egyszerukazamataba");
+                                        .FirstOrDefault(b => b.Name == vezerkartyak[i].Item5 + "egyszerukazamataba");
                                     if (butn != null)
                                     {
-                                        if (butn.BackColor == Color.White)
-                                        {
-
-                                        }
-                                        else
+                                        if (butn.BackColor!=Color.White)
                                         {
                                             if (button.BackColor == Color.White)
                                             {
@@ -1408,24 +1396,12 @@ namespace Duszaverseny_2025
                               .FirstOrDefault(b => b.Name == vezerkartyak[i].Item1 + "konnyukazamataba");
                                 if (button != null)
                                 {
-                                    string alap = string.Empty;
-                                    for (int j = 0; j < kartyak.Count; j++)
-                                    {
-                                        if (kartyak[j].Item1 == vezerkartyak[i].Item5)
-                                        {
-                                            alap = kartyak[j].Item1;
-                                        }
-                                    }
 
                                     Button butn = konnyuk.Controls.OfType<Button>()
-                                        .FirstOrDefault(b => b.Name == alap + "konnyukazamataba");
+                                        .FirstOrDefault(b => b.Name == vezerkartyak[i].Item5 + "konnyukazamataba");
                                     if (butn != null)
                                     {
-                                        if (butn.BackColor == Color.White)
-                                        {
-
-                                        }
-                                        else
+                                        if (butn.BackColor != Color.White)
                                         {
                                             if (button.BackColor == Color.White)
                                             {
@@ -1451,24 +1427,12 @@ namespace Duszaverseny_2025
                               .FirstOrDefault(b => b.Name == vezerkartyak[i].Item1 + "nehezkazamataba");
                                 if (button != null)
                                 {
-                                    string alap = string.Empty;
-                                    for (int j = 0; j < kartyak.Count; j++)
-                                    {
-                                        if (kartyak[j].Item1 == vezerkartyak[i].Item5)
-                                        {
-                                            alap = kartyak[j].Item1;
-                                        }
-                                    }
 
                                     Button butn = nehezk.Controls.OfType<Button>()
-                                        .FirstOrDefault(b => b.Name == alap + "nehezkazamataba");
+                                        .FirstOrDefault(b => b.Name == vezerkartyak[i].Item5 + "nehezkazamataba");
                                     if (butn != null)
                                     {
-                                        if (butn.BackColor == Color.White)
-                                        {
-
-                                        }
-                                        else
+                                        if (butn.BackColor != Color.White)
                                         {
                                             if (button.BackColor == Color.White)
                                             {
@@ -1494,24 +1458,12 @@ namespace Duszaverseny_2025
                               .FirstOrDefault(b => b.Name == vezerkartyak[i].Item1 + "megakazamataba");
                                 if (button != null)
                                 {
-                                    string alap = string.Empty;
-                                    for (int j = 0; j < kartyak.Count; j++)
-                                    {
-                                        if (kartyak[j].Item1 == vezerkartyak[i].Item5)   
-                                        {
-                                            alap = kartyak[j].Item1;
-                                        }
-                                    }
 
                                     Button butn = megak.Controls.OfType<Button>()
-                                        .FirstOrDefault(b => b.Name == alap + "megakazamataba");
+                                        .FirstOrDefault(b => b.Name == vezerkartyak[i].Item5 + "megakazamataba");
                                     if (butn != null)
                                     {
-                                        if (butn.BackColor == Color.White)
-                                        {
-
-                                        }
-                                        else
+                                        if (butn.BackColor != Color.White)
                                         {
                                             if (button.BackColor == Color.White)
                                             {
@@ -1538,12 +1490,21 @@ namespace Duszaverseny_2025
                             .FirstOrDefault(b => b.Name == kartyak[i].Item1 + "egyszerukazamataba");
                             if (button != null)
                             {
-                                Button butn = egyszeruk.Controls.OfType<Button>()
-                                        .FirstOrDefault(b => b.Name == kartyak[i].Item1 + "egyszerukazamataba");
-                                if (butn != null)
+                                for (int j = 0; j < vezerkartyak.Count; j++)
                                 {
-                                    if (butn.BackColor == Color.White) 
+                                    Button btnn = egyszeruk.Controls.OfType<Button>()
+                                    .FirstOrDefault(b => b.Name == vezerkartyak[j].Item1 + "egyszerukazamataba");
+                                    if (btnn != null)
                                     {
+                                        if (btnn.BackColor != Color.White)
+                                        {
+                                            if (button.BackColor == Color.White)
+                                            {
+                                                button.BackColor = Color.DarkGray;
+                                            }
+                                            else { button.BackColor = Color.White; }
+                                        }
+
 
                                     }
                                     else
@@ -1554,15 +1515,11 @@ namespace Duszaverseny_2025
                                         }
                                         else { button.BackColor = Color.White; }
                                     }
+
                                 }
-                                else
-                                {
-                                    if (button.BackColor == Color.White)
-                                    {
-                                        button.BackColor = Color.DarkGray;
-                                    }
-                                    else { button.BackColor = Color.White; }
-                                }
+
+
+
                             }
                         }
 
@@ -1572,31 +1529,35 @@ namespace Duszaverseny_2025
                             .FirstOrDefault(b => b.Name == kartyak[i].Item1 + "konnyukazamataba");
                             if (button != null)
                             {
-                                Button butn = konnyuk.Controls.OfType<Button>()
-                                        .FirstOrDefault(b => b.Name == kartyak[i].Item1 + "konnyukazamataba");
-                                if (butn != null)
+                                for (int j = 0; j < vezerkartyak.Count; j++)
                                 {
-                                    if (butn.BackColor == Color.White)
+                                    Button btnn = konnyuk.Controls.OfType<Button>()
+                                    .FirstOrDefault(b => b.Name == vezerkartyak[j].Item1 + "konnyukazamataba");
+                                    if (btnn != null)
                                     {
-
+                                        if (btnn.BackColor != Color.White)
+                                        {
+                                            if (button.BackColor == Color.White)
+                                            {
+                                                button.BackColor = Color.DarkGray;
+                                            }
+                                            else { button.BackColor = Color.White; }
+                                        }
+                                            
+                                        
                                     }
-                                    else
-                                    {
+                                    else {
                                         if (button.BackColor == Color.White)
                                         {
                                             button.BackColor = Color.DarkGray;
                                         }
                                         else { button.BackColor = Color.White; }
                                     }
+                                    
                                 }
-                                else
-                                {
-                                    if (button.BackColor == Color.White)
-                                    {
-                                        button.BackColor = Color.DarkGray;
-                                    }
-                                    else { button.BackColor = Color.White; }
-                                }
+
+                                
+
                             }
                         }
 
@@ -1606,12 +1567,21 @@ namespace Duszaverseny_2025
                             .FirstOrDefault(b => b.Name == kartyak[i].Item1 + "nehezkazamataba");
                             if (button != null)
                             {
-                                Button butn = nehezk.Controls.OfType<Button>()
-                                        .FirstOrDefault(b => b.Name == kartyak[i].Item1 + "nehezkazamataba");
-                                if (butn != null)
+                                for (int j = 0; j < vezerkartyak.Count; j++)
                                 {
-                                    if (butn.BackColor == Color.White)
+                                    Button btnn = nehezk.Controls.OfType<Button>()
+                                    .FirstOrDefault(b => b.Name == vezerkartyak[j].Item1 + "nehezkazamataba");
+                                    if (btnn != null)
                                     {
+                                        if (btnn.BackColor != Color.White)
+                                        {
+                                            if (button.BackColor == Color.White)
+                                            {
+                                                button.BackColor = Color.DarkGray;
+                                            }
+                                            else { button.BackColor = Color.White; }
+                                        }
+
 
                                     }
                                     else
@@ -1622,30 +1592,35 @@ namespace Duszaverseny_2025
                                         }
                                         else { button.BackColor = Color.White; }
                                     }
+
                                 }
-                                else
-                                {
-                                    if (button.BackColor == Color.White)
-                                    {
-                                        button.BackColor = Color.DarkGray;
-                                    }
-                                    else { button.BackColor = Color.White; }
-                                }
+
+
+
                             }
                         }
-
+                        
                         if (name == kartyak[i].Item1 + "megakazamataba")
                         {
                             Button button = megak.Controls.OfType<Button>()
                             .FirstOrDefault(b => b.Name == kartyak[i].Item1 + "megakazamataba");
                             if (button != null)
                             {
-                                Button butn = megak.Controls.OfType<Button>()
-                                        .FirstOrDefault(b => b.Name == kartyak[i].Item1 + "megakazamataba");
-                                if (butn != null)
+                                for (int j = 0; j < vezerkartyak.Count; j++)
                                 {
-                                    if (butn.BackColor == Color.White)
+                                    Button btnn = megak.Controls.OfType<Button>()
+                                    .FirstOrDefault(b => b.Name == vezerkartyak[j].Item1 + "megakazamataba");
+                                    if (btnn != null)
                                     {
+                                        if (btnn.BackColor != Color.White)
+                                        {
+                                            if (button.BackColor == Color.White)
+                                            {
+                                                button.BackColor = Color.DarkGray;
+                                            }
+                                            else { button.BackColor = Color.White; }
+                                        }
+
 
                                     }
                                     else
@@ -1656,15 +1631,11 @@ namespace Duszaverseny_2025
                                         }
                                         else { button.BackColor = Color.White; }
                                     }
+
                                 }
-                                else
-                                {
-                                    if (button.BackColor == Color.White)
-                                    {
-                                        button.BackColor = Color.DarkGray;
-                                    }
-                                    else { button.BackColor = Color.White; }
-                                }
+
+
+
                             }
                         }
                     }
@@ -1991,6 +1962,7 @@ namespace Duszaverseny_2025
                 string name = btn.Name;
                 if (name == "backtomainscreenpakli")
                 {
+                    Pakli.Clear();
                     for (int i = 0; i < playercards.Count; i++)
                     {
 
@@ -2033,10 +2005,11 @@ namespace Duszaverseny_2025
 
         private void Kartyagombok(object sender, EventArgs e)
         {
-            Pakli.Clear();
+            
             playerscreen.Hide();
             if (!this.Controls.Contains(kartyakscreen)) this.Controls.Add(kartyakscreen);
             kartyakscreen.Show();
+            kartyakscreen.Controls.Clear();
             kartyakscreen.BringToFront();
             kartyakscreen.BackColor = Color.DimGray;
 
@@ -2089,11 +2062,19 @@ namespace Duszaverseny_2025
                 x += 110;
                 if (x > 1000) { x = 10; y += 140; }
 
-                Button butnn = kartyakscreen.Controls.OfType<Button>()
-                                        .FirstOrDefault(b => b.Name == kartyak[i].Item1 + "kartyakpanelen");
+                Color back;
+                if (Pakli.Contains(kartyak[i].Item1))
+                {
+                    back = Color.White;
+                }
+                else { back = Color.DarkGray; }
+
+                    Button butnn = kartyakscreen.Controls.OfType<Button>()
+                                            .FirstOrDefault(b => b.Name == kartyak[i].Item1 + "kartyakpanelen");
                 if (butnn != null)
                 {
                     butnn.Enabled = false;
+                    butnn.BackColor = back;
                 }
                 for (int j=0; j < playercards.Count; j++)
                 {
@@ -2520,6 +2501,13 @@ namespace Duszaverseny_2025
 
         private void SelectBuffsScreen(int key, string típus)
         {
+            foreach (Control ctrl in this.Controls)
+            {
+                if (ctrl is Panel panel && panel.Visible)
+                {
+                    panel.Hide();
+                }
+            }
             int x = 5;
             if (powerupcount == 0)
             {
@@ -2589,6 +2577,13 @@ namespace Duszaverseny_2025
 
         private void HarcIndítás(int key, string típus)
         {
+            foreach (Control ctrl in this.Controls)
+            {
+                if (ctrl is Panel panel && panel.Visible)
+                {
+                    panel.Hide();
+                }
+            }
             Dictionary<string, string> Pairs = new Dictionary<string, string>();
 
             foreach (Control c in buffselect.Controls)
@@ -2608,7 +2603,7 @@ namespace Duszaverseny_2025
                 }
                 c.Dispose();
             }
-            this.Controls.Remove(buffselect);
+            
             Harc(key, típus, Pairs);
         }
 
@@ -3026,36 +3021,34 @@ namespace Duszaverseny_2025
                             }
                         }
                     }
-
-
                 }
                 else if (jutalom.ToLower() == "sebzés" || jutalom.ToLower() == "életerő" || jutalom.ToLower() == "sebzes" || jutalom.ToLower() == "eletero")
                 {
                     foreach (int i in playercards.Keys)
                     {
-                        if (playercards[i].Item1 == jharcos)
+                        if (kartyak[i].Item1 == jharcos)
                         {
                             if (jutalom.ToLower() == "sebzés" || jutalom.ToLower() == "sebzes")
                             {
-                                playercards[i] = (playercards[i].Item1, playercards[i].Item2 + 1, playercards[i].Item3, playercards[i].Item4);
-                                nyeremeny.Text = "Játékos nyert" + Environment.NewLine + "+1 sebzés: " + playercards[i].Item1;
+                                kartyak[i] = (kartyak[i].Item1, kartyak[i].Item2 + 1, kartyak[i].Item3, kartyak[i].Item4);
+                                nyeremeny.Text = "Játékos nyert" + Environment.NewLine + "+1 sebzés: " + kartyak[i].Item1;
                             }
                             else if (jutalom.ToLower() == "életerő" || jutalom.ToLower() == "eletero")
                             {
-                                playercards[i] = (playercards[i].Item1, playercards[i].Item2, playercards[i].Item3 + 2, playercards[i].Item4);
-                                nyeremeny.Text = "Játékos nyert" + Environment.NewLine + "+2 élet: " + playercards[i].Item1;
+                                kartyak[i] = (kartyak[i].Item1, kartyak[i].Item2, kartyak[i].Item3 + 2, kartyak[i].Item4);
+                                nyeremeny.Text = "Játékos nyert" + Environment.NewLine + "+2 élet: " + kartyak[i].Item1;
                             }
                             string buttonName = "gyujtemeny" + i;
                             Control[] found = kartyakscreen.Controls.Find(buttonName, true);
                             if (found.Length > 0 && found[0] is Button btn)
                             {
-                                btn.Text = playercards[i].Item1 + Environment.NewLine + playercards[i].Item2 + "/" + playercards[i].Item3 + Environment.NewLine + playercards[i].Item4;
+                                btn.Text = kartyak[i].Item1 + Environment.NewLine + kartyak[i].Item2 + "/" + kartyak[i].Item3 + Environment.NewLine + kartyak[i].Item4;
                             }
                             string buttonName1 = "paklibtn" + i;
                             Control[] found1 = kartyakscreen.Controls.Find(buttonName1, true);
                             if (found1.Length > 0 && found1[0] is Button btn1)
                             {
-                                btn1.Text = playercards[i].Item1 + Environment.NewLine + playercards[i].Item2 + "/" + playercards[i].Item3 + Environment.NewLine + playercards[i].Item4;
+                                btn1.Text = kartyak[i].Item1 + Environment.NewLine + kartyak[i].Item2 + "/" + kartyak[i].Item3 + Environment.NewLine + kartyak[i].Item4;
                             }
                             break;
                         }
